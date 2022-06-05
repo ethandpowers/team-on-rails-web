@@ -1,11 +1,10 @@
 
 import React from "react";
+import Button from "../components/button";
 
 function Signup() {
     return (
-        <h1 className="text-3xl font-bold underline">
-            Signup
-        </h1>
+        <Button>This is a customizable button</Button>
     );
 }
 

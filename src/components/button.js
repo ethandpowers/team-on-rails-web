@@ -2,7 +2,7 @@ import React from "react";
 
 function Button(props){
     return (
-        <button {...props}>
+        <button className="rounded-full" {...props}>
             {props.children}
         </button>
     );
