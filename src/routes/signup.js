@@ -4,7 +4,9 @@ import Button from "../components/button";
 
 function Signup() {
     return (
-        <Button>This is a customizable button</Button>
+        <div>
+            <Button>This is a customizable button</Button>
+        </div>
     );
 }
 
