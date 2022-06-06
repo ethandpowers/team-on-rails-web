@@ -1,18 +1,31 @@
 
 import React from "react";
-import Button1 from "../components/button1";
-import Button2 from "../components/button2";
-import Button3 from "../components/button3";
-import Button4 from "../components/button4";
+import Button1 from "../components/buttons/button1";
+import Button2 from "../components/buttons/button2";
+import Button3 from "../components/buttons/button3";
+import Button4 from "../components/buttons/button4";
+import SignupForm from "../components/signupform";
 
 function Signup() {
+    const colors=["#53bf00", "#00bf6c", "#00b2bf"];
     return (
-        <div>
-            <Button1>This is button 1</Button1>
-            <Button2>This is button 2</Button2>
-            <Button3>This is button 3</Button3>
-            <Button4>This is button 4</Button4>
+        <>
+        <style type="text/css">
+            {`
+            .signup-page{
+                width: 100%;
+                height: 100vh;
+                background: linear-gradient(35deg, ${colors[0]}, ${colors[1]}, ${colors[2]});
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            `}
+        </style>
+        <div className="signup-page">
+            <SignupForm></SignupForm>
         </div>
+        </>
     );
 }
 

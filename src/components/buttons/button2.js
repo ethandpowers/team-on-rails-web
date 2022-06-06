@@ -2,7 +2,7 @@ import React from "react";
 
 // A large button that pops when you hover over it.
 function Button2(props) {
-    const colors = ["#FFFFFF", "#53bf00", "#00bf6c", "#000000"];
+    const colors = ["#FFFFFF", "#53bf00", "#00b2bf", "#000000"];
     return (
         <>
             <style type="text/css">
