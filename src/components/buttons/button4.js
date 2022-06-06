@@ -79,7 +79,7 @@ function Button4(props) {
                     }
                 `}
             </style>
-            <button className="button-85" role="button" {...props}>{props.children}</button>
+            <button className="button-85" {...props}>{props.children}</button>
         </>
     );
 }

@@ -35,7 +35,7 @@ function Button3(props) {
                     }
                 `}
             </style>
-            <button className="button-41" role="button" {...props}>{props.children}</button>
+            <button className="button-41" {...props}>{props.children}</button>
         </>
     );
 }

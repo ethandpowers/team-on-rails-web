@@ -57,7 +57,7 @@ function Button2(props) {
                     }
                 `}
             </style>
-            <button className="button-64" role="button" {...props}><span className="text">{props.children}</span></button>
+            <button className="button-64" {...props}><span className="text">{props.children}</span></button>
         </>
     );
 }
