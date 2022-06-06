@@ -1,18 +1,20 @@
 import React from "react";
 
+// A large button that pops when you hover over it.
 function Button2(props) {
+    const colors = ["#FFFFFF", "#53bf00", "#00bf6c", "#000000"];
     return (
         <>
             <style type="text/css">
                 {`
                     .button-64 {
                       align-items: center;
-                      background-image: linear-gradient(144deg, #53bf00, #00bf6c);
+                      background-image: linear-gradient(144deg, ${colors[1]}, ${colors[2]});
                       border: 0;
                       border-radius: 8px;
                       box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
                       box-sizing: border-box;
-                      color: #FFFFFF;
+                      color: ${colors[0]};
                       display: flex;
                       font-family: Phantomsans, sans-serif;
                       font-size: 20px;
@@ -35,7 +37,7 @@ function Button2(props) {
                     }
                     
                     .button-64 span {
-                      background-color: rgb(5, 6, 45);
+                      background-color: ${colors[3]};
                       padding: 16px 24px;
                       border-radius: 6px;
                       width: 100%;

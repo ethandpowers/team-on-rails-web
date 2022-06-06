@@ -1,6 +1,8 @@
 import React from "react";
 
+// A large button that draws attention to itself.
 function Button1(props) {
+    const colors = ["#b8e898", "#53bf00", "#00bf6c"];
     return (
         <>
             <style type="text/css">
@@ -54,7 +56,7 @@ function Button1(props) {
                     }
                     
                     .button-77:before {
-                        background-color: #b8e898;
+                        background-color: ${colors[0]};
                         content: "";
                         display: block;
                         height: 100%;
@@ -68,7 +70,7 @@ function Button1(props) {
                     
                     .button-77:after {
                         background-color: initial;
-                        background-image: linear-gradient(92.83deg, #53bf00 0, #00bf6c 100%);
+                        background-image: linear-gradient(92.83deg, ${colors[1]} 0, ${colors[2]} 100%);
                         bottom: 4px;
                         content: "";
                         display: block;
