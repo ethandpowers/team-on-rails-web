@@ -2,7 +2,6 @@ import React from "react";
 
 // A small but flashy button
 function Button4(props) {
-    const colors = ["#FFFFFF", "#53bf00", "#00bf6c"];
     return (
         <>
             <style type="text/css">
