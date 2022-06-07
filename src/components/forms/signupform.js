@@ -1,8 +1,16 @@
 import React from "react";
+import { signUp } from "../../firebase";
 import Button2 from "../buttons/button2";
 import TextField from "./textfield";
 
 function SignupForm() {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const name = event.target.name.value;
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        await signUp(name, email, password);
+    }
     return (
         <>
             <style type="text/css">
@@ -29,7 +37,6 @@ function SignupForm() {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        flex-width: auto;
                     }
 
                     #signup-form-submit{
@@ -38,14 +45,20 @@ function SignupForm() {
 
                     #form-main-contents{
                         flex-grow: 1;
+                        width: 100%;
+                        margin-bottom: 10px;
                     }
                 `}
             </style>
             <div className="signup-card">
-                <form id="signup-form">
+                <form id="signup-form" onSubmit={handleSubmit}>
                     <div id="form-main-contents">
+                        <label>Name</label>
+                        <TextField name="name" type="text" required></TextField>
                         <label>Email</label>
-                        <TextField type="email"></TextField>
+                        <TextField name="email" type="email" required></TextField>
+                        <label>Password</label>
+                        <TextField name="password" type="Password" required></TextField>
                     </div>
                     <Button2 id="signup-form-submit" type="submit">Sign Up</Button2>
                 </form>

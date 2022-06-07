@@ -1,9 +1,14 @@
 
 import React from "react";
 import SignupForm from "../components/forms/signupform";
+import { Navigate } from "react-router-dom";
+import { loggedIn } from "../firebase";
 
 function Signup() {
     const colors = ["#53bf00", "#00bf6c", "#00b2bf", "#6c00bf"];
+    if(loggedIn()){
+        return <Navigate to="/dashboard"></Navigate>
+    }
     return (
         <>
             <style type="text/css">
