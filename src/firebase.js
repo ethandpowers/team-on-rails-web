@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, update } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAfvt67zQjyY_D9NlwNwNhVMPN7CtucsGA",
@@ -39,4 +39,13 @@ export async function logIn(email, password) {
 
 export async function logOut() {
     await auth.signOut();
+}
+
+export async function joinGroup(code){
+    await update(ref(database, `users/${auth.currentUser.uid}`), {
+        groupsAsMember: [{
+            id: code,
+            name: "Test Group"
+        }]
+    });
 }
