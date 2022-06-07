@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref, set, child, get } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAfvt67zQjyY_D9NlwNwNhVMPN7CtucsGA",
@@ -29,9 +29,7 @@ export async function signUp(name, email, password) {
     await createUserWithEmailAndPassword(auth, email, password);
     await set(ref(database, `users/${auth.currentUser.uid}`), {
         name,
-        email,
-        groupsAsMember: [],
-        groupsAsAdmin: [],
+        email
     });
 }
 
@@ -41,18 +39,4 @@ export async function logIn(email, password) {
 
 export async function logOut() {
     await auth.signOut();
-}
-
-export async function getUserGroups() {
-    const user = auth.currentUser;
-    const dbRef = ref(database);
-    await get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
-        if (snapshot.exists()) {
-            console.log(snapshot.val());
-        } else {
-            console.log("No data available");
-        }
-    }).catch((error) => {
-        console.error(error);
-    });
 }

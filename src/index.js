@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Home from './routes/home';
-import DashboardRouter from './routes/dashboardrouter';
+import DashboardRouter from './routes/dashboard/dashboardrouter';
 import Login from './routes/login';
 import Signup from './routes/signup';
 import NotFound from './routes/404';

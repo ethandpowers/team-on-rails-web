@@ -1,10 +1,12 @@
 
 import React from "react";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { Navigate, Routes, Route } from "react-router-dom";
-import Loading from "../components/loading";
-import MainDashboard from "../components/dashboard/maindashboard";
-import CreateGroup from "../components/dashboard/creategroup";
+import Loading from "../../components/loading";
+import MainDashboard from "./routes/maindashboard";
+import CreateGroup from "./routes/creategroup";
+import JoinGroup from "./routes/joingroup";
+import Settings from "./routes/settings";
 
 function DashboardRouter() {
     const [loggedInState, setLoggedInState] = React.useState(true);
@@ -33,6 +35,8 @@ function DashboardRouter() {
             <Routes>
                 <Route path="/" element={<MainDashboard />} />
                 <Route path="/creategroup" element={<CreateGroup />} />
+                <Route path="/joingroup" element={<JoinGroup />} />
+                <Route path="/settings" element={<Settings />} />
             </Routes>
         );
     }
