@@ -1,16 +1,18 @@
 import React from "react";
-import { auth, database, logOut } from "../../../firebase";
+import { auth, database } from "../../../firebase";
 import { ref, onValue } from "firebase/database";
 import Loading from "../../../components/loading";
 import NoGroupsModal from "../components/nogroupsmodal";
 import Tasks from "../components/tasks";
 import ElementBG from "../../../components/backgrounds/elementbg";
-import Waves from "../../../components/backgrounds/waves";
 import FloatingBubbles from "../../../components/backgrounds/floatingbubbles";
+import DashboardHeader from "../../../components/dashboardheader";
+import Settings from "./settings";
 
-function MainDashboard() {
+function MainDashboard(props) {
 	const [groupsAsAdmin, setGroupsAsAdmin] = React.useState([]);
 	const [groupsAsMember, setGroupsAsMember] = React.useState([]);
+	const [name, setName] = React.useState("");
 	const [loaded, setLoaded] = React.useState(false);
 
 	const dbRef = ref(database, 'users/' + auth.currentUser.uid);
@@ -29,6 +31,8 @@ function MainDashboard() {
 		} else if (groupsAsMember.length > 0) {
 			setGroupsAsMember([]);
 		}
+
+		if(data.name !== name) setName(data.name);
 	});
 
 	//loading screen while loading groups data
@@ -47,18 +51,20 @@ function MainDashboard() {
 			</>
 		);
 	}
-
 	return (
 		<>
 			<style type="text/css">
 				{`
 					#dashboard-main-container {
 						display: flex;
-						flex-direction: row;
+						flex-direction: row-reverse;
 						width: 100%;
+						padding: 10px;
 					}
         		`}
 			</style>
+			{ (props.modal === "settings") ? <Settings></Settings>: <></> }
+			<DashboardHeader name={name}></DashboardHeader>
 			<div id="dashboard-main-container">
 				<Tasks></Tasks>
 			</div>

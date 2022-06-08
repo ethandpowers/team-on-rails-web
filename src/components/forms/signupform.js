@@ -12,7 +12,7 @@ function SignupForm(props) {
         const password = event.target.password.value;
         try {await signUp(name, email, password);}
         catch(error){
-            props.badPassword(error.message);
+            props.badPassword();
         }
     }
     return (

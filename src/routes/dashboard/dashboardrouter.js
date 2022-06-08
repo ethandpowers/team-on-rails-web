@@ -1,7 +1,7 @@
 
 import React from "react";
 import { auth } from "../../firebase";
-import { Navigate, Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 import Loading from "../../components/loading";
 import MainDashboard from "./routes/maindashboard";
 import Settings from "./routes/settings";
@@ -9,6 +9,8 @@ import Settings from "./routes/settings";
 function DashboardRouter() {
     const [loggedInState, setLoggedInState] = React.useState(true);
     const [loaded, setLoaded] = React.useState(false);
+    const location = useLocation();
+    const background = location.state && location.state.background;
 
     auth.onAuthStateChanged(user => {
         setLoaded(true);
@@ -30,11 +32,13 @@ function DashboardRouter() {
         //display the main content of the dashboard once authenticated
     } else {
         return (
-            <Routes>
-                <Route path="/" element={<MainDashboard />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="*" element={<Navigate to="/dashboard" />} />
-            </Routes>
+            <>
+                <Routes location={background || location}>
+                    <Route path="/" element={<MainDashboard />} />
+                    <Route path="*" element={<Navigate to="/dashboard" />} />
+                </Routes>
+                {background && <Route path="/settings" element={<Settings />} />}
+            </>
         );
     }
 }

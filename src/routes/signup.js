@@ -12,7 +12,7 @@ function Signup() {
     const [loggedInState, setLoggedInState] = React.useState(false);
     const [alertState, setAlertState] = React.useState(false);
 
-    const badPassword = (msg) => {
+    const badPassword = () => {
         setAlertState(true);
     }
 

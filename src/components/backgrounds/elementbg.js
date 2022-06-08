@@ -1,5 +1,4 @@
 import React from "react";
-import FloatingBubbles from "./floatingbubbles";
 
 function ElementBG(props) {
     return (
