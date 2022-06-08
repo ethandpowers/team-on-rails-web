@@ -2,10 +2,19 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { auth } from "../firebase";
 import LoginForm from "../components/forms/loginform";
+import ElementBG from "../components/backgrounds/elementbg";
+import FloatingSquares from "../components/backgrounds/floatingbubbles";
+import Alert from "../components/alert";
 
 function Login() {
     const colors = ["#53bf00", "#00bf6c", "#00b2bf", "#6c00bf"];
     const [loggedInState, setLoggedInState] = React.useState(false);
+    const [alertState, setAlertState] = React.useState(false);
+
+    const accountnotfound = () => {
+        setAlertState(true);
+    }
+    
     auth.onAuthStateChanged(user => {
         if (user) {
             setLoggedInState(true);
@@ -28,8 +37,12 @@ function Login() {
                 }
             `}
             </style>
+            {alertState && <Alert>Incorrect email or password</Alert>}
+            <ElementBG>
+                <FloatingSquares></FloatingSquares>
+            </ElementBG>
             <div className="signup-page">
-                <LoginForm></LoginForm>
+                <LoginForm accountnotfound={accountnotfound}></LoginForm>
             </div>
         </>
     );

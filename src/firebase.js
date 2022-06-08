@@ -41,10 +41,11 @@ export async function logOut() {
     await auth.signOut();
 }
 
-export async function joinGroup(code) {
+export async function joinGroup(id) {
+
     await update(ref(database, `users/${auth.currentUser.uid}`), {
         groupsAsMember: [{
-            id: code,
+            id: id,
             name: "Test Group"
         }]
     });

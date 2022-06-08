@@ -4,12 +4,15 @@ import Button2 from "../buttons/button2";
 import TextField from "./textfield";
 import { Link } from "react-router-dom";
 
-function LoginForm() {
+function LoginForm(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const email = event.target.email.value;
         const password = event.target.password.value;
-        await logIn(email, password);
+        try { await logIn(email, password); }
+        catch (error) {
+            props.accountnotfound();
+        }
     }
     return (
         <>

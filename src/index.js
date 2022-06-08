@@ -10,6 +10,7 @@ import DashboardRouter from './routes/dashboard/dashboardrouter';
 import Login from './routes/login';
 import Signup from './routes/signup';
 import NotFound from './routes/404';
+import LogOut from './routes/logout';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,6 +21,7 @@ root.render(
         <Route path="/dashboard/*" element={<DashboardRouter />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/logout" element={<LogOut />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

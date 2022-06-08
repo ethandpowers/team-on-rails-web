@@ -28,7 +28,7 @@ function NoGroupsModal() {
             animation={false}
         >
             <Modal.Header>
-                <Modal.Title>Enter the group code:</Modal.Title>
+                <Modal.Title>Enter the group ID:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form id="join-group" onSubmit={joinGroup}>
@@ -45,7 +45,7 @@ function NoGroupsModal() {
                             }
                         `}
                     </style>
-                    <input type="text" name="code" id="join-group-input" placeholder="Group Code" autoFocus />
+                    <input type="text" name="code" id="join-group-input" placeholder="Group ID" autoFocus />
                 </form>
             </Modal.Body>
             <Modal.Footer>

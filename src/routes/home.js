@@ -1,11 +1,14 @@
 
 import React from "react";
-import Waves from "../components/waves";
+import FloatingSquares from "../components/backgrounds/floatingbubbles";
+import ElementBG from "../components/backgrounds/elementbg";
 
 function Home() {
     return (
         <div>
-            <Waves></Waves>
+            <ElementBG>
+                
+            </ElementBG>
         </div>
     );
 }
