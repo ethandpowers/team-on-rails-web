@@ -4,13 +4,16 @@ import Button2 from "../buttons/button2";
 import TextField from "./textfield";
 import { Link } from "react-router-dom";
 
-function SignupForm() {
+function SignupForm(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
-        await signUp(name, email, password);
+        try {await signUp(name, email, password);}
+        catch(error){
+            props.badPassword(error.message);
+        }
     }
     return (
         <>

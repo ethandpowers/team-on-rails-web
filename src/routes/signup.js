@@ -5,10 +5,17 @@ import SignupForm from "../components/forms/signupform";
 import { auth } from "../firebase";
 import ElementBG from "../components/backgrounds/elementbg";
 import Waves from "../components/backgrounds/waves";
+import Alert from "../components/alert";
 
 function Signup() {
     const colors = ["#53bf00", "#00bf6c", "#00b2bf", "#6c00bf"];
     const [loggedInState, setLoggedInState] = React.useState(false);
+    const [alertState, setAlertState] = React.useState(false);
+
+    const badPassword = (msg) => {
+        setAlertState(true);
+    }
+
     auth.onAuthStateChanged(user => {
         if (user) {
             setLoggedInState(true);
@@ -31,11 +38,12 @@ function Signup() {
                     }
             `}
             </style>
+            {alertState && <Alert>Please enter a stronger password.</Alert>}
             <ElementBG>
                 <Waves></Waves>
             </ElementBG>
             <div className="signup-page">
-                <SignupForm></SignupForm>
+                <SignupForm badPassword={badPassword}></SignupForm>
             </div>
         </>
     );

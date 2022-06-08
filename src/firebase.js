@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, push, ref, set, update } from "firebase/database";
+import { get, getDatabase, push, ref, set, update } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAfvt67zQjyY_D9NlwNwNhVMPN7CtucsGA",
@@ -26,10 +26,12 @@ export function loggedIn() {
 }
 
 export async function signUp(name, email, password) {
-    await createUserWithEmailAndPassword(auth, email, password);
-    await set(ref(database, `users/${auth.currentUser.uid}`), {
-        name,
-        email
+    await createUserWithEmailAndPassword(auth, email, password).then(() => {
+        set(ref(database, `users/${auth.currentUser.uid}`), {
+            name,
+            email,
+            accountCreationTimeStamp: Date.now(),
+        });
     });
 }
 
@@ -42,19 +44,34 @@ export async function logOut() {
 }
 
 export async function joinGroup(id) {
+    let group = await (await get(ref(database, `groups/${id}`))).val();
+    if (group) {
+        await push(ref(database, `users/${auth.currentUser.uid}/groupsAsMember`), {
+            groupId: id,
+            groupName: group.name,
+            joinedTimeStamp: Date.now()
+        });
 
-    await update(ref(database, `users/${auth.currentUser.uid}`), {
-        groupsAsMember: [{
-            id: id,
-            name: "Test Group"
-        }]
-    });
+        let name = await (await get(ref(database, `users/${auth.currentUser.uid}/name`))).val();
+        await push(ref(database, `groups/${id}/members`), {
+            userId: auth.currentUser.uid,
+            name: name,
+        });
+    } else {
+        return false;
+    }
+    return true;
 }
 
 export async function createGroup(groupName) {
+    let name = await (await get(ref(database, `users/${auth.currentUser.uid}/name`))).val();
     let groupRef = await push(ref(database, 'groups/'), {
         name: groupName,
-        administrator: auth.currentUser.uid
+        administrator: { userId: auth.currentUser.uid, name: name },
+        creationTimeStamp: Date.now(),
     });
-    await push(ref(database, `users/${auth.currentUser.uid}/groupsAsAdmin/`), { groupId: groupRef.key, name: groupName });
+    await push(ref(database, `users/${auth.currentUser.uid}/groupsAsAdmin/`), {
+        groupId: groupRef.key,
+        name: groupName
+    });
 }

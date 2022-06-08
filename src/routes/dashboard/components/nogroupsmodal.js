@@ -6,11 +6,13 @@ import { joinGroup as joinGroupFirebase, createGroup as createGroupFirebase } fr
 function NoGroupsModal() {
     const [create, setCreate] = React.useState(false);
     const [join, setJoin] = React.useState(false);
+    const [error, setError] = React.useState(false);
 
-    const joinGroup = (event) => {
+    const joinGroup = async (event) => {
         event.preventDefault();
         let code = event.target.code.value;
-        joinGroupFirebase(code);
+        let joinSuccess = await joinGroupFirebase(code);
+        setError(!joinSuccess);
     }
 
     const createGroup = (event) => {
@@ -20,20 +22,21 @@ function NoGroupsModal() {
     }
 
     if (join) {
-        return (<Modal
-            show={true}
-            backdrop="static"
-            keyboard={false}
-            centered
-            animation={false}
-        >
-            <Modal.Header>
-                <Modal.Title>Enter the group ID:</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <form id="join-group" onSubmit={joinGroup}>
-                    <style type="text/css">
-                        {`
+        return (
+            <Modal
+                show={true}
+                backdrop="static"
+                keyboard={false}
+                centered
+                animation={false}
+            >
+                <Modal.Header>
+                    <Modal.Title>Enter the group ID:</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form id="join-group" onSubmit={joinGroup}>
+                        <style type="text/css">
+                            {`
                             #join-group-input {
                                 width: 100%;
                                 height: 100%;
@@ -43,15 +46,29 @@ function NoGroupsModal() {
                             #join-group-input:focus {
                                 outline: none;
                             }
+
+                            #join-group-error-text{
+                                color: red;
+                            }
+
+                            #join-footer{
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: space-between;
+                            }
                         `}
-                    </style>
-                    <input type="text" name="code" id="join-group-input" placeholder="Group ID" autoFocus />
-                </form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button3 type='submit' form="join-group">Join</Button3>
-            </Modal.Footer>
-        </Modal>);
+                        </style>
+                        <input type="text" name="code" id="join-group-input" placeholder="Group ID" autoFocus />
+                    </form>
+                </Modal.Body>
+                <Modal.Footer id="join-footer">
+                    <div>
+                        {error && <div id="join-group-error-text"> Group not found</div>}
+                    </div>
+                    <Button3 type='submit' form="join-group">Join</Button3>
+                </Modal.Footer>
+            </Modal>
+        );
     } else if (create) {
         return (<Modal
             show={true}
