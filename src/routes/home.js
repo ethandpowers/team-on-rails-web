@@ -1,10 +1,11 @@
 
 import React from "react";
+import Waves from "../components/waves";
 
 function Home() {
     return (
         <div>
-            <h1>Home</h1>
+            <Waves></Waves>
         </div>
     );
 }

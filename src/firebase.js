@@ -55,5 +55,5 @@ export async function createGroup(groupName) {
         name: groupName,
         administrator: auth.currentUser.uid
     });
-    await push(ref(database, `users/${auth.currentUser.uid}/groupsAsAdmin/`), { groupId: groupRef.key,name: groupName });
+    await push(ref(database, `users/${auth.currentUser.uid}/groupsAsAdmin/`), { groupId: groupRef.key, name: groupName });
 }
