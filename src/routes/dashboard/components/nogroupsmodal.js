@@ -1,11 +1,10 @@
 import { Button, Modal } from "react-bootstrap";
 import React from "react";
-import { Navigate } from "react-router-dom";
 import Button3 from "../../../components/buttons/button3";
-import { joinGroup as joinGroupFirebase } from "../../../firebase";
+import { joinGroup as joinGroupFirebase, createGroup as createGroupFirebase } from "../../../firebase";
 
 function NoGroupsModal() {
-    const [redirectTarget, setRedirectTarget] = React.useState("");
+    const [create, setCreate] = React.useState(false);
     const [join, setJoin] = React.useState(false);
 
     const joinGroup = (event) => {
@@ -14,9 +13,13 @@ function NoGroupsModal() {
         joinGroupFirebase(code);
     }
 
-    if (redirectTarget !== "") {
-        return <Navigate to={redirectTarget} />
-    } else if (join) {
+    const createGroup = (event) => {
+        event.preventDefault();
+        let groupName = event.target.groupName.value;
+        createGroupFirebase(groupName);
+    }
+
+    if (join) {
         return (<Modal
             show={true}
             backdrop="static"
@@ -42,11 +45,51 @@ function NoGroupsModal() {
                             }
                         `}
                     </style>
-                    <input type="text" name="code" id="join-group-input" placeholder="Group Code" autoFocus/>
+                    <input type="text" name="code" id="join-group-input" placeholder="Group Code" autoFocus />
                 </form>
             </Modal.Body>
             <Modal.Footer>
                 <Button3 type='submit' form="join-group">Join</Button3>
+            </Modal.Footer>
+        </Modal>);
+    } else if (create) {
+        return (<Modal
+            show={true}
+            backdrop="static"
+            keyboard={false}
+            centered
+            animation={false}
+        >
+            <Modal.Header>
+                <Modal.Title>What will the group be called?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <form id="create-group" onSubmit={createGroup}>
+                    <style type="text/css">
+                        {`
+                            #create-group-input {
+                                width: 100%;
+                                height: 100%;
+                                border: none;
+                            }
+
+                            #create-group-input:focus {
+                                outline: none;
+                            }
+
+                            #create-footer{
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: space-between;
+                            }
+                        `}
+                    </style>
+                    <input type="text" name="groupName" id="create-group-input" placeholder="Group Name" autoFocus />
+                </form>
+            </Modal.Body>
+            <Modal.Footer id="create-footer">
+                Note: You will be the administrator of this group.
+                <Button3 type='submit' form="create-group">Create</Button3>
             </Modal.Footer>
         </Modal>);
     }
@@ -67,7 +110,7 @@ function NoGroupsModal() {
                 <Button variant="seconary" onClick={() => setJoin(true)}>
                     Join Group
                 </Button>
-                <Button3 variant="primary" onClick={() => setRedirectTarget('creategroup')}>Create Group</Button3>
+                <Button3 variant="primary" onClick={() => setCreate(true)}>Create Group</Button3>
             </Modal.Footer>
         </Modal>
     );

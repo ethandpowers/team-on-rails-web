@@ -4,8 +4,6 @@ import { auth } from "../../firebase";
 import { Navigate, Routes, Route } from "react-router-dom";
 import Loading from "../../components/loading";
 import MainDashboard from "./routes/maindashboard";
-import CreateGroup from "./routes/creategroup";
-import JoinGroup from "./routes/joingroup";
 import Settings from "./routes/settings";
 
 function DashboardRouter() {
@@ -34,9 +32,8 @@ function DashboardRouter() {
         return (
             <Routes>
                 <Route path="/" element={<MainDashboard />} />
-                <Route path="/creategroup" element={<CreateGroup />} />
-                <Route path="/joingroup" element={<JoinGroup />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>
         );
     }
