@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React } from "react";
 import AccountOptionsDropdown from "./accountoptionsdropdown";
 
 function DashboardHeader(props) {
@@ -15,8 +15,8 @@ function DashboardHeader(props) {
                         background-color: #2b3050;
                         min-height: 50px;
                         color: white;
-                        padding-right: 20px;
-                        padding-left: 20px;
+                        padding-right: 10px;
+                        padding-left: 10px;
                         padding-top: 10px;
                         padding-bottom: 10px;
                     }

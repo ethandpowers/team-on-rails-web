@@ -62,14 +62,23 @@ function MainDashboard() {
 		);
 	}
 	return (
-		<>
+		<div id="dashboard-page">
 			<style type="text/css">
 				{`
-					#dashboard-main-container {
+					#dashboard-page {
+						width: 100%;
+						height: 100vh;
 						display: flex;
-						flex-direction: row-reverse;
+						flex-direction: column;
+					}
+
+					#dashboard-main-container {
+						flex: 1 1 auto;
+						display: flex;
+						flex-direction: row;
 						width: 100%;
 						padding: 10px;
+						justify-content: space-between;
 					}
         		`}
 			</style>
@@ -77,9 +86,10 @@ function MainDashboard() {
 			{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
 			<DashboardHeader name={name} showSettings={showSettings}></DashboardHeader>
 			<div id="dashboard-main-container">
+				<div></div>
 				<Tasks></Tasks>
 			</div>
-		</>
+		</div>
 	);
 }
 

@@ -1,8 +1,8 @@
 import React from "react";
 import { logIn } from "../../firebase";
-import Button2 from "../buttons/button2";
-import TextField from "./textfield";
 import { Link } from "react-router-dom";
+import { Card, Form } from "react-bootstrap";
+import Button3 from "../buttons/button3";
 
 function LoginForm(props) {
     const handleSubmit = async (event) => {
@@ -18,53 +18,39 @@ function LoginForm(props) {
         <>
             <style type="text/css">
                 {`
-                    .signup-card {
+                    .login-card{
                         width: 25%;
-                        min-width: 300px;
-                        min-height: 300px;
-                        padding: 35px;
+                    }
+
+                    #login-form-footer{
                         display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        background-color: rgba(255, 255, 255, .45);
-                        border-radius: 20px;
-                        border: 1px solid rgba(255, 255, 255, .25);
-                        box-shadow: 0 0 10px 1px rgba(0, 0, 0, .25);
-                        backdrop-filter: blur(15px);
+                        flex-direction: row;
+                        justify-content: center;
                         align-items: center;
-                    }
-
-                    #signup-form{
-                        height: 100%;
-                        width: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                    }
-
-                    #signup-form-submit{
-                        width: auto;
-                    }
-
-                    #form-main-contents{
-                        flex-grow: 1;
-                        width: 100%;
-                        margin-bottom: 24px;
                     }
                 `}
             </style>
-            <div className="signup-card">
-                <form id="signup-form" onSubmit={handleSubmit}>
-                    <div id="form-main-contents">
-                        <label>Email</label>
-                        <TextField name="email" type="email" required></TextField>
-                        <label>Password</label>
-                        <TextField name="password" type="Password" required></TextField>
-                    </div>
-                    <Button2 id="signup-form-submit" type="submit">Log In</Button2>
+            <Card className="login-card">
+                <Card.Body>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control name="email" type="email" placeholder="Enter email" />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control name="password" type="password" placeholder="Password" />
+                        </Form.Group>
+                        <Button3 type="submit">
+                            Log In
+                        </Button3>
+                    </Form>
+                </Card.Body>
+                <Card.Footer id="login-form-footer">
                     <Link to="/signup">Don't have an account?</Link>
-                </form>
-            </div>
+                </Card.Footer>
+            </Card>
         </>
     );
 }

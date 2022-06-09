@@ -1,4 +1,5 @@
 import React from "react";
+import { Card } from "react-bootstrap";
 
 function Tasks(props) {
     return (
@@ -6,24 +7,29 @@ function Tasks(props) {
             <style type="text/css">
                 {`
                     #tasks-container {
-                        width: 25%;
-                        min-width: 300px;
-                        min-height: 300px;
-                        padding: 35px;
                         display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        background-color: rgba(255, 255, 255, .45);
-                        border-radius: 20px;
-                        border: 1px solid rgba(255, 255, 255, .25);
-                        box-shadow: 0 0 10px 1px rgba(0, 0, 0, .25);
-                        backdrop-filter: blur(15px);
-                        align-items: center;
-                }`}
+                        flex-flow: column;
+                        width: 30%;
+                        height: 100%;
+                    }
+
+                    @media screen and (max-width: 900px) {
+                        #tasks-container {
+                            width: 100%;
+                        }
+                    }
+                `}
             </style>
-            <div id="tasks-container">
-                <h1>Tasks</h1>
-            </div>
+                <Card id="tasks-container">
+                    <Card.Body>
+                        <Card.Title>Your Tasks</Card.Title>
+                        <Card.Text >
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Donec velit urna, aliquam eget ante ut, ultrices finibus
+                            nunc.
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
         </>
     );
 }
