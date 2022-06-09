@@ -3,11 +3,12 @@ import { auth, database } from "../../../firebase";
 import { ref, onValue } from "firebase/database";
 import Loading from "../../../components/loading";
 import NoGroupsModal from "../components/nogroupsmodal";
-import Tasks from "../components/tasks";
 import ElementBG from "../../../components/backgrounds/elementbg";
 import FloatingBubbles from "../../../components/backgrounds/floatingbubbles";
 import DashboardHeader from "../components/dashboardheader";
-import Settings from "./settings";
+import Settings from "./accountsettings";
+import AdminDashboard from "../components/admindashboard";
+import MemberDashboard from "../components/memberdashboard";
 
 function MainDashboard() {
 	const [groupsAsAdmin, setGroupsAsAdmin] = React.useState([]);
@@ -15,6 +16,8 @@ function MainDashboard() {
 	const [name, setName] = React.useState("");
 	const [loaded, setLoaded] = React.useState(false);
 	const [showSettingsState, setShowSettingsState] = React.useState(false);
+	const [currentGroup, setCurrentGroup] = React.useState(null);
+	const [isAdmin, setIsAdmin] = React.useState(false);
 
 	const showSettings = () => {
 		setShowSettingsState(true);
@@ -24,11 +27,8 @@ function MainDashboard() {
 		setShowSettingsState(false);
 	}
 
-	const dbRef = ref(database, 'users/' + auth.currentUser.uid);
-
-	//Realtime listener for user data
-	onValue(dbRef, (snapshot) => {
-		if (!loaded) setLoaded(true);
+	//Realtime listener for user account data
+	onValue(ref(database, 'users/' + auth.currentUser.uid), (snapshot) => {
 		const data = snapshot.val();
 		if (data.groupsAsAdmin) {
 			if (Object.keys(data.groupsAsAdmin).length !== groupsAsAdmin.length) setGroupsAsAdmin(Object.values(data.groupsAsAdmin));
@@ -43,6 +43,18 @@ function MainDashboard() {
 		}
 
 		if (data.name !== name) setName(data.name);
+
+		if (!loaded) {
+			if(groupsAsAdmin[0]) {
+				setCurrentGroup(groupsAsAdmin[0]);
+				setIsAdmin(true);
+			}else if(groupsAsMember[0]) {
+				setCurrentGroup(groupsAsMember[0]);
+				setIsAdmin(false);
+			}
+
+			setLoaded(true)
+		};
 	});
 
 	//loading screen while loading groups data
@@ -71,24 +83,12 @@ function MainDashboard() {
 						display: flex;
 						flex-direction: column;
 					}
-
-					#dashboard-main-container {
-						flex: 1 1 auto;
-						display: flex;
-						flex-direction: row;
-						width: 100%;
-						padding: 10px;
-						justify-content: space-between;
-					}
         		`}
 			</style>
 
 			{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
-			<DashboardHeader name={name} showSettings={showSettings}></DashboardHeader>
-			<div id="dashboard-main-container">
-				<div></div>
-				<Tasks></Tasks>
-			</div>
+			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup}></DashboardHeader>
+			{isAdmin ? <AdminDashboard />: <MemberDashboard />}
 		</div>
 	);
 }
