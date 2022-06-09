@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import AccountOptionsDropdown from "../routes/dashboard/components/accountoptionsdropdown";
+import AccountOptionsDropdown from "./accountoptionsdropdown";
 
 function DashboardHeader(props) {
     return (
@@ -24,7 +24,7 @@ function DashboardHeader(props) {
             </style>
             <div id="dashboard-header-container">
                 <div></div>
-                <AccountOptionsDropdown name={props.name}></AccountOptionsDropdown>
+                <AccountOptionsDropdown name={props.name} showSettings={props.showSettings}></AccountOptionsDropdown>
             </div>
         </>
     );

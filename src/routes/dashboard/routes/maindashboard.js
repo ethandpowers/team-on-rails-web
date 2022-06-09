@@ -6,17 +6,27 @@ import NoGroupsModal from "../components/nogroupsmodal";
 import Tasks from "../components/tasks";
 import ElementBG from "../../../components/backgrounds/elementbg";
 import FloatingBubbles from "../../../components/backgrounds/floatingbubbles";
-import DashboardHeader from "../../../components/dashboardheader";
+import DashboardHeader from "../components/dashboardheader";
 import Settings from "./settings";
 
-function MainDashboard(props) {
+function MainDashboard() {
 	const [groupsAsAdmin, setGroupsAsAdmin] = React.useState([]);
 	const [groupsAsMember, setGroupsAsMember] = React.useState([]);
 	const [name, setName] = React.useState("");
 	const [loaded, setLoaded] = React.useState(false);
+	const [showSettingsState, setShowSettingsState] = React.useState(false);
+
+	const showSettings = () => {
+		setShowSettingsState(true);
+	}
+
+	const hideSettings = () => {
+		setShowSettingsState(false);
+	}
 
 	const dbRef = ref(database, 'users/' + auth.currentUser.uid);
 
+	//Realtime listener for user data
 	onValue(dbRef, (snapshot) => {
 		if (!loaded) setLoaded(true);
 		const data = snapshot.val();
@@ -32,7 +42,7 @@ function MainDashboard(props) {
 			setGroupsAsMember([]);
 		}
 
-		if(data.name !== name) setName(data.name);
+		if (data.name !== name) setName(data.name);
 	});
 
 	//loading screen while loading groups data
@@ -44,9 +54,9 @@ function MainDashboard(props) {
 	else if (groupsAsAdmin.length === 0 && groupsAsMember.length === 0) {
 		return (
 			<>
-			<ElementBG>
-				<FloatingBubbles></FloatingBubbles>
-			</ElementBG>
+				<ElementBG>
+					<FloatingBubbles></FloatingBubbles>
+				</ElementBG>
 				<NoGroupsModal></NoGroupsModal>
 			</>
 		);
@@ -63,8 +73,9 @@ function MainDashboard(props) {
 					}
         		`}
 			</style>
-			{ (props.modal === "settings") ? <Settings></Settings>: <></> }
-			<DashboardHeader name={name}></DashboardHeader>
+
+			{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
+			<DashboardHeader name={name} showSettings={showSettings}></DashboardHeader>
 			<div id="dashboard-main-container">
 				<Tasks></Tasks>
 			</div>

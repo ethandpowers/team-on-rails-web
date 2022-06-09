@@ -124,7 +124,7 @@ function NoGroupsModal() {
                 You can join an existing group or create a new one.
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="seconary" onClick={() => setJoin(true)}>
+                <Button variant="clear" onClick={() => setJoin(true)}>
                     Join Group
                 </Button>
                 <Button3 variant="primary" onClick={() => setCreate(true)}>Create Group</Button3>

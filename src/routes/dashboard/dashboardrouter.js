@@ -4,7 +4,6 @@ import { auth } from "../../firebase";
 import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 import Loading from "../../components/loading";
 import MainDashboard from "./routes/maindashboard";
-import Settings from "./routes/settings";
 
 function DashboardRouter() {
     const [loggedInState, setLoggedInState] = React.useState(true);
@@ -35,9 +34,9 @@ function DashboardRouter() {
             <>
                 <Routes location={background || location}>
                     <Route path="/" element={<MainDashboard />} />
-                    <Route path="*" element={<Navigate to="/dashboard" />} />
+                    <Route path="*" element={<MainDashboard />} />
                 </Routes>
-                {background && <Route path="/settings" element={<Settings />} />}
+
             </>
         );
     }
