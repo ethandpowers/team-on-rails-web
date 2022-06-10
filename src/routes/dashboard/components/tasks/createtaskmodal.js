@@ -1,9 +1,9 @@
 import { onValue, ref } from "firebase/database";
 import { React, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import Button3 from "../../../components/buttons/button3";
-import { createTask } from "../../../firebase";
-import { auth, database } from "../../../firebase";
+import Button3 from "../../../../components/buttons/button3";
+import { createTask } from "../../../../firebase";
+import { auth, database } from "../../../../firebase";
 
 function CreateTaskModal(props) {
     const [groupMembers, setGroupMembers] = useState([]);
@@ -38,7 +38,7 @@ function CreateTaskModal(props) {
         let task = {
             title: event.target.title.value,
             description: event.target.description.value ? event.target.description.value : null,
-            dueDate: event.target.dueDate.value ? event.target.dueDate.value : null,
+            deadline: event.target.deadline.value ? event.target.deadline.value : null,
             assignedTo: assignedTo,
             assignedBy: { userId: auth.currentUser.uid, name: props.name },
             status: "pending"
@@ -72,16 +72,16 @@ function CreateTaskModal(props) {
                             <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows="3" placeholder="Enter description" />
                         </Form.Group>
-                        <Form.Group controlId="dueDate" className="mb-3">
-                            <Form.Label>Due Date</Form.Label>
-                            <Form.Control type="date" placeholder="Enter due date" />
+                        <Form.Group controlId="deadline" className="mb-3">
+                            <Form.Label>Deadline</Form.Label>
+                            <Form.Control type="date" placeholder="Enter Deadline" />
                         </Form.Group>
                         <Form.Group controlId="assignedTo" className="mb-3">
                             <Form.Label>Assigned To</Form.Label>
                             <Form.Control as="select">
                                 <option key="sel">Select User</option>
                                 <option key={groupAdmin.userId} value={groupAdmin.userId}>{groupAdmin.name}</option>
-                                {groupMembers.map((user, index) => {
+                                {groupMembers.map((user) => {
                                     return (
                                         <option key={user.userId} value={user.userId}>{user.name}</option>
                                     )

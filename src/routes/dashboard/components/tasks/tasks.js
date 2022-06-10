@@ -1,14 +1,27 @@
 import { onValue, ref } from "firebase/database";
 import { React, useState } from "react";
 import { Card, ListGroup, Tab, Nav } from "react-bootstrap";
-import Button3 from "../../../components/buttons/button3";
-import { auth, database } from "../../../firebase";
+import Button3 from "../../../../components/buttons/button3";
+import { auth, database } from "../../../../firebase";
 import CreateTaskModal from "./createtaskmodal";
+import TaskDetailsModal from "./taskdetailsmodal";
+import TaskPreview from "./taskpreview";
 
 function Tasks(props) {
     const [tasks, setTasks] = useState([]);
     const [yourTasks, setYourTasks] = useState([]);
     const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
+    const [showTaskDetailsModal, setShowTaskDetailsModal] = useState(null);
+
+    const sortTasksByDeadline = (a, b) => {
+        if (a.deadline < b.deadline) {
+            return -1;
+        } else if (a.deadline > b.deadline) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
     onValue(ref(database, `groups/${props.group.groupId}/tasks`), (snapshot) => {
         const data = snapshot.val();
@@ -92,6 +105,12 @@ function Tasks(props) {
 
                     .task-tab:hover{
                         color: #2b3050;
+                        cursor: pointer;
+                    }
+
+                    #tasks-body-button{
+                        display: flex;
+                        flex-flow: column-reverse;
                     }
 
                     @media screen and (max-width: 900px) {
@@ -101,8 +120,10 @@ function Tasks(props) {
                     }
                 `}
             </style>
+            {showCreateTaskModal && <CreateTaskModal hideModal={() => setShowCreateTaskModal(false)} group={props.group} name={props.name} />}
+            {showTaskDetailsModal && <TaskDetailsModal hideModal={() => setShowTaskDetailsModal(false)} task={showTaskDetailsModal} />}
             <Card id="tasks-container">
-                <Tab.Container defaultActiveKey={yourTasks.length > 0 ? "your-tasks": "all-tasks"}>
+                <Tab.Container defaultActiveKey={yourTasks.length > 0 ? "your-tasks" : "all-tasks"}>
                     <Card.Header>
                         <Nav variant="tabs">
                             <Nav.Item>
@@ -116,22 +137,23 @@ function Tasks(props) {
                     <Tab.Content>
                         <Tab.Pane eventKey="your-tasks">
                             <ListGroup className="list-group-flush">
-                                {yourTasks.map((task, index) => {
+                                {yourTasks.sort(sortTasksByDeadline).map((task, index) => {
                                     return (
-                                        <ListGroup.Item key={index}>
-                                            {task.title}
+                                        <ListGroup.Item key={index} action onClick={() => setShowTaskDetailsModal(task)}>
+                                            <TaskPreview task={task} />
                                         </ListGroup.Item>
                                     );
                                 })}
                                 {yourTasks.length === 0 && <ListGroup.Item>No tasks assigned to you yet.</ListGroup.Item>}
                             </ListGroup>
                         </Tab.Pane>
+
                         <Tab.Pane eventKey="all-tasks">
                             <ListGroup className="list-group-flush">
-                                {tasks.map((task, index) => {
+                                {tasks.sort(sortTasksByDeadline).map((task, index) => {
                                     return (
-                                        <ListGroup.Item key={index}>
-                                            {task.title}
+                                        <ListGroup.Item key={index} action onClick={() => { setShowTaskDetailsModal(task) }}>
+                                            <TaskPreview task={task} />
                                         </ListGroup.Item>
                                     );
                                 })}
@@ -140,6 +162,9 @@ function Tasks(props) {
                     </Tab.Content>
 
                 </Tab.Container>
+                <Card.Body id="tasks-body-button">
+                    <Button3 onClick={() => { setShowCreateTaskModal(true) }}>Create Task</Button3>
+                </Card.Body>
             </Card>
         </>
     );
