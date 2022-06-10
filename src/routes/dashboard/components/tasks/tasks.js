@@ -140,7 +140,7 @@ function Tasks(props) {
                                 {yourTasks.sort(sortTasksByDeadline).map((task, index) => {
                                     return (
                                         <ListGroup.Item key={index} action onClick={() => setShowTaskDetailsModal(task)}>
-                                            <TaskPreview task={task} />
+                                            <TaskPreview task={task} showName={false} />
                                         </ListGroup.Item>
                                     );
                                 })}
@@ -153,7 +153,7 @@ function Tasks(props) {
                                 {tasks.sort(sortTasksByDeadline).map((task, index) => {
                                     return (
                                         <ListGroup.Item key={index} action onClick={() => { setShowTaskDetailsModal(task) }}>
-                                            <TaskPreview task={task} />
+                                            <TaskPreview task={task} showName={true} />
                                         </ListGroup.Item>
                                     );
                                 })}
