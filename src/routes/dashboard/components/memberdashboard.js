@@ -1,7 +1,7 @@
 import React from "react";
 import Tasks from "./tasks";
 
-function MemberDashboard(){
+function MemberDashboard(props){
 
     return(
         <>
@@ -19,7 +19,7 @@ function MemberDashboard(){
             </style>
             <div id="dashboard-main-container">
 				<div></div>
-				<Tasks></Tasks>
+				<Tasks group={props.group}></Tasks>
 			</div>
         </>
     );

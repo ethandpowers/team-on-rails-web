@@ -11,6 +11,7 @@ import Login from './routes/login';
 import Signup from './routes/signup';
 import NotFound from './routes/404';
 import LogOut from './routes/logout';
+import TermsOfService from './routes/termsofservice';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,6 +23,7 @@ root.render(
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/logout" element={<LogOut />} />
+        <Route path="termsofservice" element={<TermsOfService />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

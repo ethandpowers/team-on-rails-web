@@ -6,7 +6,7 @@ import NoGroupsModal from "../components/nogroupsmodal";
 import ElementBG from "../../../components/backgrounds/elementbg";
 import FloatingBubbles from "../../../components/backgrounds/floatingbubbles";
 import DashboardHeader from "../components/dashboardheader";
-import Settings from "./accountsettings";
+import Settings from "../components/accountsettings";
 import AdminDashboard from "../components/admindashboard";
 import MemberDashboard from "../components/memberdashboard";
 
@@ -31,13 +31,25 @@ function MainDashboard() {
 	onValue(ref(database, 'users/' + auth.currentUser.uid), (snapshot) => {
 		const data = snapshot.val();
 		if (data.groupsAsAdmin) {
-			if (Object.keys(data.groupsAsAdmin).length !== groupsAsAdmin.length) setGroupsAsAdmin(Object.values(data.groupsAsAdmin));
+			if (Object.keys(data.groupsAsAdmin).length !== groupsAsAdmin.length) {
+				setGroupsAsAdmin(Object.values(data.groupsAsAdmin));
+				if (currentGroup === null) {
+					setCurrentGroup(Object.values(data.groupsAsAdmin)[0]);
+					setIsAdmin(true);
+				}
+			}
 		} else if (groupsAsAdmin.length > 0) {
 			setGroupsAsAdmin([]);
 		}
 
 		if (data.groupsAsMember) {
-			if (Object.keys(data.groupsAsMember).length !== groupsAsMember.length) setGroupsAsMember(Object.values(data.groupsAsMember));
+			if (Object.keys(data.groupsAsMember).length !== groupsAsMember.length) {
+				setGroupsAsMember(Object.values(data.groupsAsMember));
+				if (currentGroup === null) {
+					setCurrentGroup(Object.values(data.groupsAsMember)[0]);
+					setIsAdmin(false);
+				}
+			}
 		} else if (groupsAsMember.length > 0) {
 			setGroupsAsMember([]);
 		}
@@ -45,14 +57,6 @@ function MainDashboard() {
 		if (data.name !== name) setName(data.name);
 
 		if (!loaded) {
-			if(groupsAsAdmin[0]) {
-				setCurrentGroup(groupsAsAdmin[0]);
-				setIsAdmin(true);
-			}else if(groupsAsMember[0]) {
-				setCurrentGroup(groupsAsMember[0]);
-				setIsAdmin(false);
-			}
-
 			setLoaded(true)
 		};
 	});
@@ -88,7 +92,7 @@ function MainDashboard() {
 
 			{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
 			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup}></DashboardHeader>
-			{isAdmin ? <AdminDashboard />: <MemberDashboard />}
+			{isAdmin ? <AdminDashboard group={currentGroup}/>: <MemberDashboard group={currentGroup}/>}
 		</div>
 	);
 }

@@ -10,8 +10,8 @@ function SignupForm(props) {
         const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
-        try {await signUp(name, email, password);}
-        catch(error){
+        try { await signUp(name, email, password); }
+        catch (error) {
             props.badPassword();
         }
     }
@@ -34,18 +34,21 @@ function SignupForm(props) {
             <Card className="signup-card">
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3" controlId="formBasicName">
+                        <Form.Group className="mb-3" controlId="formBasicName">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control name="name" type="text" placeholder="Enter first and last name" />
+                            <Form.Control name="name" type="text" placeholder="Enter first and last name" required/>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control name="email" type="email" placeholder="Enter email" />
+                            <Form.Control name="email" type="email" placeholder="Enter email" required />
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control name="password" type="password" placeholder="Password" />
+                            <Form.Control name="password" type="password" placeholder="Password" required/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formTOSCheckbox">
+                            <Form.Check type="checkbox" label={`By selecting this, you agree to our termsd of service.`} required/>
                         </Form.Group>
                         <Button3 type="submit">
                             Sign Up
