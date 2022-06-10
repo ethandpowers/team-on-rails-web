@@ -92,7 +92,7 @@ function MainDashboard() {
 
 			{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
 			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup}></DashboardHeader>
-			{isAdmin ? <AdminDashboard group={currentGroup}/>: <MemberDashboard group={currentGroup}/>}
+			{isAdmin ? <AdminDashboard group={currentGroup} name={name}/>: <MemberDashboard group={currentGroup} name={name}/>}
 		</div>
 	);
 }

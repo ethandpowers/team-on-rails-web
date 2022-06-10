@@ -2,7 +2,6 @@ import React from "react";
 import Tasks from "./tasks";
 
 function AdminDashboard(props){
-
     return(
         <>
             <style type="text/css">
@@ -19,7 +18,7 @@ function AdminDashboard(props){
             </style>
             <div id="dashboard-main-container">
 				<div></div>
-				<Tasks group={props.group}></Tasks>
+				<Tasks group={props.group} name={props.name}></Tasks>
 			</div>
         </>
     );

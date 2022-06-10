@@ -75,3 +75,10 @@ export async function createGroup(groupName) {
         name: groupName
     });
 }
+
+export async function createTask(group, task){
+    await push(ref(database, `groups/${group.groupId}/tasks`), {
+        ...task,
+        creationTimeStamp: Date.now(),
+    });
+}

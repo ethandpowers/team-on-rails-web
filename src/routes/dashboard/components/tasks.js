@@ -7,14 +7,17 @@ import CreateTaskModal from "./createtaskmodal";
 
 function Tasks(props) {
     const [tasks, setTasks] = useState([]);
+    const [yourTasks, setYourTasks] = useState([]);
     const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
 
-    onValue(ref(database, `users/${props.group.groupId}`), (snapshot) => {
+    onValue(ref(database, `groups/${props.group.groupId}/tasks`), (snapshot) => {
         const data = snapshot.val();
-        if (data.tasks) {
-            if (Object.keys(data.tasks).length !== tasks.length) {
-                setTasks(Object.values(data.tasks));
-            }
+        if (data == null && tasks.length !== 0) {
+            setTasks([]);
+            setYourTasks([]);
+        } else if (data != null && Object.values(data).length !== tasks.length) {
+            setTasks(Object.values(data));
+            setYourTasks(Object.values(data).filter(task => task.assignedTo.userId === auth.currentUser.uid));
         }
     });
 
@@ -48,14 +51,14 @@ function Tasks(props) {
                         margin-left: 10px;
                     }
 
-                    @media screen and (max-width: 900px) {
+                    @media screen and (max-width: 1000px) {
                         #tasks-container {
                             width: 100%;
                         }
                     }
                 `}
                 </style>
-                {showCreateTaskModal && <CreateTaskModal hideModal={()=>setShowCreateTaskModal(false)}/>}
+                {showCreateTaskModal && <CreateTaskModal hideModal={() => setShowCreateTaskModal(false)} group={props.group} name={props.name} />}
                 <Card id="tasks-container">
                     <Card.Header id="tasks-empty-header">
                         <i className="bi bi-list-task"></i>
@@ -99,7 +102,7 @@ function Tasks(props) {
                 `}
             </style>
             <Card id="tasks-container">
-                <Tab.Container defaultActiveKey="your-tasks">
+                <Tab.Container defaultActiveKey={yourTasks.length > 0 ? "your-tasks": "all-tasks"}>
                     <Card.Header>
                         <Nav variant="tabs">
                             <Nav.Item>
@@ -113,13 +116,26 @@ function Tasks(props) {
                     <Tab.Content>
                         <Tab.Pane eventKey="your-tasks">
                             <ListGroup className="list-group-flush">
-                                <ListGroup.Item>item</ListGroup.Item>
-                                <ListGroup.Item>item</ListGroup.Item>
-                                <ListGroup.Item>item</ListGroup.Item>
+                                {yourTasks.map((task, index) => {
+                                    return (
+                                        <ListGroup.Item key={index}>
+                                            {task.title}
+                                        </ListGroup.Item>
+                                    );
+                                })}
+                                {yourTasks.length === 0 && <ListGroup.Item>No tasks assigned to you yet.</ListGroup.Item>}
                             </ListGroup>
                         </Tab.Pane>
                         <Tab.Pane eventKey="all-tasks">
-                            all tasks
+                            <ListGroup className="list-group-flush">
+                                {tasks.map((task, index) => {
+                                    return (
+                                        <ListGroup.Item key={index}>
+                                            {task.title}
+                                        </ListGroup.Item>
+                                    );
+                                })}
+                            </ListGroup>
                         </Tab.Pane>
                     </Tab.Content>
 
