@@ -17,6 +17,10 @@ function Tasks(props) {
     const [showEditTaskModal, setShowEditTaskModal] = useState(null);
 
     const sortTasksByDeadline = (a, b) => {
+        if(a.completed && !b.completed) return 1;
+        if(!a.completed && b.completed) return -1;
+        if(a.deadline && !b.deadline) return 1;
+        if(!a.deadline && b.deadline) return -1;
         if (a.deadline < b.deadline) {
             return -1;
         } else if (a.deadline > b.deadline) {
@@ -24,6 +28,7 @@ function Tasks(props) {
         } else {
             return 0;
         }
+
     }
 
     const deleteTask = (task) => {
@@ -135,7 +140,7 @@ function Tasks(props) {
                 `}
             </style>
             {showCreateTaskModal && <CreateTaskModal hideModal={() => setShowCreateTaskModal(false)} group={props.group} name={props.name} />}
-            {showTaskDetailsModal && <TaskDetailsModal hideModal={() => setShowTaskDetailsModal(false)} task={showTaskDetailsModal} name={props.name} showEditModal={()=>{setShowEditTaskModal(showTaskDetailsModal)}}/>}
+            {showTaskDetailsModal && <TaskDetailsModal hideModal={() => setShowTaskDetailsModal(false)} group={props.group} task={showTaskDetailsModal} name={props.name} showEditModal={()=>{setShowEditTaskModal(showTaskDetailsModal)}}/>}
             {showEditTaskModal && <EditTaskModal hideModal={() => setShowEditTaskModal(false)} deleteTask={deleteTask} group={props.group} task={showEditTaskModal} name={props.name} isAdmin={props.isAdmin}/>}
             <Card id="tasks-container">
                 <Tab.Container defaultActiveKey={yourTasks.length > 0 ? "your-tasks" : "all-tasks"}>

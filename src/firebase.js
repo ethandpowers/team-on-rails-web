@@ -96,3 +96,10 @@ export async function updateTask(group, task) {
 export async function deleteTask(group, task) {
     await remove(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`));
 }
+
+export async function completeTask(group, task) {
+    await update(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`), {
+        completed: true,
+        completionTimeStamp: Date.now(),
+    });
+}

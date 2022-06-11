@@ -2,7 +2,8 @@ import { onValue, ref } from "firebase/database";
 import { React, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import Button3 from "../../../../components/buttons/button3";
-import { auth, database, updateTask } from "../../../../firebase";
+import { database, updateTask } from "../../../../firebase";
+import moment from "moment";
 
 function EditTaskModal(props) {
     const [groupMembers, setGroupMembers] = useState([]);
@@ -38,7 +39,7 @@ function EditTaskModal(props) {
             ...props.task,
             title: event.target.title.value,
             description: event.target.description.value ? event.target.description.value : null,
-            deadline: event.target.deadline.value ? event.target.deadline.value : null,
+            deadline: event.target.deadline.value ? moment(event.target.deadline.value, "YYYY-MM-DD").format("MM/DD/YYYY") : null,
             assignedTo: assignedTo,
         }
         updateTask(props.group, task);
@@ -75,7 +76,7 @@ function EditTaskModal(props) {
                         </Form.Group>
                         <Form.Group controlId="description" className="mb-3">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" rows="3" defaultValue={props.task.description ? props.task.description : "Enter description"} />
+                            <Form.Control as="textarea" rows="3" placeholder="Enter description" defaultValue={props.task.description ? props.task.description : ""} />
                         </Form.Group>
                         <Form.Group controlId="deadline" className="mb-3">
                             <Form.Label>Deadline</Form.Label>

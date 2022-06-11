@@ -4,6 +4,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import Button3 from "../../../../components/buttons/button3";
 import { createTask } from "../../../../firebase";
 import { auth, database } from "../../../../firebase";
+import moment from "moment";
 
 function CreateTaskModal(props) {
     const [groupMembers, setGroupMembers] = useState([]);
@@ -38,10 +39,10 @@ function CreateTaskModal(props) {
         let task = {
             title: event.target.title.value,
             description: event.target.description.value ? event.target.description.value : null,
-            deadline: event.target.deadline.value ? event.target.deadline.value : null,
+            deadline: event.target.deadline.value ? moment(event.target.deadline.value, "YYYY-MM-DD").format("MM/DD/YYYY") : null,
             assignedTo: assignedTo,
             assignedBy: { userId: auth.currentUser.uid, name: props.name },
-            status: "pending"
+            completed: false,
         }
         createTask(props.group, task);
         props.hideModal();
