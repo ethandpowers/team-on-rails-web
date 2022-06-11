@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { get, getDatabase, push, ref, set, update } from "firebase/database";
+import { get, getDatabase, push, ref, set, update, remove } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAfvt67zQjyY_D9NlwNwNhVMPN7CtucsGA",
@@ -76,9 +76,23 @@ export async function createGroup(groupName) {
     });
 }
 
-export async function createTask(group, task){
-    await push(ref(database, `groups/${group.groupId}/tasks`), {
+export async function createTask(group, task) {
+    let taskref = await push(ref(database, `groups/${group.groupId}/tasks`), {
         ...task,
         creationTimeStamp: Date.now(),
     });
+    await update(ref(database, `groups/${group.groupId}/tasks/${taskref.key}`), {
+        taskId: taskref.key,
+    });
+}
+
+export async function updateTask(group, task) {
+    await update(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`), {
+        ...task,
+        updateTimeStamp: Date.now(),
+    });
+}
+
+export async function deleteTask(group, task) {
+    await remove(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`));
 }

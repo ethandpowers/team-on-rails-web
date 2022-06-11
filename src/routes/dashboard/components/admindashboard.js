@@ -18,7 +18,7 @@ function AdminDashboard(props){
             </style>
             <div id="dashboard-main-container">
 				<div></div>
-				<Tasks group={props.group} name={props.name}></Tasks>
+				<Tasks group={props.group} name={props.name} isAdmin={true}></Tasks>
 			</div>
         </>
     );

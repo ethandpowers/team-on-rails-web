@@ -18,11 +18,16 @@ function TaskPreview(props) {
                         align-items: center;
                     }
 
-                    .fullwidth-center{
+                    .fullwidth-end{
                         flex-grow: 1;
                         display: flex;
-                        justify-content: center;
+                        justify-content: flex-end;
                         flex-direction: row;
+                        padding-right: 20px;
+                    }
+
+                    .task-deadline-icon{
+                        margin-right: 10px;
                     }
                 `}
             </style>
@@ -31,16 +36,16 @@ function TaskPreview(props) {
                     <div className="task-preview-text fw-bold">
                         {props.task.title}
                     </div>
-                    {props.showName && <div className="me-auto">
+                    {props.showName && props.task.assignedTo && <div className="me-auto">
                         {props.task.assignedTo.name}
                     </div>}
-                    {!props.showName && <div className="me-auto">
-                        <i className=" mr-2 bi bi-calendar-x"></i>
+                    {!props.showName && props.task.deadline && <div className="me-auto">
+                        <i className="bi bi-calendar-x task-deadline-icon"></i>
                         {props.task.deadline}
                     </div>}
                 </div>
-                {props.showName && <div className="fullwidth-center me-auto">
-                    <i className="bi bi-calendar-x mr-2"></i>
+                {props.showName && props.task.deadline && <div className="fullwidth-end me-auto">
+                    <i className="bi bi-calendar-x task-deadline-icon"></i>
                     {props.task.deadline}
                 </div>}
                 <i className="bi bi-arrows-angle-expand"></i>
