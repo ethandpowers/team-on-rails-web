@@ -1,4 +1,5 @@
 import React from "react";
+import Calendar from "./calendar/calendar";
 import Tasks from "./tasks/tasks";
 
 function MemberDashboard(props){
@@ -18,7 +19,7 @@ function MemberDashboard(props){
                 `}
             </style>
             <div id="dashboard-main-container">
-				<div></div>
+				<Calendar></Calendar>
 				<Tasks group={props.group} name={props.name} isAdmin={false}></Tasks>
 			</div>
         </>

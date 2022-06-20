@@ -6,7 +6,7 @@ import NoGroupsModal from "../components/modals/nogroupsmodal";
 import ElementBG from "../../../components/backgrounds/elementbg";
 import FloatingBubbles from "../../../components/backgrounds/floatingbubbles";
 import DashboardHeader from "../components/dashboardheader";
-import Settings from "../components/accountsettings";
+import Settings from "../components/modals/accountsettings";
 import AdminDashboard from "../components/admindashboard";
 import MemberDashboard from "../components/memberdashboard";
 import JoinGroupModal from "../components/modals/joingroupmodal";
