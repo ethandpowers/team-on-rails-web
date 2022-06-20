@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
 import React from "react";
-import Button3 from "../../../components/buttons/button3";
-import { joinGroup as joinGroupFirebase, createGroup as createGroupFirebase } from "../../../firebase";
+import Button3 from "../../../../components/buttons/button3";
+import { joinGroup as joinGroupFirebase, createGroup as createGroupFirebase } from "../../../../firebase";
 
 function NoGroupsModal() {
     const [create, setCreate] = React.useState(false);

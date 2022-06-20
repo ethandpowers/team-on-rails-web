@@ -48,7 +48,7 @@ export async function joinGroup(id) {
     if (group) {
         await push(ref(database, `users/${auth.currentUser.uid}/groupsAsMember`), {
             groupId: id,
-            groupName: group.name,
+            name: group.name,
             joinedTimeStamp: Date.now()
         });
 

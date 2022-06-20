@@ -2,13 +2,15 @@ import React from "react";
 import { auth, database } from "../../../firebase";
 import { ref, onValue } from "firebase/database";
 import Loading from "../../../components/loading";
-import NoGroupsModal from "../components/nogroupsmodal";
+import NoGroupsModal from "../components/modals/nogroupsmodal";
 import ElementBG from "../../../components/backgrounds/elementbg";
 import FloatingBubbles from "../../../components/backgrounds/floatingbubbles";
 import DashboardHeader from "../components/dashboardheader";
 import Settings from "../components/accountsettings";
 import AdminDashboard from "../components/admindashboard";
 import MemberDashboard from "../components/memberdashboard";
+import JoinGroupModal from "../components/modals/joingroupmodal";
+import CreateGroupModal from "../components/modals/creategroupmodal";
 
 function MainDashboard() {
 	const [groupsAsAdmin, setGroupsAsAdmin] = React.useState([]);
@@ -16,6 +18,8 @@ function MainDashboard() {
 	const [name, setName] = React.useState("");
 	const [loaded, setLoaded] = React.useState(false);
 	const [showSettingsState, setShowSettingsState] = React.useState(false);
+	const [showJoinGroupModal, setShowJoinGroupModal] = React.useState(false);
+	const [showCreateGroupModal, setShowCreateGroupModal] = React.useState(false);
 	const [currentGroup, setCurrentGroup] = React.useState(null);
 	const [isAdmin, setIsAdmin] = React.useState(false);
 
@@ -25,6 +29,22 @@ function MainDashboard() {
 
 	const hideSettings = () => {
 		setShowSettingsState(false);
+	}
+
+	const showJoinGroupModalFunc = () => {
+		setShowJoinGroupModal(true);
+	}
+
+	const showCreateGroupModalFunc = () => {
+		setShowCreateGroupModal(true);
+	}
+
+	const hideCreateGroupModal = () => {
+		setShowCreateGroupModal(false);
+	}
+
+	const hideJoinGroupModal = () => {
+		setShowJoinGroupModal(false);
 	}
 
 	//Realtime listener for user account data
@@ -91,8 +111,10 @@ function MainDashboard() {
 			</style>
 
 			{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
-			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup}></DashboardHeader>
-			{isAdmin ? <AdminDashboard group={currentGroup} name={name}/>: <MemberDashboard group={currentGroup} name={name}/>}
+			{showJoinGroupModal && <JoinGroupModal hideModal={hideJoinGroupModal}></JoinGroupModal>}
+			{showCreateGroupModal && <CreateGroupModal hideModal={hideCreateGroupModal}></CreateGroupModal>}
+			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} joinGroup={showJoinGroupModalFunc} createGroup={showCreateGroupModalFunc}></DashboardHeader>
+			{isAdmin ? <AdminDashboard group={currentGroup} name={name} /> : <MemberDashboard group={currentGroup} name={name} />}
 		</div>
 	);
 }

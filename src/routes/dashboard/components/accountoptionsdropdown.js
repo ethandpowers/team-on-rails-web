@@ -13,6 +13,8 @@ function AccountOptionsDropdown(props) {
                 `}
             </style>
             <DropdownButton id="account-options-dropdown-button" variant="clear" title={props.name}>
+                <Dropdown.Item onClick={props.createGroup}>Create Group</Dropdown.Item>
+                <Dropdown.Item onClick={props.joinGroup}>Join Group</Dropdown.Item>
                 <Dropdown.Item onClick={props.showSettings}>Settings</Dropdown.Item>
                 <Dropdown.Item onClick={logOut}>Log Out</Dropdown.Item>
             </DropdownButton>

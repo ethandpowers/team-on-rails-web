@@ -1,5 +1,7 @@
 import { React } from "react";
 import AccountOptionsDropdown from "./accountoptionsdropdown";
+import SelectGroupDropdown from "./selectgroupdropdown";
+import { Button } from "react-bootstrap";
 
 function DashboardHeader(props) {
     return (
@@ -20,11 +22,24 @@ function DashboardHeader(props) {
                         padding-top: 10px;
                         padding-bottom: 10px;
                     }
+
+                    #group-nav-div{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+
+                    #copy-id-button{
+                        color: white;
+                    }
                 `}
             </style>
             <div id="dashboard-header-container">
-                <div></div>
-                <AccountOptionsDropdown name={props.name} showSettings={props.showSettings}></AccountOptionsDropdown>
+                <div id="group-nav-div">
+                    <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
+                    <Button variant="clear" id="copy-id-button" onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId) }}>Copy Group ID: {props.currentGroup.groupId} <i className="bi bi-clipboard-check"></i></Button>
+                </div>
+                <AccountOptionsDropdown name={props.name} showSettings={props.showSettings} joinGroup={props.joinGroup} createGroup={props.createGroup}></AccountOptionsDropdown>
             </div>
         </>
     );

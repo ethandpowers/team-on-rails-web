@@ -48,7 +48,7 @@ function SignupForm(props) {
                             <Form.Control name="password" type="password" placeholder="Password" required/>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formTOSCheckbox">
-                            <Form.Check type="checkbox" label={`By selecting this, you agree to our termsd of service.`} required/>
+                            <Form.Check type="checkbox" label={`By selecting this, you agree to our terms of service.`} required/>
                         </Form.Group>
                         <Button3 type="submit">
                             Sign Up
