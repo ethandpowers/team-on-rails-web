@@ -11,12 +11,13 @@ function DashboardHeader(props) {
                 {`
                     #dashboard-header-container {
                         width: 100%;
+                        min-height: 60px;
+                        // height: 50px;
                         display: flex;
                         flex-direction: row;
                         align-items: center;
                         justify-content: space-between;
                         background-color: #2b3050;
-                        min-height: 50px;
                         color: white;
                         padding-right: 10px;
                         padding-left: 10px;

@@ -26,7 +26,7 @@ function JoinGroupModal(props) {
                 <Modal.Title>Enter the group ID:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <form id="join-group" onSubmit={joinGroup} autocomplete="off">
+                <form id="join-group" onSubmit={joinGroup} autComplete="off">
                     <style type="text/css">
                         {`
                             #join-group-input {

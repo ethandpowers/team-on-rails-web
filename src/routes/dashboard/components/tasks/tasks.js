@@ -1,26 +1,22 @@
-import { onValue, ref } from "firebase/database";
 import { React, useState } from "react";
 import { Card, ListGroup, Tab, Nav } from "react-bootstrap";
 import Button3 from "../../../../components/buttons/button3";
-import { auth, database, deleteTask as FBDeleteTask } from "../../../../firebase";
+import { deleteTask as FBDeleteTask } from "../../../../firebase";
 import CreateTaskModal from "./createtaskmodal";
 import TaskDetailsModal from "./taskdetailsmodal";
 import EditTaskModal from "./edittaskmodal";
 import TaskPreview from "./taskpreview";
 
 function Tasks(props) {
-    const [loaded, setLoaded] = useState(false);
-    const [tasks, setTasks] = useState([]);
-    const [yourTasks, setYourTasks] = useState([]);
     const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
     const [showTaskDetailsModal, setShowTaskDetailsModal] = useState(null);
     const [showEditTaskModal, setShowEditTaskModal] = useState(null);
 
     const sortTasksByDeadline = (a, b) => {
-        if(a.completed && !b.completed) return 1;
-        if(!a.completed && b.completed) return -1;
-        if(a.deadline && !b.deadline) return -1;
-        if(!a.deadline && b.deadline) return 1;
+        if (a.completed && !b.completed) return 1;
+        if (!a.completed && b.completed) return -1;
+        if (a.deadline && !b.deadline) return -1;
+        if (!a.deadline && b.deadline) return 1;
         if (a.deadline < b.deadline) {
             return -1;
         } else if (a.deadline > b.deadline) {
@@ -37,23 +33,7 @@ function Tasks(props) {
         setShowTaskDetailsModal(false); // This is to close the modal when the task is deleted
     }
 
-    onValue(ref(database, `groups/${props.group.groupId}/tasks`), (snapshot) => {
-        const data = snapshot.val();
-        if (data == null && tasks.length !== 0) {
-            setTasks([]);
-            setYourTasks([]);
-        } else if (data != null && Object.values(data).length !== tasks.length) {
-            setTasks(Object.values(data));
-            setYourTasks(Object.values(data).filter(task => task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid)));
-        }
-        if(!loaded) {
-            setLoaded(true);
-        }
-    });
-    if(!loaded) {
-        return null;
-    }
-    if (tasks.length === 0) {
+    if (props.tasks.length === 0) {
         return (
             <>
                 <style type="text/css">
@@ -132,6 +112,15 @@ function Tasks(props) {
                         flex-flow: column-reverse;
                     }
 
+                    #task-list{
+                        display: flex;
+                        flex-flow: column;
+                        width: 100%;
+                        height: 100%;
+                        max-height: 100%;
+                        overflow: auto;
+                    }
+
                     @media screen and (max-width: 900px) {
                         #tasks-container {
                             width: 100%;
@@ -140,10 +129,10 @@ function Tasks(props) {
                 `}
             </style>
             {showCreateTaskModal && <CreateTaskModal hideModal={() => setShowCreateTaskModal(false)} group={props.group} name={props.name} />}
-            {showTaskDetailsModal && <TaskDetailsModal hideModal={() => setShowTaskDetailsModal(false)} group={props.group} task={showTaskDetailsModal} name={props.name} showEditModal={()=>{setShowEditTaskModal(showTaskDetailsModal)}}/>}
-            {showEditTaskModal && <EditTaskModal hideModal={() => setShowEditTaskModal(false)} deleteTask={deleteTask} group={props.group} task={showEditTaskModal} name={props.name} isAdmin={props.isAdmin}/>}
+            {showTaskDetailsModal && <TaskDetailsModal hideModal={() => setShowTaskDetailsModal(false)} group={props.group} task={showTaskDetailsModal} name={props.name} showEditModal={() => { setShowEditTaskModal(showTaskDetailsModal) }} />}
+            {showEditTaskModal && <EditTaskModal hideModal={() => setShowEditTaskModal(false)} updateTaskUI={setShowTaskDetailsModal} deleteTask={deleteTask} group={props.group} task={showEditTaskModal} name={props.name} isAdmin={props.isAdmin} />}
             <Card id="tasks-container">
-                <Tab.Container defaultActiveKey={yourTasks.length > 0 ? "your-tasks" : "all-tasks"}>
+                <Tab.Container defaultActiveKey={props.yourTasks.length > 0 ? "your-tasks" : "all-tasks"}>
                     <Card.Header>
                         <Nav variant="tabs">
                             <Nav.Item>
@@ -154,32 +143,34 @@ function Tasks(props) {
                             </Nav.Item>
                         </Nav>
                     </Card.Header>
-                    <Tab.Content>
-                        <Tab.Pane eventKey="your-tasks">
-                            <ListGroup className="list-group-flush">
-                                {yourTasks.sort(sortTasksByDeadline).map((task, index) => {
-                                    return (
-                                        <ListGroup.Item key={index} action onClick={() => setShowTaskDetailsModal(task)}>
-                                            <TaskPreview task={task} showName={false} />
-                                        </ListGroup.Item>
-                                    );
-                                })}
-                                {yourTasks.length === 0 && <ListGroup.Item>No tasks assigned to you yet.</ListGroup.Item>}
-                            </ListGroup>
-                        </Tab.Pane>
+                    <div id="task-list">
+                        <Tab.Content>
+                            <Tab.Pane eventKey="your-tasks">
+                                <ListGroup className="list-group-flush">
+                                    {props.yourTasks.sort(sortTasksByDeadline).map((task, index) => {
+                                        return (
+                                            <ListGroup.Item key={index} action onClick={() => setShowTaskDetailsModal(task)}>
+                                                <TaskPreview task={task} showName={false} />
+                                            </ListGroup.Item>
+                                        );
+                                    })}
+                                    {props.yourTasks.length === 0 && <ListGroup.Item>No tasks assigned to you yet.</ListGroup.Item>}
+                                </ListGroup>
+                            </Tab.Pane>
 
-                        <Tab.Pane eventKey="all-tasks">
-                            <ListGroup className="list-group-flush">
-                                {tasks.sort(sortTasksByDeadline).map((task, index) => {
-                                    return (
-                                        <ListGroup.Item key={index} action onClick={() => { setShowTaskDetailsModal(task) }}>
-                                            <TaskPreview task={task} showName={true} />
-                                        </ListGroup.Item>
-                                    );
-                                })}
-                            </ListGroup>
-                        </Tab.Pane>
-                    </Tab.Content>
+                            <Tab.Pane eventKey="all-tasks">
+                                <ListGroup className="list-group-flush">
+                                    {props.tasks.sort(sortTasksByDeadline).map((task, index) => {
+                                        return (
+                                            <ListGroup.Item key={index} action onClick={() => { setShowTaskDetailsModal(task) }}>
+                                                <TaskPreview task={task} showName={true} />
+                                            </ListGroup.Item>
+                                        );
+                                    })}
+                                </ListGroup>
+                            </Tab.Pane>
+                        </Tab.Content>
+                    </div>
 
                 </Tab.Container>
                 <Card.Body id="tasks-body-button">

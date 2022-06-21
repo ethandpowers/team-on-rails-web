@@ -43,6 +43,7 @@ function EditTaskModal(props) {
             assignedTo: assignedTo,
         }
         updateTask(props.group, task);
+        props.updateTaskUI(task);
         props.hideModal();
     }
 

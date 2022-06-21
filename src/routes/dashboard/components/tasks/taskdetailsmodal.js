@@ -1,7 +1,10 @@
+import { onValue } from "firebase/database";
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import Button3 from "../../../../components/buttons/button3";
 import { completeTask } from "../../../../firebase";
+import { database } from "../../../../firebase";
+import { ref } from "firebase/database";
 
 function TaskDetailsModal(props) {
     const completeCurrentTask = () => {
@@ -63,11 +66,11 @@ function TaskDetailsModal(props) {
                 {props.task.description && <Modal.Body>
                     <p>{props.task.description}</p>
                 </Modal.Body>}
-                {(!props.task.completed || props.task.assignedTo)&& <Modal.Footer id="task-details-footer">
+                {(!props.task.completed || props.task.assignedTo) && <Modal.Footer id="task-details-footer">
                     {props.task.assignedTo && props.name !== props.task.assignedTo.name && `Assigned to ${props.task.assignedTo.name} by ${props.task.assignedBy.name}`}
                     {props.task.assignedTo && props.name === props.task.assignedTo.name && `Assigned to you by ${props.task.assignedBy.name}`}
                     <div></div>
-                   {!props.task.completed && <Button3 onClick={completeCurrentTask}><i className="bi bi-check-lg task-icon"></i>Mark Complete</Button3>}
+                    {!props.task.completed && <Button3 onClick={completeCurrentTask}><i className="bi bi-check-lg task-icon"></i>Mark Complete</Button3>}
                 </Modal.Footer>}
             </Modal>
         </>

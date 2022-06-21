@@ -3,7 +3,7 @@ import { Card } from 'react-bootstrap';
 import DateDetails from './datedetails';
 import MonthDisplay from './monthdisplay';
 
-function Calendar() {
+function Calendar(props) {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth());
     const [date, setDate] = useState(new Date().getDate());
@@ -34,7 +34,7 @@ function Calendar() {
             </style>
             <Card id="main-calendar">
                 <Card.Body id="calendar-body">
-                    <MonthDisplay year={year} month={month} date={date} setYear={setYear} setMonth={setMonth} setDate={setDate} />
+                    <MonthDisplay year={year} month={month} date={date} setYear={setYear} setMonth={setMonth} setDate={setDate} yourTasks={props.yourTasks} tasks={props.tasks}/>
                     <DateDetails />
                 </Card.Body>
             </Card>

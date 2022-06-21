@@ -7,10 +7,10 @@ import ElementBG from "../../components/backgrounds/elementbg";
 import FloatingBubbles from "../../components/backgrounds/floatingbubbles";
 import DashboardHeader from "./components/dashboardheader";
 import Settings from "./components/modals/accountsettings";
-import AdminDashboard from "./components/admindashboard";
-import MemberDashboard from "./components/memberdashboard";
 import JoinGroupModal from "./components/modals/joingroupmodal";
 import CreateGroupModal from "./components/modals/creategroupmodal";
+import Calendar from "./components/calendar/calendar";
+import Tasks from "./components/tasks/tasks";
 
 function MainDashboard() {
 	const [groupsAsAdmin, setGroupsAsAdmin] = React.useState([]);
@@ -22,30 +22,16 @@ function MainDashboard() {
 	const [showCreateGroupModal, setShowCreateGroupModal] = React.useState(false);
 	const [currentGroup, setCurrentGroup] = React.useState(null);
 	const [isAdmin, setIsAdmin] = React.useState(false);
+	const [yourTasks, setYourTasks] = React.useState([]);
+	const [tasks, setTasks] = React.useState([]);
 
-	const showSettings = () => {
-		setShowSettingsState(true);
-	}
-
-	const hideSettings = () => {
-		setShowSettingsState(false);
-	}
-
-	const showJoinGroupModalFunc = () => {
-		setShowJoinGroupModal(true);
-	}
-
-	const showCreateGroupModalFunc = () => {
-		setShowCreateGroupModal(true);
-	}
-
-	const hideCreateGroupModal = () => {
-		setShowCreateGroupModal(false);
-	}
-
-	const hideJoinGroupModal = () => {
-		setShowJoinGroupModal(false);
-	}
+	//modal control functions
+	const showSettings = () => setShowSettingsState(true);
+	const hideSettings = () => setShowSettingsState(false);
+	const showJoinGroupModalFunc = () => setShowJoinGroupModal(true);
+	const showCreateGroupModalFunc = () => setShowCreateGroupModal(true);
+	const hideCreateGroupModal = () => setShowCreateGroupModal(false);
+	const hideJoinGroupModal = () => setShowJoinGroupModal(false);
 
 	//Realtime listener for user account data
 	onValue(ref(database, 'users/' + auth.currentUser.uid), (snapshot) => {
@@ -75,11 +61,24 @@ function MainDashboard() {
 		}
 
 		if (data.name !== name) setName(data.name);
-
-		if (!loaded) {
-			setLoaded(true)
-		};
 	});
+
+	//Realtime listener for group tasks
+	if (currentGroup) {
+		onValue(ref(database, `groups/${currentGroup.groupId}/tasks`), (snapshot) => {
+			const data = snapshot.val();
+			if (data == null && tasks.length !== 0) {
+				setTasks([]);
+				setYourTasks([]);
+			} else if (data != null && Object.values(data).length !== tasks.length) {
+				setTasks(Object.values(data));
+				setYourTasks(Object.values(data).filter(task => task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid)));
+			}
+			if (!loaded) {
+				setLoaded(true)
+			};
+		});
+	}
 
 	//loading screen while loading groups data
 	if (!loaded) {
@@ -98,15 +97,24 @@ function MainDashboard() {
 		);
 	}
 	return (
-		<div id="dashboard-page">
+		<>
 			<style type="text/css">
 				{`
-					#dashboard-page {
-						width: 100%;
-						height: 100vh;
-						display: flex;
-						flex-direction: column;
-					}
+					#dashboard-main-container {
+						height: calc(100vh - 60px);
+                        flex: 1 1 auto;
+                        display: flex;
+                        flex-direction: row;
+                        width: 100%;
+                        padding: 10px;
+                        justify-content: space-between;
+                    }
+
+                    @media screen and (max-width: 900px) {
+                        #dashboard-main-container {
+                            flex-direction: column; 
+                        }
+                    }
         		`}
 			</style>
 
@@ -114,8 +122,12 @@ function MainDashboard() {
 			{showJoinGroupModal && <JoinGroupModal hideModal={hideJoinGroupModal}></JoinGroupModal>}
 			{showCreateGroupModal && <CreateGroupModal hideModal={hideCreateGroupModal}></CreateGroupModal>}
 			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} joinGroup={showJoinGroupModalFunc} createGroup={showCreateGroupModalFunc}></DashboardHeader>
-			{isAdmin ? <AdminDashboard group={currentGroup} name={name} /> : <MemberDashboard group={currentGroup} name={name} />}
-		</div>
+
+			<div id="dashboard-main-container">
+				<Calendar yourTasks={yourTasks} tasks={tasks}></Calendar>
+				<Tasks group={currentGroup} name={name} isAdmin={isAdmin} tasks={tasks} yourTasks={yourTasks}></Tasks>
+			</div>
+		</>
 	);
 }
 

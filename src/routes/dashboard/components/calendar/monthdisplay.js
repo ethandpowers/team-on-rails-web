@@ -113,28 +113,26 @@ function MonthDisplay(props) {
                     })}
 
                     {Array(new Date(year, month + 1, 0).getDate()).fill(0).map((day, index) => {
-                        if (props.year === year && props.month === month && props.date === index + 1) {
-                            return (
-                                <DayOfMonthDisplay key={index} rows={rows} selected={true} date={{
-                                    year: year,
-                                    month: month,
-                                    day: index + 1
-                                }}></DayOfMonthDisplay>
-                            );
-                        } else {
-                            return (
-                                <DayOfMonthDisplay key={index} rows={rows} onClick={() => {
+                        return (
+                            <DayOfMonthDisplay key={index} rows={rows}
+                                selected={props.year === year && props.month === month && props.date === index + 1}
+                                onClick={() => {
                                     props.setYear(year);
                                     props.setMonth(month);
                                     props.setDate(index + 1);
                                 }}
-                                    date={{
-                                        year: year,
-                                        month: month,
-                                        day: index + 1
-                                    }}>{index + 1}</DayOfMonthDisplay>
-                            );
-                        }
+                                date={{
+                                    year: year,
+                                    month: month,
+                                    day: index + 1
+                                }}
+                                yourTasks={props.yourTasks}
+                                tasks={props.tasks}
+                            >
+                                {index + 1}
+                            </DayOfMonthDisplay>
+                        );
+
                     })}
                 </div>
             </div>
