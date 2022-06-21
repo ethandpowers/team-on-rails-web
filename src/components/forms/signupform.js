@@ -33,7 +33,7 @@ function SignupForm(props) {
             </style>
             <Card className="signup-card">
                 <Card.Body>
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleSubmit} autocomplete="off">
                         <Form.Group className="mb-3" controlId="formBasicName">
                             <Form.Label>Name</Form.Label>
                             <Form.Control name="name" type="text" placeholder="Enter first and last name" required/>

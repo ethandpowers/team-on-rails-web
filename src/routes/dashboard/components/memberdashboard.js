@@ -8,7 +8,7 @@ function MemberDashboard(props){
         <>
             <style type="text/css">
                 {`
-                    #dashboard-main-container {
+                    #member-dashboard-main-container {
                         flex: 1 1 auto;
                         display: flex;
                         flex-direction: row;
@@ -16,9 +16,15 @@ function MemberDashboard(props){
                         padding: 10px;
                         justify-content: space-between;
                     }
+
+                    @media screen and (max-width: 900px) {
+                        #member-dashboard-main-container {
+                            flex-direction: column;
+                        }
+                    }
                 `}
             </style>
-            <div id="dashboard-main-container">
+            <div id="member-dashboard-main-container">
 				<Calendar></Calendar>
 				<Tasks group={props.group} name={props.name} isAdmin={false}></Tasks>
 			</div>

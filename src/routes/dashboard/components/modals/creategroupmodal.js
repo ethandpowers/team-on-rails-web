@@ -24,7 +24,7 @@ function CreateGroupModal(props) {
                 <Modal.Title>What will the group be called?</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <form id="create-group" onSubmit={createGroup}>
+                <form id="create-group" onSubmit={createGroup} autoComplete="off">
                     <style type="text/css">
                         {`
                             #create-group-input {

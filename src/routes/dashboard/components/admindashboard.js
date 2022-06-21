@@ -7,7 +7,7 @@ function AdminDashboard(props){
         <>
             <style type="text/css">
                 {`
-                    #dashboard-main-container {
+                    #admin-dashboard-main-container {
                         flex: 1 1 auto;
                         display: flex;
                         flex-direction: row;
@@ -15,9 +15,15 @@ function AdminDashboard(props){
                         padding: 10px;
                         justify-content: space-between;
                     }
+
+                    @media screen and (max-width: 900px) {
+                        #admin-dashboard-main-container {
+                            flex-direction: column; 
+                        }
+                    }
                 `}
             </style>
-            <div id="dashboard-main-container">
+            <div id="admin-dashboard-main-container">
 				<Calendar></Calendar>
 				<Tasks group={props.group} name={props.name} isAdmin={true}></Tasks>
 			</div>

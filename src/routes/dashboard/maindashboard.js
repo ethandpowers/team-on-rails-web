@@ -1,16 +1,16 @@
 import React from "react";
-import { auth, database } from "../../../firebase";
+import { auth, database } from "../../firebase";
 import { ref, onValue } from "firebase/database";
-import Loading from "../../../components/loading";
-import NoGroupsModal from "../components/modals/nogroupsmodal";
-import ElementBG from "../../../components/backgrounds/elementbg";
-import FloatingBubbles from "../../../components/backgrounds/floatingbubbles";
-import DashboardHeader from "../components/dashboardheader";
-import Settings from "../components/modals/accountsettings";
-import AdminDashboard from "../components/admindashboard";
-import MemberDashboard from "../components/memberdashboard";
-import JoinGroupModal from "../components/modals/joingroupmodal";
-import CreateGroupModal from "../components/modals/creategroupmodal";
+import Loading from "../../components/loading";
+import NoGroupsModal from "./components/modals/nogroupsmodal";
+import ElementBG from "../../components/backgrounds/elementbg";
+import FloatingBubbles from "../../components/backgrounds/floatingbubbles";
+import DashboardHeader from "./components/dashboardheader";
+import Settings from "./components/modals/accountsettings";
+import AdminDashboard from "./components/admindashboard";
+import MemberDashboard from "./components/memberdashboard";
+import JoinGroupModal from "./components/modals/joingroupmodal";
+import CreateGroupModal from "./components/modals/creategroupmodal";
 
 function MainDashboard() {
 	const [groupsAsAdmin, setGroupsAsAdmin] = React.useState([]);

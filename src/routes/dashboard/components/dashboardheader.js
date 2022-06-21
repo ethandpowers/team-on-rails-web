@@ -1,6 +1,6 @@
 import { React, useState } from "react";
-import AccountOptionsDropdown from "./accountoptionsdropdown";
-import SelectGroupDropdown from "./selectgroupdropdown";
+import AccountOptionsDropdown from "./dropdowns/accountoptionsdropdown";
+import SelectGroupDropdown from "./dropdowns/selectgroupdropdown";
 import { Button } from "react-bootstrap";
 
 function DashboardHeader(props) {
@@ -42,7 +42,7 @@ function DashboardHeader(props) {
                         navigator.clipboard.writeText(props.currentGroup.groupId);
                         setCopiedId(true);
                     }}>
-                        Copy Group ID: {props.currentGroup.groupId} {copiedId ? <i className="bi bi-clipboard-check" /> : <i className="bi bi-clipboard" />}
+                        Group ID: {props.currentGroup.groupId} {copiedId ? <i className="bi bi-clipboard-check" /> : <i className="bi bi-clipboard" />}
                     </Button>
                 </div>
                 <AccountOptionsDropdown name={props.name} showSettings={props.showSettings} joinGroup={props.joinGroup} createGroup={props.createGroup}></AccountOptionsDropdown>

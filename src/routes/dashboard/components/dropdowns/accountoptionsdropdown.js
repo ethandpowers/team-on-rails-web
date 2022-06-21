@@ -1,6 +1,6 @@
 import { React } from "react";
 import { DropdownButton, Dropdown } from "react-bootstrap";
-import { logOut } from "../../../firebase";
+import { logOut } from "../../../../firebase";
 
 function AccountOptionsDropdown(props) {
     return (

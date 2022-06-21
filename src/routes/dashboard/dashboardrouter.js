@@ -3,7 +3,7 @@ import React from "react";
 import { auth } from "../../firebase";
 import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 import Loading from "../../components/loading";
-import MainDashboard from "./routes/maindashboard";
+import MainDashboard from "./maindashboard";
 
 function DashboardRouter() {
     const [loggedInState, setLoggedInState] = React.useState(true);

@@ -12,11 +12,12 @@ function DateDetails() {
                         flex-flow: column;
                         justify-content: center;
                         align-items: center;
+                        border-left: 1px solid #e6e6e6;
                     }
                 `}
                 </style>
             <div id="date-details">
-                wackier
+                wack
             </div>
         </>
     );

@@ -1,6 +1,5 @@
 import { React, useState } from 'react';
 import { Card } from 'react-bootstrap';
-import 'react-calendar/dist/Calendar.css';
 import DateDetails from './datedetails';
 import MonthDisplay from './monthdisplay';
 

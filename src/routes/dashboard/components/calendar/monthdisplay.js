@@ -94,16 +94,20 @@ function MonthDisplay(props) {
                     #selected-date {
                         background-color: lightgray;
                     }
+
+                    .green-hover:hover {
+                        color: #53bf00;
+                    }
                 `}
             </style>
             <div id="month-display">
                 <div id="month-display-header">
-                    <i className=" clickable bi bi-caret-left-fill" onClick={previousMonth}></i>
+                    <i className="green-hover clickable bi bi-caret-left-fill" onClick={previousMonth}></i>
                     <div id="month-over-year">
                         <h2>{months[month]}</h2>
                         <h5>{year}</h5>
                     </div>
-                    <i className="clickable bi bi-caret-right-fill" onClick={nextMonth}></i>
+                    <i className="green-hover clickable bi bi-caret-right-fill" onClick={nextMonth}></i>
                 </div>
                 <div id="days-of-week">
                     {days.map((day, index) => {
@@ -120,9 +124,9 @@ function MonthDisplay(props) {
                     })}
                     {Array(new Date(year, month + 1, 0).getDate()).fill(0).map((day, index) => {
                         if (props.year === year && props.month === month && props.date === index + 1) {
-                            return <div id="selected-date" className="day-of-month" key={index}>{index + 1}</div>;
+                            return <div id="selected-date" className="clickable day-of-month" key={index}>{index + 1}</div>;
                         } else {
-                            return <div key={index} className="day-of-month" onClick={()=>{
+                            return <div key={index} className="clickable day-of-month" onClick={()=>{
                                 props.setYear(year);
                                 props.setMonth(month);
                                 props.setDate(index + 1);
