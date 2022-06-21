@@ -14,10 +14,18 @@ function DateDetails() {
                         align-items: center;
                         border-left: 1px solid #e6e6e6;
                     }
+
+                    @media screen and (max-width: 900px) {
+                        #date-details {
+                            width: 100%;
+                            border-left: none;
+                            border-top: 1px solid #e6e6e6;
+                        }
+                    }
                 `}
                 </style>
             <div id="date-details">
-                wack
+                
             </div>
         </>
     );

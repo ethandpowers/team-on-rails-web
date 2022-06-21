@@ -1,10 +1,12 @@
 import { React, useState } from "react";
+import DayOfMonthDisplay from "./dayofmonthdisplay";
 
 function MonthDisplay(props) {
     const [year, setYear] = useState(props.year);
     const [month, setMonth] = useState(props.month);
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const rows = (new Date(year, month, 0).getDay() + 1) % 7 < 5 || new Date(year, month + 1, 0).getDate() < 31 ? "5" : "6";
 
     const nextMonth = () => {
         if (month === 11) {
@@ -72,16 +74,6 @@ function MonthDisplay(props) {
                         justify-content: center;
                     }
 
-                    .day-of-month {
-                        width: calc(100% / 7);
-                        height: calc(100% / ${(new Date(year, month, 0).getDay() + 1) % 7 < 5  || new Date(year, month + 1, 0).getDate() < 31 ? "5" : "6"});
-                        padding: 5px;
-                    }
-
-                    .day-of-month:hover {
-                        background-color: #f5f5f5;
-                    }
-
                     .clickable:hover {
                         cursor: pointer;
                     }
@@ -89,10 +81,6 @@ function MonthDisplay(props) {
                     .calendar-day-placeholder{
                         width: calc(100% / 7);
                         height: calc(100% / 7);
-                    }
-
-                    #selected-date {
-                        background-color: lightgray;
                     }
 
                     .green-hover:hover {
@@ -119,18 +107,33 @@ function MonthDisplay(props) {
                     })}
                 </div>
                 <div id="month-display-body">
+
                     {Array((new Date(year, month, 0).getDay() + 1) % 7).fill(0).map((day, index) => {
                         return <div key={index} className="calendar-day-placeholder"></div>;
                     })}
+
                     {Array(new Date(year, month + 1, 0).getDate()).fill(0).map((day, index) => {
                         if (props.year === year && props.month === month && props.date === index + 1) {
-                            return <div id="selected-date" className="clickable day-of-month" key={index}>{index + 1}</div>;
+                            return (
+                                <DayOfMonthDisplay key={index} rows={rows} selected={true} date={{
+                                    year: year,
+                                    month: month,
+                                    day: index + 1
+                                }}></DayOfMonthDisplay>
+                            );
                         } else {
-                            return <div key={index} className="clickable day-of-month" onClick={()=>{
-                                props.setYear(year);
-                                props.setMonth(month);
-                                props.setDate(index + 1);
-                            }}>{index + 1}</div>;
+                            return (
+                                <DayOfMonthDisplay key={index} rows={rows} onClick={() => {
+                                    props.setYear(year);
+                                    props.setMonth(month);
+                                    props.setDate(index + 1);
+                                }}
+                                    date={{
+                                        year: year,
+                                        month: month,
+                                        day: index + 1
+                                    }}>{index + 1}</DayOfMonthDisplay>
+                            );
                         }
                     })}
                 </div>

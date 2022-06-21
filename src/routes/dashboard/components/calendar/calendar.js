@@ -24,6 +24,12 @@ function Calendar() {
                     flex-direction: row;
                     width: 100%;
                 }
+
+                @media screen and (max-width: 900px) {
+                    #calendar-body {
+                        flex-direction: column;
+                    }
+                }
             `}
             </style>
             <Card id="main-calendar">

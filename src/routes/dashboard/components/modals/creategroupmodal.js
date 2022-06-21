@@ -17,7 +17,6 @@ function CreateGroupModal(props) {
             backdrop="static"
             keyboard={false}
             centered
-            animation={false}
             onHide={props.hideModal}
         >
             <Modal.Header closeButton>
