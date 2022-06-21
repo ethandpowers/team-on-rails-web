@@ -12,7 +12,6 @@ function DateDetails() {
                         flex-flow: column;
                         justify-content: center;
                         align-items: center;
-                        background-color: purple;
                     }
                 `}
                 </style>

@@ -3,9 +3,27 @@ import { React, useState } from "react";
 function MonthDisplay(props) {
     const [year, setYear] = useState(props.year);
     const [month, setMonth] = useState(props.month);
-    const [date, setDate] = useState(props.date);
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    const nextMonth = () => {
+        if (month === 11) {
+            setYear(year + 1);
+            setMonth(0);
+        } else {
+            setMonth(month + 1);
+        }
+    }
+
+    const previousMonth = () => {
+        if (month === 0) {
+            setYear(year - 1);
+            setMonth(11);
+        } else {
+            setMonth(month - 1);
+        }
+    }
+
     return (
         <>
             <style>
@@ -30,6 +48,7 @@ function MonthDisplay(props) {
 
                     #month-over-year{
                         text-align: center;
+                        width: 50%
                     }
 
                     #days-of-week{
@@ -45,36 +64,71 @@ function MonthDisplay(props) {
                         display: flex;
                         flex-direction: row;
                         flex-wrap: wrap;
-                        background-color: yellow;
+                    }
+
+                    .day-of-week {
+                        width: calc(100% / 7);
+                        display: flex;
+                        justify-content: center;
                     }
 
                     .day-of-month {
-                        flex-grow: 1;
-                        display: flex;
-                        justify-content: center;
+                        width: calc(100% / 7);
+                        height: calc(100% / ${(new Date(year, month, 0).getDay() + 1) % 7 < 5  || new Date(year, month + 1, 0).getDate() < 31 ? "5" : "6"});
+                        padding: 5px;
+                    }
+
+                    .day-of-month:hover {
+                        background-color: #f5f5f5;
+                    }
+
+                    .clickable:hover {
+                        cursor: pointer;
+                    }
+
+                    .calendar-day-placeholder{
+                        width: calc(100% / 7);
+                        height: calc(100% / 7);
+                    }
+
+                    #selected-date {
+                        background-color: lightgray;
                     }
                 `}
             </style>
             <div id="month-display">
                 <div id="month-display-header">
-                    <i class="bi bi-caret-left-fill"></i>
+                    <i className=" clickable bi bi-caret-left-fill" onClick={previousMonth}></i>
                     <div id="month-over-year">
                         <h2>{months[month]}</h2>
                         <h5>{year}</h5>
                     </div>
-                    <i class="bi bi-caret-right-fill"></i>
+                    <i className="clickable bi bi-caret-right-fill" onClick={nextMonth}></i>
                 </div>
                 <div id="days-of-week">
                     {days.map((day, index) => {
                         return (
-                            <div className="day-of-month" key={index}>
-                                <h4>{day}</h4>
+                            <div className="day-of-week" key={index}>
+                                {day}
                             </div>
                         );
                     })}
                 </div>
                 <div id="month-display-body">
-
+                    {Array((new Date(year, month, 0).getDay() + 1) % 7).fill(0).map((day, index) => {
+                        return <div key={index} className="calendar-day-placeholder"></div>;
+                    })}
+                    {Array(new Date(year, month + 1, 0).getDate()).fill(0).map((day, index) => {
+                        if (props.year === year && props.month === month && props.date === index + 1) {
+                            return <div id="selected-date" className="day-of-month" key={index}>{index + 1}</div>;
+                        } else {
+                            return <div key={index} className="day-of-month" onClick={()=>{
+                                props.setYear(year);
+                                props.setMonth(month);
+                                props.setDate(index + 1);
+                            }}>{index + 1}</div>;
+                        }
+                    })}
                 </div>
             </div>
         </>

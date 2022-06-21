@@ -1,9 +1,10 @@
-import { React } from "react";
+import { React, useState } from "react";
 import AccountOptionsDropdown from "./accountoptionsdropdown";
 import SelectGroupDropdown from "./selectgroupdropdown";
 import { Button } from "react-bootstrap";
 
 function DashboardHeader(props) {
+    const [copiedId, setCopiedId] = useState(false);
     return (
         <>
             <style type="text/css">
@@ -37,7 +38,12 @@ function DashboardHeader(props) {
             <div id="dashboard-header-container">
                 <div id="group-nav-div">
                     <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
-                    <Button variant="clear" id="copy-id-button" onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId) }}>Copy Group ID: {props.currentGroup.groupId} <i className="bi bi-clipboard-check"></i></Button>
+                    <Button variant="clear" id="copy-id-button" onClick={() => {
+                        navigator.clipboard.writeText(props.currentGroup.groupId);
+                        setCopiedId(true);
+                    }}>
+                        Copy Group ID: {props.currentGroup.groupId} {copiedId ? <i className="bi bi-clipboard-check" /> : <i className="bi bi-clipboard" />}
+                    </Button>
                 </div>
                 <AccountOptionsDropdown name={props.name} showSettings={props.showSettings} joinGroup={props.joinGroup} createGroup={props.createGroup}></AccountOptionsDropdown>
             </div>
