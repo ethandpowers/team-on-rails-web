@@ -60,7 +60,7 @@ function DateDetails(props) {
                         padding-right: 20px;
                     }
 
-                    .task-icon{
+                    .text-icon{
                         margin-right: 10px;
                     }
 
@@ -84,7 +84,15 @@ function DateDetails(props) {
                         background-color: #b597ff;
                     }
 
-                    @media screen and (max-width: 900px) {
+                    .event-preview-container{
+                        display: flex;
+                        flex-direction: row;
+                        width: 100%;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    @media screen and (max-width: 1000px) {
                         #date-details {
                             width: 100%;
                             border-left: none;
@@ -106,7 +114,19 @@ function DateDetails(props) {
                         {todaysEvents.map((event, index) => {
                             return (
                                 <div className={`day-details-event-display ${isYourEvent(event) ? "day-details-your-event-display" : ""}`} key={index}>
-                                    {event.title}
+                                    <div className="event-preview-container">
+                                        <div className="fw-bold">
+                                            {event.title}
+                                        </div>
+                                        {event.startTime &&
+                                            <div>
+                                                <i className="bi bi-clock text-icon"></i>
+                                                {event.startTime}
+                                                {event.endTime && <>{` - ${event.endTime}`}</>}
+                                            </div>
+
+                                        }
+                                    </div>
                                 </div>
                             );
                         })}
@@ -128,7 +148,7 @@ function DateDetails(props) {
                                         </div>}
                                     </div>
                                     {task.completed && <div className="fullwidth-end me-auto">
-                                        <i className="bi bi-check-lg task-icon"></i>
+                                        <i className="bi bi-check-lg text-icon"></i>
                                         {(new Date(task.completionTimeStamp)).toLocaleDateString()}
                                     </div>}
                                 </div>

@@ -107,7 +107,7 @@ function Tasks(props) {
                         overflow: auto;
                     }
 
-                    @media screen and (max-width: 900px) {
+                    @media screen and (max-width: 1000px) {
                         #tasks-container {
                             width: 100%;
                             height: auto;

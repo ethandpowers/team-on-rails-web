@@ -148,7 +148,7 @@ function MainDashboard() {
                         justify-content: space-between;
                     }
 
-                    @media screen and (max-width: 900px) {
+                    @media screen and (max-width: 1000px) {
                         #dashboard-main-container {
                             flex-direction: column; 
 							height: auto;

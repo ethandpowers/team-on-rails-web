@@ -66,6 +66,12 @@ function CreateEventModal(props) {
                 .separated-horizontal-checkbox{
                     margin-right: 25px;
                 }
+
+                @media screen and (max-width: 1000px) {
+                    .horizontal-form{
+                        flex-direction: column;
+                    }
+                }
             `}
             </style>
             <Modal

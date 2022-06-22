@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import DateDetails from './datedetails';
 import MonthDisplay from './monthdisplay';
@@ -24,7 +24,7 @@ function Calendar(props) {
                     width: 100%;
                 }
 
-                @media screen and (max-width: 900px) {
+                @media screen and (max-width: 1000px) {
                     #calendar-body {
                         flex-direction: column;
                     }
