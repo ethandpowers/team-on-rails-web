@@ -113,6 +113,7 @@ function MainDashboard() {
                     @media screen and (max-width: 900px) {
                         #dashboard-main-container {
                             flex-direction: column; 
+							height: auto;
                         }
                     }
         		`}
@@ -124,7 +125,7 @@ function MainDashboard() {
 			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} joinGroup={showJoinGroupModalFunc} createGroup={showCreateGroupModalFunc}></DashboardHeader>
 
 			<div id="dashboard-main-container">
-				<Calendar yourTasks={yourTasks} tasks={tasks}></Calendar>
+				<Calendar yourTasks={yourTasks} tasks={tasks} group={currentGroup}></Calendar>
 				<Tasks group={currentGroup} name={name} isAdmin={isAdmin} tasks={tasks} yourTasks={yourTasks}></Tasks>
 			</div>
 		</>

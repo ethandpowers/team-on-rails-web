@@ -1,5 +1,6 @@
 import React from "react";
 import { auth } from "../../../../firebase";
+import { sortTasks } from "../../utilities"
 
 function DayOfMonthDisplay(props) {
     const currentYear = new Date().getFullYear();
@@ -38,11 +39,11 @@ function DayOfMonthDisplay(props) {
                         overflow-x: hidden;
                         text-overflow: ellipsis;
                         padding-left: 2px;
-                        background-color: #b8e898;
+                        background-color: #96a8de;
                     }
 
                     .your-task-calendar-display{
-                        background-color: #96a8de;
+                        background-color: #b8e898;
                     }
 
                     .date-number{
@@ -55,7 +56,7 @@ function DayOfMonthDisplay(props) {
                 className={`clickable day-of-month ${(props.date.year === currentYear && props.date.month === currentMonth && props.date.day === currentDate) ? "today" : ""}`}
             >
                 <div className="date-number">{props.date.day}</div>
-                {props.tasks.map((task, index) => {
+                {props.tasks.sort(sortTasks).map((task, index) => {
                     if (task.deadline) {
                         //if task is for that day
                         let deadline = new Date(task.deadline);

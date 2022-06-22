@@ -6,26 +6,12 @@ import CreateTaskModal from "./createtaskmodal";
 import TaskDetailsModal from "./taskdetailsmodal";
 import EditTaskModal from "./edittaskmodal";
 import TaskPreview from "./taskpreview";
+import {sortTasks} from "../../utilities"
 
 function Tasks(props) {
     const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
     const [showTaskDetailsModal, setShowTaskDetailsModal] = useState(null);
     const [showEditTaskModal, setShowEditTaskModal] = useState(null);
-
-    const sortTasksByDeadline = (a, b) => {
-        if (a.completed && !b.completed) return 1;
-        if (!a.completed && b.completed) return -1;
-        if (a.deadline && !b.deadline) return -1;
-        if (!a.deadline && b.deadline) return 1;
-        if (a.deadline < b.deadline) {
-            return -1;
-        } else if (a.deadline > b.deadline) {
-            return 1;
-        } else {
-            return 0;
-        }
-
-    }
 
     const deleteTask = (task) => {
         FBDeleteTask(props.group, task);
@@ -124,6 +110,7 @@ function Tasks(props) {
                     @media screen and (max-width: 900px) {
                         #tasks-container {
                             width: 100%;
+                            height: auto;
                         }
                     }
                 `}
@@ -147,7 +134,7 @@ function Tasks(props) {
                         <Tab.Content>
                             <Tab.Pane eventKey="your-tasks">
                                 <ListGroup className="list-group-flush">
-                                    {props.yourTasks.sort(sortTasksByDeadline).map((task, index) => {
+                                    {props.yourTasks.sort(sortTasks).map((task, index) => {
                                         return (
                                             <ListGroup.Item key={index} action onClick={() => setShowTaskDetailsModal(task)}>
                                                 <TaskPreview task={task} showName={false} />
@@ -160,7 +147,7 @@ function Tasks(props) {
 
                             <Tab.Pane eventKey="all-tasks">
                                 <ListGroup className="list-group-flush">
-                                    {props.tasks.sort(sortTasksByDeadline).map((task, index) => {
+                                    {props.tasks.sort(sortTasks).map((task, index) => {
                                         return (
                                             <ListGroup.Item key={index} action onClick={() => { setShowTaskDetailsModal(task) }}>
                                                 <TaskPreview task={task} showName={true} />

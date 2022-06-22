@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import HorizontalDivider from "../../../../components/horizontaldivider";
 import DayOfMonthDisplay from "./dayofmonthdisplay";
 
 function MonthDisplay(props) {
@@ -86,6 +87,12 @@ function MonthDisplay(props) {
                     .green-hover:hover {
                         color: #53bf00;
                     }
+                    @media screen and (max-width: 900px) {
+                        #month-display-body {
+                            width: 100%;
+                            height: 100vh;
+                        }
+                    }
                 `}
             </style>
             <div id="month-display">
@@ -97,6 +104,7 @@ function MonthDisplay(props) {
                     </div>
                     <i className="green-hover clickable bi bi-caret-right-fill" onClick={nextMonth}></i>
                 </div>
+                <HorizontalDivider />
                 <div id="days-of-week">
                     {days.map((day, index) => {
                         return (
