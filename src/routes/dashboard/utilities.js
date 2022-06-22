@@ -9,10 +9,14 @@ export const sortTasks = (a, b) => {
         return -1;
     } else if (a.deadline > b.deadline) {
         return 1;
-    } else {
+    } else if (b.deadline < a.deadline) {
         return 0;
     }
-
+    if ( a.assignedTo && a.assignedTo.userId === auth.currentUser.uid) {
+        return -1;
+    }else{
+        return 1;
+    }
 }
 
 export const isYourEvent = (event) => {

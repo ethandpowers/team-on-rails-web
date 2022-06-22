@@ -34,7 +34,7 @@ function DateDetails(props) {
                         width: 100%;
                     }
 
-                    #day-details-tasks-list{
+                    .day-details-item-list{
                         border-radius: 5px;
                         overflow: hidden;
                     }
@@ -99,20 +99,23 @@ function DateDetails(props) {
             <div id="date-details">
                 <h4>Details for {daysOfWeek[new Date(props.year, props.month, props.date).getDay()] + " " + dateString}</h4>
                 <Button variant="outline-warning" onClick={props.createEvent}>Create Event</Button>
-                <HorizontalDivider />
                 {todaysEvents.length > 0 ? <div id="day-details-items">
+                    <HorizontalDivider />
                     <h5>Events</h5>
-                    {todaysEvents.map((event, index) => {
-                        return (
-                            <div className={`day-details-event-display ${isYourEvent(event) ? "day-details-your-event-display" : ""}`} key={index}>
-                                {event.title}
-                            </div>
-                        );
-                    })}
+                    <div className="day-details-item-list">
+                        {todaysEvents.map((event, index) => {
+                            return (
+                                <div className={`day-details-event-display ${isYourEvent(event) ? "day-details-your-event-display" : ""}`} key={index}>
+                                    {event.title}
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div> : null}
                 {todaysTasks.length > 0 ? <div id="day-details-items">
+                    <HorizontalDivider />
                     <h5>Tasks</h5>
-                    <div id="day-details-tasks-list">
+                    <div className="day-details-item-list">
                         {todaysTasks.map((task, index) => {
                             return (
                                 <div key={index} className={`task-preview-container day-details-task-display ${task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid) ? "day-details-your-task-display" : ""}`}>
@@ -132,7 +135,7 @@ function DateDetails(props) {
                             );
                         })}</div>
                 </div> : null}
-                {todaysTasks.length === 0 && todaysEvents.length === 0 ? "You don't have anything planned!" : null}
+                {todaysTasks.length === 0 && todaysEvents.length === 0 ? <><HorizontalDivider />"You don't have anything planned!"</> : null}
             </div>
         </>
     );

@@ -26,6 +26,10 @@ function MainDashboard() {
 	const [tasks, setTasks] = useState([]);
 	const [groupMembers, setGroupMembers] = useState([]);
 	const [groupAdministrator, setGroupAdministrator] = useState(null);
+	const [events, setEvents] = useState([]);
+	const [year, setYear] = useState(new Date().getFullYear());
+	const [month, setMonth] = useState(new Date().getMonth());
+	const [date, setDate] = useState(new Date().getDate());
 
 	//modal control functions
 	const showSettings = () => setShowSettingsState(true);
@@ -85,20 +89,32 @@ function MainDashboard() {
 	//Realtime listener for group members
 	if (currentGroup) {
 		onValue(ref(database, `groups/${currentGroup.groupId}/members`), (snapshot) => {
-			    const data = snapshot.val();
-			    if (Object.values(data).length !== groupMembers.length) {
-			        setGroupMembers(Object.values(data));
-			    }
+			const data = snapshot.val();
+			if (Object.values(data).length !== groupMembers.length) {
+				setGroupMembers(Object.values(data));
+			}
 		});
 	}
 
 	//Realtime listener for group adminitrator
 	if (currentGroup) {
 		onValue(ref(database, `groups/${currentGroup.groupId}/administrator`), (snapshot) => {
-			    const data = snapshot.val();
-			    if (!groupAdministrator || data.userId !== groupAdministrator.userId) {
-						setGroupAdministrator(data);
-				}
+			const data = snapshot.val();
+			if (!groupAdministrator || data.userId !== groupAdministrator.userId) {
+				setGroupAdministrator(data);
+			}
+		});
+	}
+
+	//Realtime listener for events
+	if (currentGroup) {
+		onValue(ref(database, `groups/${currentGroup.groupId}/calendar/${year}/${month}`), (snapshot) => {
+			const data = snapshot.val();
+			if (!data) {
+				events.length > 0 && setEvents([]);
+			} else if ((events.length !== Object.keys(data).length)) {
+				setEvents(Object.values(data));
+			}
 		});
 	}
 
@@ -147,8 +163,28 @@ function MainDashboard() {
 			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} joinGroup={showJoinGroupModalFunc} createGroup={showCreateGroupModalFunc}></DashboardHeader>
 
 			<div id="dashboard-main-container">
-				<Calendar yourTasks={yourTasks} tasks={tasks} group={currentGroup} groupAdmin={groupAdministrator} groupMembers={groupMembers}></Calendar>
-				<Tasks group={currentGroup} name={name} isAdmin={isAdmin} tasks={tasks} yourTasks={yourTasks} groupAdmin={groupAdministrator} groupMembers={groupMembers}></Tasks>
+				<Calendar
+					yourTasks={yourTasks}
+					tasks={tasks}
+					group={currentGroup}
+					groupAdmin={groupAdministrator}
+					groupMembers={groupMembers}
+					events={events}
+					year={year}
+					setYear={setYear}
+					month={month}
+					setMonth={setMonth}
+					date={date}
+					setDate={setDate} />
+
+				<Tasks
+					group={currentGroup}
+					name={name}
+					isAdmin={isAdmin}
+					tasks={tasks}
+					yourTasks={yourTasks}
+					groupAdmin={groupAdministrator}
+					groupMembers={groupMembers} />
 			</div>
 		</>
 	);
