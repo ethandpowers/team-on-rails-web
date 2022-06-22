@@ -35,7 +35,7 @@ function Calendar(props) {
             <Card id="main-calendar">
                 <Card.Body id="calendar-body">
                     <MonthDisplay year={year} month={month} date={date} setYear={setYear} setMonth={setMonth} setDate={setDate} yourTasks={props.yourTasks} tasks={props.tasks}/>
-                    <DateDetails />
+                    <DateDetails year={year} month={month} date={date} yourTasks={props.yourTasks} tasks={props.tasks}/>
                 </Card.Body>
             </Card>
         </>
