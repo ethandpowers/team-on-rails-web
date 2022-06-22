@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import { auth, database } from "../../firebase";
 import { ref, onValue } from "firebase/database";
 import Loading from "../../components/loading";
@@ -13,17 +13,19 @@ import Calendar from "./components/calendar/calendar";
 import Tasks from "./components/tasks/tasks";
 
 function MainDashboard() {
-	const [groupsAsAdmin, setGroupsAsAdmin] = React.useState([]);
-	const [groupsAsMember, setGroupsAsMember] = React.useState([]);
-	const [name, setName] = React.useState("");
-	const [loaded, setLoaded] = React.useState(false);
-	const [showSettingsState, setShowSettingsState] = React.useState(false);
-	const [showJoinGroupModal, setShowJoinGroupModal] = React.useState(false);
-	const [showCreateGroupModal, setShowCreateGroupModal] = React.useState(false);
-	const [currentGroup, setCurrentGroup] = React.useState(null);
-	const [isAdmin, setIsAdmin] = React.useState(false);
-	const [yourTasks, setYourTasks] = React.useState([]);
-	const [tasks, setTasks] = React.useState([]);
+	const [groupsAsAdmin, setGroupsAsAdmin] = useState([]);
+	const [groupsAsMember, setGroupsAsMember] = useState([]);
+	const [name, setName] = useState("");
+	const [loaded, setLoaded] = useState(false);
+	const [showSettingsState, setShowSettingsState] = useState(false);
+	const [showJoinGroupModal, setShowJoinGroupModal] = useState(false);
+	const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+	const [currentGroup, setCurrentGroup] = useState(null);
+	const [isAdmin, setIsAdmin] = useState(false);
+	const [yourTasks, setYourTasks] = useState([]);
+	const [tasks, setTasks] = useState([]);
+	const [groupMembers, setGroupMembers] = useState([]);
+	const [groupAdministrator, setGroupAdministrator] = useState(null);
 
 	//modal control functions
 	const showSettings = () => setShowSettingsState(true);
@@ -63,7 +65,7 @@ function MainDashboard() {
 		if (data.name !== name) setName(data.name);
 	});
 
-	//Realtime listener for group tasks
+	// Realtime listener for group tasks
 	if (currentGroup) {
 		onValue(ref(database, `groups/${currentGroup.groupId}/tasks`), (snapshot) => {
 			const data = snapshot.val();
@@ -77,6 +79,26 @@ function MainDashboard() {
 			if (!loaded) {
 				setLoaded(true)
 			};
+		});
+	}
+
+	//Realtime listener for group members
+	if (currentGroup) {
+		onValue(ref(database, `groups/${currentGroup.groupId}/members`), (snapshot) => {
+			    const data = snapshot.val();
+			    if (Object.values(data).length !== groupMembers.length) {
+			        setGroupMembers(Object.values(data));
+			    }
+		});
+	}
+
+	//Realtime listener for group adminitrator
+	if (currentGroup) {
+		onValue(ref(database, `groups/${currentGroup.groupId}/administrator`), (snapshot) => {
+			    const data = snapshot.val();
+			    if (!groupAdministrator || data.userId !== groupAdministrator.userId) {
+						setGroupAdministrator(data);
+				}
 		});
 	}
 
@@ -125,8 +147,8 @@ function MainDashboard() {
 			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} joinGroup={showJoinGroupModalFunc} createGroup={showCreateGroupModalFunc}></DashboardHeader>
 
 			<div id="dashboard-main-container">
-				<Calendar yourTasks={yourTasks} tasks={tasks} group={currentGroup}></Calendar>
-				<Tasks group={currentGroup} name={name} isAdmin={isAdmin} tasks={tasks} yourTasks={yourTasks}></Tasks>
+				<Calendar yourTasks={yourTasks} tasks={tasks} group={currentGroup} groupAdmin={groupAdministrator} groupMembers={groupMembers}></Calendar>
+				<Tasks group={currentGroup} name={name} isAdmin={isAdmin} tasks={tasks} yourTasks={yourTasks} groupAdmin={groupAdministrator} groupMembers={groupMembers}></Tasks>
 			</div>
 		</>
 	);

@@ -115,9 +115,9 @@ function Tasks(props) {
                     }
                 `}
             </style>
-            {showCreateTaskModal && <CreateTaskModal hideModal={() => setShowCreateTaskModal(false)} group={props.group} name={props.name} />}
+            {showCreateTaskModal && <CreateTaskModal hideModal={() => setShowCreateTaskModal(false)} group={props.group} name={props.name} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers}/>}
             {showTaskDetailsModal && <TaskDetailsModal hideModal={() => setShowTaskDetailsModal(false)} group={props.group} task={showTaskDetailsModal} name={props.name} showEditModal={() => { setShowEditTaskModal(showTaskDetailsModal) }} />}
-            {showEditTaskModal && <EditTaskModal hideModal={() => setShowEditTaskModal(false)} updateTaskUI={setShowTaskDetailsModal} deleteTask={deleteTask} group={props.group} task={showEditTaskModal} name={props.name} isAdmin={props.isAdmin} />}
+            {showEditTaskModal && <EditTaskModal hideModal={() => setShowEditTaskModal(false)} updateTaskUI={setShowTaskDetailsModal} deleteTask={deleteTask} group={props.group} task={showEditTaskModal} name={props.name} isAdmin={props.isAdmin} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers}/>}
             <Card id="tasks-container">
                 <Tab.Container defaultActiveKey={props.yourTasks.length > 0 ? "your-tasks" : "all-tasks"}>
                     <Card.Header>

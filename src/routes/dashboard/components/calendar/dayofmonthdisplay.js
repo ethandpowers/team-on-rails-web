@@ -1,6 +1,7 @@
 import React from "react";
 import { auth } from "../../../../firebase";
-import { sortTasks } from "../../utilities"
+import { sortTasks } from "../../utilities";
+import { isYourEvent } from "../../utilities";
 
 function DayOfMonthDisplay(props) {
     const currentYear = new Date().getFullYear();
@@ -26,14 +27,14 @@ function DayOfMonthDisplay(props) {
                     }
 
                     .today{
-                        border: 1px solid #53bf00;
+                        // border: 1px solid #53bf00;
                     }
 
                     .clickable:hover {
                         cursor: pointer;
                     }
 
-                    .task-calendar-display{
+                    .calendar-display-item{
                         width=100%;
                         white-space: nowrap;
                         overflow-x: hidden;
@@ -49,6 +50,14 @@ function DayOfMonthDisplay(props) {
                     .date-number{
                         margin-left: 2px;
                     }
+
+                    .event-calendar-display{
+                        background-color: #ffc10780;
+                    }
+
+                    .your-event-calendar-display{
+                        background-color: #b597ff;
+                    }
                 `}
             </style>
             <div onClick={props.onClick}
@@ -56,13 +65,23 @@ function DayOfMonthDisplay(props) {
                 className={`clickable day-of-month ${(props.date.year === currentYear && props.date.month === currentMonth && props.date.day === currentDate) ? "today" : ""}`}
             >
                 <div className="date-number">{props.date.day}</div>
+                {props.events.map((event, index) => {
+                    let date = new Date(event.dateString);
+                    if (props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()) {
+                        return (
+                            <div key={index} className={`event-calendar-display calendar-display-item ${isYourEvent(event)? "your-event-calendar-display" : ""}`}>
+                                {event.title}
+                            </div>
+                        );
+                    }
+                })}
                 {props.tasks.sort(sortTasks).map((task, index) => {
                     if (task.deadline) {
                         //if task is for that day
                         let deadline = new Date(task.deadline);
                         if (deadline.getFullYear() === props.date.year && deadline.getMonth() === props.date.month && deadline.getDate() === props.date.day) {
                             return (
-                                <div className={`${task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid) ? "your-task-calendar-display" : ""} task-calendar-display`} key={index}>
+                                <div className={`${task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid) ? "your-task-calendar-display" : ""} calendar-display-item`} key={index}>
                                     {task.title}
                                 </div>
                             );

@@ -2,11 +2,18 @@ import React from "react";
 import { auth } from "../../../../firebase";
 import HorizontalDivider from "../../../../components/horizontaldivider";
 import { Button } from "react-bootstrap";
+import { isYourEvent } from "../../utilities";
 
 function DateDetails(props) {
-    const dateString = `${props.month}/${props.date}/${props.year}`;
+    const dateString = `${props.month + 1}/${props.date}/${props.year}`;
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let todaysTasks = props.tasks.filter(task => task.deadline && (new Date(task.deadline).toDateString() === new Date(props.year, props.month, props.date).toDateString()));
+    let todaysEvents = props.events.filter(event => {
+        let date = new Date(event.dateString);
+        let res = props.year === date.getFullYear() && props.month === date.getMonth() && props.date === date.getDate()
+        return res;
+    });
+
     return (
         <>
             <style>
@@ -21,11 +28,10 @@ function DateDetails(props) {
                         margin-left: 15px;
                     }
 
-                    #day-details-tasks{
+                    #day-details-items{
                         display: flex;
                         flex-flow: column;
                         width: 100%;
-                        height: 100%;
                     }
 
                     #day-details-tasks-list{
@@ -68,6 +74,16 @@ function DateDetails(props) {
                         background-color: #b8e898;
                     }
 
+                    .day-details-event-display{
+                        width=100%;
+                        padding: 5px;
+                        background-color: #ffc10780;
+                    }
+
+                    .day-details-your-event-display{
+                        background-color: #b597ff;
+                    }
+
                     @media screen and (max-width: 900px) {
                         #date-details {
                             width: 100%;
@@ -84,7 +100,17 @@ function DateDetails(props) {
                 <h4>Details for {daysOfWeek[new Date(props.year, props.month, props.date).getDay()] + " " + dateString}</h4>
                 <Button variant="outline-warning" onClick={props.createEvent}>Create Event</Button>
                 <HorizontalDivider />
-                {todaysTasks.length > 0 ? <div id="day-details-tasks">
+                {todaysEvents.length > 0 ? <div id="day-details-items">
+                    <h5>Events</h5>
+                    {todaysEvents.map((event, index) => {
+                        return (
+                            <div className={`day-details-event-display ${isYourEvent(event) ? "day-details-your-event-display" : ""}`} key={index}>
+                                {event.title}
+                            </div>
+                        );
+                    })}
+                </div> : null}
+                {todaysTasks.length > 0 ? <div id="day-details-items">
                     <h5>Tasks</h5>
                     <div id="day-details-tasks-list">
                         {todaysTasks.map((task, index) => {
@@ -105,7 +131,8 @@ function DateDetails(props) {
                                 </div>
                             );
                         })}</div>
-                </div> : "You don't have anything planned!"}
+                </div> : null}
+                {todaysTasks.length === 0 && todaysEvents.length === 0 ? "You don't have anything planned!" : null}
             </div>
         </>
     );

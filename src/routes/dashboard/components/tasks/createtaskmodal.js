@@ -7,32 +7,15 @@ import { auth, database } from "../../../../firebase";
 import moment from "moment";
 
 function CreateTaskModal(props) {
-    const [groupMembers, setGroupMembers] = useState([]);
-    const [groupAdmin, setGroupAdmin] = useState({});
-
-    onValue(ref(database, `groups/${props.group.groupId}/members`), (snapshot) => {
-        const data = snapshot.val();
-        if (Object.values(data).length !== groupMembers.length) {
-            setGroupMembers(Object.values(data));
-        }
-    });
-
-    onValue(ref(database, `groups/${props.group.groupId}/administrator`), (snapshot) => {
-        const data = snapshot.val();
-        if (data.name !== groupAdmin.name) {
-            setGroupAdmin(data);
-        }
-    });
-
     const handleSubmit = (event) => {
         event.preventDefault();
         let assignedTo = null;
         if (event.target.assignedTo.value !== "Select User") {
             assignedTo = event.target.assignedTo.value;
-            if (groupAdmin.userId === assignedTo) {
-                assignedTo = groupAdmin;
+            if (props.groupAdmin.userId === assignedTo) {
+                assignedTo = props.groupAdmin;
             } else {
-                assignedTo = groupMembers.filter(member => member.userId === assignedTo)[0];
+                assignedTo = props.groupMembers.filter(member => member.userId === assignedTo)[0];
             }
         }
 
@@ -77,8 +60,8 @@ function CreateTaskModal(props) {
                         <Form.Label>Assigned To</Form.Label>
                         <Form.Control as="select">
                             <option key="sel">Select User</option>
-                            <option key={groupAdmin.userId} value={groupAdmin.userId}>{groupAdmin.name}</option>
-                            {groupMembers.map((user) => {
+                            <option key={props.groupAdmin.userId} value={props.groupAdmin.userId}>{props.groupAdmin.name}</option>
+                            {props.groupMembers.map((user) => {
                                 return (
                                     <option key={user.userId} value={user.userId}>{user.name}</option>
                                 )

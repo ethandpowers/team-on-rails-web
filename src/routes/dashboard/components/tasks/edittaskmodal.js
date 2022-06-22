@@ -99,7 +99,7 @@ function EditTaskModal(props) {
                 </Modal.Body>
                 <Modal.Footer id="edit-task-footer">
                     <div>
-                        {props.isAdmin && <Button variant="danger" onClick={()=>props.deleteTask(props.task)}>Delete Task</Button>}
+                        {props.isAdmin && <Button variant="danger" onClick={() => props.deleteTask(props.task)}>Delete Task</Button>}
                     </div>
                     <div>
                         <Button variant="clear" onClick={props.hideModal}>
