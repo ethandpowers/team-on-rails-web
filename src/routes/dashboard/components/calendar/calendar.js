@@ -2,10 +2,12 @@ import { React, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import DateDetails from './datedetails';
 import MonthDisplay from './monthdisplay';
-import CreateEventModal from './createeventmodal';
+import CreateEventModal from '../modals/createeventmodal';
+import EventDetailsModal from '../modals/eventdetailsmodal';
 
 function Calendar(props) {
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
+    const [eventDetailsModal, setEventDetailsModal] = useState(false);
     return (
         <>
             <style>
@@ -32,6 +34,7 @@ function Calendar(props) {
             `}
             </style>
             {showCreateEventModal && <CreateEventModal hideModal={() => setShowCreateEventModal(false)} year={props.year} month={props.month} date={props.date} group={props.group} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} />}
+            {eventDetailsModal && <EventDetailsModal hideModal={() => setEventDetailsModal(false)} event={eventDetailsModal}/>}
             <Card id="main-calendar">
                 <Card.Body id="calendar-body">
                     <MonthDisplay
@@ -52,7 +55,8 @@ function Calendar(props) {
                         yourTasks={props.yourTasks}
                         tasks={props.tasks}
                         events={props.events}
-                        createEvent={() => setShowCreateEventModal(true)} />
+                        createEvent={() => setShowCreateEventModal(true)} 
+                        setEvent={setEventDetailsModal}/>
                 </Card.Body>
             </Card>
         </>

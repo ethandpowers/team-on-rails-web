@@ -30,10 +30,6 @@ function DayOfMonthDisplay(props) {
                         // border: 1px solid #53bf00;
                     }
 
-                    .clickable:hover {
-                        cursor: pointer;
-                    }
-
                     .calendar-display-item{
                         width: 100%;
                         white-space: nowrap;

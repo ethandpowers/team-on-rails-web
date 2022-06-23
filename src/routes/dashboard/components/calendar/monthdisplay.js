@@ -75,10 +75,6 @@ function MonthDisplay(props) {
                         justify-content: center;
                     }
 
-                    .clickable:hover {
-                        cursor: pointer;
-                    }
-
                     .calendar-day-placeholder{
                         width: calc(100% / 7);
                         height: calc(100% / 7);

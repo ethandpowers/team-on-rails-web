@@ -16,3 +16,16 @@ code {
 /* ::selection {
   background: rgba(255, 193, 7, 0.5)
 } */
+
+.clickable:hover {
+  cursor: pointer;
+}
+
+.flex-grow-1{
+  flex-grow: 1;
+}
+
+.flex-row{
+  display: flex;
+  flex-direction: row;  
+}

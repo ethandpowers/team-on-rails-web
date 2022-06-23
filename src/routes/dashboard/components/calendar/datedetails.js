@@ -3,6 +3,7 @@ import { auth } from "../../../../firebase";
 import HorizontalDivider from "../../../../components/horizontaldivider";
 import { Button } from "react-bootstrap";
 import { isYourEvent } from "../../utilities";
+import moment from "moment";
 
 function DateDetails(props) {
     const dateString = `${props.month + 1}/${props.date}/${props.year}`;
@@ -62,6 +63,7 @@ function DateDetails(props) {
 
                     .text-icon{
                         margin-right: 10px;
+                        margin-left: 10px;
                     }
 
                     .day-details-task-display{
@@ -113,16 +115,19 @@ function DateDetails(props) {
                     <div className="day-details-item-list">
                         {todaysEvents.map((event, index) => {
                             return (
-                                <div className={`day-details-event-display ${isYourEvent(event) ? "day-details-your-event-display" : ""}`} key={index}>
+                                <div className={`day-details-event-display clickable ${isYourEvent(event) ? "day-details-your-event-display" : ""}`}
+                                    key={index}
+                                    onClick={() => { props.setEvent(event) }}
+                                >
                                     <div className="event-preview-container">
                                         <div className="fw-bold">
                                             {event.title}
                                         </div>
                                         {event.startTime &&
-                                            <div>
+                                            <div className="flex-row">
                                                 <i className="bi bi-clock text-icon"></i>
-                                                {event.startTime}
-                                                {event.endTime && <>{` - ${event.endTime}`}</>}
+                                                {moment(event.startTime, "H:mm").format("h:mm A")}
+                                                {event.endTime && <>{` - ${moment(event.endTime, "H:mm").format("h:mm A")}`}</>}
                                             </div>
 
                                         }
