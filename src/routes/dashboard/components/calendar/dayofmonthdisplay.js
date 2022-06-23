@@ -35,7 +35,7 @@ function DayOfMonthDisplay(props) {
                     }
 
                     .calendar-display-item{
-                        width=100%;
+                        width: 100%;
                         white-space: nowrap;
                         overflow-x: hidden;
                         text-overflow: ellipsis;
@@ -52,7 +52,7 @@ function DayOfMonthDisplay(props) {
                     }
 
                     .event-calendar-display{
-                        background-color: #ffc10780;
+                        background-color: #ffe082;
                     }
 
                     .your-event-calendar-display{
@@ -69,7 +69,7 @@ function DayOfMonthDisplay(props) {
                     let date = new Date(event.dateString);
                     if (props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()) {
                         return (
-                            <div key={index} className={`event-calendar-display calendar-display-item ${isYourEvent(event)? "your-event-calendar-display" : ""}`}>
+                            <div key={index} className={`event-calendar-display ${isYourEvent(event)? "your-event-calendar-display" : ""} calendar-display-item`}>
                                 {event.title}
                             </div>
                         );

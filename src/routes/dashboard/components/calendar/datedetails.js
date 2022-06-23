@@ -77,7 +77,7 @@ function DateDetails(props) {
                     .day-details-event-display{
                         width=100%;
                         padding: 5px;
-                        background-color: #ffc10780;
+                        background-color: #ffe082;
                     }
 
                     .day-details-your-event-display{
