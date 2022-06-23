@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import moment from "moment";
 import { createEvent } from "../../../../firebase"
+import Button5 from "../../../../components/buttons/button5";
 
 function CreateEventModal(props) {
 
@@ -50,10 +51,6 @@ function CreateEventModal(props) {
                 .create-event-horizontal-input{
                     flex-grow: 1;
                     margin-right: 15px;
-                }
-
-                #create-event-submit{
-                    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
                 }
 
                 #create-event-participants{
@@ -127,7 +124,7 @@ function CreateEventModal(props) {
                     <Button variant="clear" onClick={props.hideModal}>
                         Cancel
                     </Button>
-                    <Button id="create-event-submit" variant="warning" type="submit" form="create-event-form">Create</Button>
+                    <Button5 type="submit" form="create-event-form">Create</Button5>
                 </Modal.Footer>
             </Modal>
         </>

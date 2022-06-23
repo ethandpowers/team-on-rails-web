@@ -106,11 +106,11 @@ export async function completeTask(group, task) {
 
 export async function createEvent(group, event) {
     let date = new Date(event.dateString);
-    let eventref = await push(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}`), {
+    let eventref = await push(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events`), {
         ...event,
         creationTimeStamp: Date.now(),
     });
-    await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/${eventref.key}`), {
+    await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${eventref.key}`), {
         eventId: eventref.key,
     });
 }

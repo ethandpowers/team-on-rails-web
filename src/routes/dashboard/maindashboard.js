@@ -108,7 +108,7 @@ function MainDashboard() {
 
 	//Realtime listener for events
 	if (currentGroup) {
-		onValue(ref(database, `groups/${currentGroup.groupId}/calendar/${year}/${month}`), (snapshot) => {
+		onValue(ref(database, `groups/${currentGroup.groupId}/calendar/${year}/${month}/events`), (snapshot) => {
 			const data = snapshot.val();
 			if (!data) {
 				events.length > 0 && setEvents([]);

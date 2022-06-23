@@ -40,11 +40,11 @@ function DayOfMonthDisplay(props) {
                         overflow-x: hidden;
                         text-overflow: ellipsis;
                         padding-left: 2px;
-                        background-color: #96a8de;
+                        background-color: #b8e898;
                     }
 
                     .your-task-calendar-display{
-                        background-color: #b8e898;
+                        background-color: #b597ff;
                     }
 
                     .date-number{
@@ -56,7 +56,7 @@ function DayOfMonthDisplay(props) {
                     }
 
                     .your-event-calendar-display{
-                        background-color: #b597ff;
+                        background-color: #95c9ff;
                     }
                 `}
             </style>

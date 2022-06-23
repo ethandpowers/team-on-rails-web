@@ -66,12 +66,12 @@ function DateDetails(props) {
 
                     .day-details-task-display{
                         width=100%;
-                        background-color: #96a8de;
+                        background-color: #b8e898;
                         padding: 5px;
                     }
 
                     .day-details-your-task-display{
-                        background-color: #b8e898;
+                        background-color: #b597ff;
                     }
 
                     .day-details-event-display{
@@ -81,7 +81,7 @@ function DateDetails(props) {
                     }
 
                     .day-details-your-event-display{
-                        background-color: #b597ff;
+                        background-color: #95c9ff;
                     }
 
                     .event-preview-container{

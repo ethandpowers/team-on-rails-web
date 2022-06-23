@@ -90,7 +90,7 @@ function MonthDisplay(props) {
                     @media screen and (max-width: 1000px) {
                         #month-display-body {
                             width: 100%;
-                            height: 100vh;
+                            height: 70vh;
                         }
                     }
                 `}
