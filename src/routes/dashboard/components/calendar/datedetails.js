@@ -27,6 +27,7 @@ function DateDetails(props) {
                         border-left: 1px solid #e6e6e6;
                         padding-left: 15px;
                         margin-left: 15px;
+                        overflow: auto;
                     }
 
                     #day-details-items{
@@ -68,12 +69,12 @@ function DateDetails(props) {
 
                     .day-details-task-display{
                         width=100%;
-                        background-color: #b8e898;
+                        background-color: #ff95c8;
                         padding: 5px;
                     }
 
                     .day-details-your-task-display{
-                        background-color: #b597ff;
+                        background-color: #95ffcc;
                     }
 
                     .day-details-event-display{
@@ -83,7 +84,7 @@ function DateDetails(props) {
                     }
 
                     .day-details-your-event-display{
-                        background-color: #95c9ff;
+                        background-color: #b597ff;
                     }
 
                     .event-preview-container{

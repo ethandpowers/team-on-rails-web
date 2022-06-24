@@ -24,6 +24,7 @@ function Calendar(props) {
                     display: flex;
                     flex-direction: row;
                     width: 100%;
+                    height: 100%;
                 }
 
                 @media screen and (max-width: 1000px) {
