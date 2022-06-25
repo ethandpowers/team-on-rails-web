@@ -1,10 +1,7 @@
-import { onValue } from "firebase/database";
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import Button3 from "../../../../components/buttons/button3";
 import { completeTask } from "../../../../firebase";
-import { database } from "../../../../firebase";
-import { ref } from "firebase/database";
 
 function TaskDetailsModal(props) {
     const completeCurrentTask = () => {
@@ -56,7 +53,7 @@ function TaskDetailsModal(props) {
                 centered
                 size="lg"
             >
-                <Modal.Header id="task-details-header" closeButton>
+                <Modal.Header closeButton>
                     <Modal.Title>{props.task.title}</Modal.Title>
                     {props.task.deadline && <div id="task-details-deadline"><i className=" mr-2 bi bi-calendar-x task-icon"></i>{props.task.deadline}</div>}
                     <div id="task-details-completion-div">{props.task.completed && `Completed on ${(new Date(props.task.completionTimeStamp)).toLocaleDateString()}`}</div>

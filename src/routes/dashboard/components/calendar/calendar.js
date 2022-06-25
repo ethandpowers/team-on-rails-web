@@ -4,10 +4,12 @@ import DateDetails from './datedetails';
 import MonthDisplay from './monthdisplay';
 import CreateEventModal from '../modals/createeventmodal';
 import EventDetailsModal from '../modals/eventdetailsmodal';
+import EditEventModal from '../modals/editeventmodal';
 
 function Calendar(props) {
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [eventDetailsModal, setEventDetailsModal] = useState(false);
+    const [editEvent, setEditEvent] = useState(false);
     return (
         <>
             <style>
@@ -35,7 +37,8 @@ function Calendar(props) {
             `}
             </style>
             {showCreateEventModal && <CreateEventModal hideModal={() => setShowCreateEventModal(false)} year={props.year} month={props.month} date={props.date} group={props.group} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} />}
-            {eventDetailsModal && <EventDetailsModal hideModal={() => setEventDetailsModal(false)} event={eventDetailsModal}/>}
+            {eventDetailsModal && <EventDetailsModal hideModal={() => setEventDetailsModal(false)} event={eventDetailsModal} editEvent={setEditEvent} />}
+            {editEvent && <EditEventModal hideModal={() => setEditEvent(false)} updateEventUI={setEventDetailsModal} event={editEvent} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} group={props.group} />}
             <Card id="main-calendar">
                 <Card.Body id="calendar-body">
                     <MonthDisplay
@@ -56,8 +59,8 @@ function Calendar(props) {
                         yourTasks={props.yourTasks}
                         tasks={props.tasks}
                         events={props.events}
-                        createEvent={() => setShowCreateEventModal(true)} 
-                        setEvent={setEventDetailsModal}/>
+                        createEvent={() => setShowCreateEventModal(true)}
+                        setEvent={setEventDetailsModal} />
                 </Card.Body>
             </Card>
         </>

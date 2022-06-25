@@ -1,9 +1,10 @@
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import moment from 'moment';
 import Button5 from '../../../../components/buttons/button5';
 
 function EventDetailsModal(props) {
-    return(
+    return (
         <>
             <style type="text/css">
                 {`
@@ -13,20 +14,27 @@ function EventDetailsModal(props) {
                     justify-content: space-between;
                 }
 
-                .create-event-horizontal-input{
+                #event-details-time{
+                    margin-left: 30px;
                     flex-grow: 1;
-                    margin-right: 15px;
                 }
 
-                #create-event-participants{
-                    margin-top: 15px;
+                #event-details-date{
+                    margin-left: 30px;
+                }
+
+                .event-icon{
+                    margin-right: 10px;
+                }
+
+                #event-details-participants{
                     display: flex;
                     flex-direction: row;
                     flex-wrap: wrap;
                 }
 
-                .separated-horizontal-checkbox{
-                    margin-right: 25px;
+                .participant-chip{
+                    margin-right: 10px;
                 }
 
                 @media screen and (max-width: 1000px) {
@@ -46,12 +54,35 @@ function EventDetailsModal(props) {
             >
                 <Modal.Header closeButton>
                     <Modal.Title>{props.event.title}</Modal.Title>
+                    <div id="event-details-date"><i className=" mr-2 bi bi-calendar-x event-icon"></i>{props.event.dateString}</div>
+                    <div id="event-details-time" className="flex-row">
+                        {props.event.startTime &&
+                            <>
+                                <i className="bi bi-clock event-icon"></i>
+                                {moment(props.event.startTime, "H:mm").format("h:mm A")}
+                                {props.event.endTime && <>{` - ${moment(props.event.endTime, "H:mm").format("h:mm A")}`}</>}
+                            </>
+                        }
+                    </div>
+                    <Button variant="clear" className="gray-icon" onClick={()=>props.editEvent(props.event)}><i className="bi bi-pencil-square"></i></Button>
                 </Modal.Header>
-                <Modal.Body>
-                    
-                </Modal.Body>
-                <Modal.Footer>
-                </Modal.Footer>
+                {(props.event.description || props.event.participants) &&
+                    <Modal.Body>
+                        {props.event.description && <p>{props.event.description}</p>}
+                        {props.event.participants &&
+                            <div id="event-details-participants">
+                                {
+                                    props.event.participants.map((user, index) => {
+                                        return (
+                                            <div key={index} className="chip participant-chip">
+                                                {user.name}
+                                            </div>
+                                        );
+                                    })
+                                }
+                            </div>
+                        }
+                    </Modal.Body>}
             </Modal>
         </>
     );

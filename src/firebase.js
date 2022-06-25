@@ -114,3 +114,11 @@ export async function createEvent(group, event) {
         eventId: eventref.key,
     });
 }
+
+export async function updateEvent(group, event) {
+    let date = new Date(event.dateString);
+    await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`), {
+        ...event,
+        updateTimeStamp: Date.now(),
+    });
+}
