@@ -94,7 +94,7 @@ function CreateEventModal(props) {
                             </Form.Group>
                             <Form.Group controlId="date" className="mb-3 create-event-horizontal-input">
                                 <Form.Label>Date</Form.Label>
-                                <Form.Control type="date" placeholder="Enter Date" defaultValue={moment(`${props.date}-${props.month + 1}-${props.year}`, 'DD-MM-YYYY').format('YYYY-MM-DD')} required />
+                                <Form.Control type="date" defaultValue={moment(`${props.date}-${props.month + 1}-${props.year}`, 'DD-MM-YYYY').format('YYYY-MM-DD')} required />
                             </Form.Group>
                             <Form.Group controlId="startTime" className="mb-3 create-event-horizontal-input" >
                                 <Form.Label>Start Time</Form.Label>

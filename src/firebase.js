@@ -122,3 +122,8 @@ export async function updateEvent(group, event) {
         updateTimeStamp: Date.now(),
     });
 }
+
+export async function deleteEvent(group, event) {
+    let date = new Date(event.dateString);
+    await remove(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
+}

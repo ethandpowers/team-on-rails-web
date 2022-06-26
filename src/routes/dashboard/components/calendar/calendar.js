@@ -5,11 +5,19 @@ import MonthDisplay from './monthdisplay';
 import CreateEventModal from '../modals/createeventmodal';
 import EventDetailsModal from '../modals/eventdetailsmodal';
 import EditEventModal from '../modals/editeventmodal';
+import { deleteEvent } from '../../../../firebase';
+
 
 function Calendar(props) {
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [eventDetailsModal, setEventDetailsModal] = useState(false);
     const [editEvent, setEditEvent] = useState(false);
+
+    const removeEvent = (event) => {
+        deleteEvent(props.group, event);
+        setEditEvent(false);
+        setEventDetailsModal(false);
+    }
     return (
         <>
             <style>
@@ -38,7 +46,7 @@ function Calendar(props) {
             </style>
             {showCreateEventModal && <CreateEventModal hideModal={() => setShowCreateEventModal(false)} year={props.year} month={props.month} date={props.date} group={props.group} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} />}
             {eventDetailsModal && <EventDetailsModal hideModal={() => setEventDetailsModal(false)} event={eventDetailsModal} editEvent={setEditEvent} />}
-            {editEvent && <EditEventModal hideModal={() => setEditEvent(false)} updateEventUI={setEventDetailsModal} event={editEvent} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} group={props.group} />}
+            {editEvent && <EditEventModal isAdmin={props.isAdmin} hideModal={() => setEditEvent(false)} updateEventUI={setEventDetailsModal} event={editEvent} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} group={props.group} removeEvent={removeEvent}/>}
             <Card id="main-calendar">
                 <Card.Body id="calendar-body">
                     <MonthDisplay
@@ -60,7 +68,8 @@ function Calendar(props) {
                         tasks={props.tasks}
                         events={props.events}
                         createEvent={() => setShowCreateEventModal(true)}
-                        setEvent={setEventDetailsModal} />
+                        setEvent={setEventDetailsModal}
+                    />
                 </Card.Body>
             </Card>
         </>

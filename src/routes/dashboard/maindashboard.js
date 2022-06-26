@@ -175,7 +175,8 @@ function MainDashboard() {
 					month={month}
 					setMonth={setMonth}
 					date={date}
-					setDate={setDate} />
+					setDate={setDate} 
+					isAdmin={isAdmin}/>
 
 				<Tasks
 					group={currentGroup}

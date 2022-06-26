@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Form, Button } from "react-bootstrap";
-import { updateEvent } from "../../../../firebase"
+import { updateEvent, deleteEvent } from "../../../../firebase"
 import Button5 from "../../../../components/buttons/button5";
 import moment from "moment";
 
@@ -19,7 +19,7 @@ function EditEventModal(props) {
 
         let newEvent = {
             title: event.target.title.value,
-            description: event.target.description ? event.target.description.value: null,
+            description: event.target.description ? event.target.description.value : null,
             dateString: moment(event.target.date.value, "YYYY-MM-DD").format("MM/DD/YYYY"),
             startTime: event.target.startTime.value ? event.target.startTime.value : null,
             endTime: event.target.endTime.value ? event.target.endTime.value : null,
@@ -76,6 +76,12 @@ function EditEventModal(props) {
 
                 .separated-horizontal-checkbox{
                     margin-right: 25px;
+                }
+
+                #edit-event-footer {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
                 }
 
                 @media screen and (max-width: 1000px) {
@@ -137,11 +143,16 @@ function EditEventModal(props) {
                         </Form.Group>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="clear" onClick={props.hideModal}>
-                        Cancel
-                    </Button>
-                    <Button5 type="submit" form="edit-event-form">Save</Button5>
+                <Modal.Footer id="edit-event-footer">
+                    <div>
+                        {props.isAdmin && <Button variant="danger" onClick={() => props.removeEvent(props.event)}>Delete Event</Button>}
+                    </div>
+                    <div>
+                        <Button variant="clear" onClick={props.hideModal}>
+                            Cancel
+                        </Button>
+                        <Button5 type="submit" form="edit-event-form">Save</Button5>
+                    </div>
                 </Modal.Footer>
             </Modal>
         </>
