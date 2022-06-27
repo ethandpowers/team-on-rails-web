@@ -127,3 +127,21 @@ export async function deleteEvent(group, event) {
     let date = new Date(event.dateString);
     await remove(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
 }
+
+export async function createConversation(recipients, message){
+    let conversationRef = await push(ref(database, `/conversations`), {
+        recipients: recipients,
+    });
+    await update(ref(database, `/conversations/${conversationRef.key}`), {
+        conversationId: conversationRef.key,
+    });
+    await push(ref(database, `/conversations/${conversationRef.key}/messages`), {
+        message: message,
+        sender: auth.currentUser.uid,
+    });
+    recipients.forEach(async (recipient) => {
+        await push(ref(database, `/users/${recipient.userId}/conversations`), {
+            conversationId: conversationRef.key,
+        });
+    });
+}

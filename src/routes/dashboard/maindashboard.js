@@ -11,12 +11,16 @@ import JoinGroupModal from "./components/modals/joingroupmodal";
 import CreateGroupModal from "./components/modals/creategroupmodal";
 import Calendar from "./components/calendar/calendar";
 import Tasks from "./components/tasks/tasks";
+import Chat from "./components/chat/chat";
 
 function MainDashboard() {
+	//loading states
+	const [accountLoaded, setAccountLoaded] = useState(false);
+	const [tasksLoaded, setTasksLoaded] = useState(false);
+
 	const [groupsAsAdmin, setGroupsAsAdmin] = useState([]);
 	const [groupsAsMember, setGroupsAsMember] = useState([]);
 	const [name, setName] = useState("");
-	const [loaded, setLoaded] = useState(false);
 	const [showSettingsState, setShowSettingsState] = useState(false);
 	const [showJoinGroupModal, setShowJoinGroupModal] = useState(false);
 	const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
@@ -30,6 +34,7 @@ function MainDashboard() {
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [month, setMonth] = useState(new Date().getMonth());
 	const [date, setDate] = useState(new Date().getDate());
+	const [showChat, setShowChat] = useState(false);
 
 	//modal control functions
 	const showSettings = () => setShowSettingsState(true);
@@ -67,6 +72,7 @@ function MainDashboard() {
 		}
 
 		if (data.name !== name) setName(data.name);
+		if (!accountLoaded) setAccountLoaded(true);
 	});
 
 	// Realtime listener for group tasks
@@ -80,9 +86,7 @@ function MainDashboard() {
 				setTasks(Object.values(data));
 				setYourTasks(Object.values(data).filter(task => task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid)));
 			}
-			if (!loaded) {
-				setLoaded(true)
-			};
+			if (!tasksLoaded) setTasksLoaded(true);
 		});
 	}
 
@@ -90,7 +94,7 @@ function MainDashboard() {
 	if (currentGroup) {
 		onValue(ref(database, `groups/${currentGroup.groupId}/members`), (snapshot) => {
 			const data = snapshot.val();
-			if (Object.values(data).length !== groupMembers.length) {
+			if (data && Object.values(data).length !== groupMembers.length) {
 				setGroupMembers(Object.values(data));
 			}
 		});
@@ -118,13 +122,7 @@ function MainDashboard() {
 		});
 	}
 
-	//loading screen while loading groups data
-	if (!loaded) {
-		return <Loading></Loading>
-
-		//join or create a group if not in group
-	}
-	else if (groupsAsAdmin.length === 0 && groupsAsMember.length === 0) {
+	if (accountLoaded && groupsAsAdmin.length === 0 && groupsAsMember.length === 0) {
 		return (
 			<>
 				<ElementBG>
@@ -133,11 +131,11 @@ function MainDashboard() {
 				<NoGroupsModal></NoGroupsModal>
 			</>
 		);
-	}
-	return (
-		<>
-			<style type="text/css">
-				{`
+	} else if (tasksLoaded && groupAdministrator) {
+		return (
+			<>
+				<style type="text/css">
+					{`
 					#dashboard-main-container {
 						height: calc(100vh - 60px);
                         flex: 1 1 auto;
@@ -155,40 +153,54 @@ function MainDashboard() {
                         }
                     }
         		`}
-			</style>
+				</style>
 
-			{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
-			{showJoinGroupModal && <JoinGroupModal hideModal={hideJoinGroupModal}></JoinGroupModal>}
-			{showCreateGroupModal && <CreateGroupModal hideModal={hideCreateGroupModal}></CreateGroupModal>}
-			<DashboardHeader name={name} showSettings={showSettings} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} joinGroup={showJoinGroupModalFunc} createGroup={showCreateGroupModalFunc}></DashboardHeader>
-
-			<div id="dashboard-main-container">
-				<Calendar
-					yourTasks={yourTasks}
-					tasks={tasks}
-					group={currentGroup}
-					groupAdmin={groupAdministrator}
-					groupMembers={groupMembers}
-					events={events}
-					year={year}
-					setYear={setYear}
-					month={month}
-					setMonth={setMonth}
-					date={date}
-					setDate={setDate} 
-					isAdmin={isAdmin}/>
-
-				<Tasks
-					group={currentGroup}
+				{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
+				{showJoinGroupModal && <JoinGroupModal hideModal={hideJoinGroupModal} />}
+				{showCreateGroupModal && <CreateGroupModal hideModal={hideCreateGroupModal} />}
+				<Chat showChat={showChat} hideChat={() => setShowChat(false)} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} name={name}/>
+				<DashboardHeader
 					name={name}
-					isAdmin={isAdmin}
-					tasks={tasks}
-					yourTasks={yourTasks}
-					groupAdmin={groupAdministrator}
-					groupMembers={groupMembers} />
-			</div>
-		</>
-	);
+					showSettings={showSettings}
+					currentGroup={currentGroup}
+					setCurrentGroup={setCurrentGroup}
+					groupsAsAdmin={groupsAsAdmin}
+					groupsAsMember={groupsAsMember}
+					joinGroup={showJoinGroupModalFunc}
+					createGroup={showCreateGroupModalFunc}
+					toggleChat={() => setShowChat(true)}
+				/>
+
+				<div id="dashboard-main-container">
+					<Calendar
+						yourTasks={yourTasks}
+						tasks={tasks}
+						group={currentGroup}
+						groupAdmin={groupAdministrator}
+						groupMembers={groupMembers}
+						events={events}
+						year={year}
+						setYear={setYear}
+						month={month}
+						setMonth={setMonth}
+						date={date}
+						setDate={setDate}
+						isAdmin={isAdmin} />
+
+					<Tasks
+						group={currentGroup}
+						name={name}
+						isAdmin={isAdmin}
+						tasks={tasks}
+						yourTasks={yourTasks}
+						groupAdmin={groupAdministrator}
+						groupMembers={groupMembers} />
+				</div>
+			</>
+		);
+	} else {
+		return <Loading></Loading>
+	}
 }
 
 export default MainDashboard;

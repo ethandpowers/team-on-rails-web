@@ -40,3 +40,15 @@ code {
   border-radius: 25px;
   background-color: #f1f1f1;
 }
+
+.chip-close{
+  margin-left: 5px;
+}
+
+.chip-close:hover{
+  cursor: pointer;
+}
+
+.no-wrap{
+  white-space: nowrap;
+}

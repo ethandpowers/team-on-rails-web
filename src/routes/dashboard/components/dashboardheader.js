@@ -34,10 +34,17 @@ function DashboardHeader(props) {
                     #copy-id-button{
                         color: white;
                     }
+
+                    #chat-button{
+                        color: white;
+                        margin-left: 10px;
+                        margin-right: 10px;
+                    }
                 `}
             </style>
             <div id="dashboard-header-container">
                 <div id="group-nav-div">
+                    <Button variant="clear" onClick={props.toggleChat} id="chat-button"><i className="bi bi-chat-left-text-fill"></i></Button>
                     <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
                     <Button variant="clear" id="copy-id-button" onClick={() => {
                         navigator.clipboard.writeText(props.currentGroup.groupId);
