@@ -10,7 +10,6 @@ function NewMessage(props) {
     const [imageUrl, setImageUrl] = useState(null);
     const [imageName, setImageName] = useState(null);
     const imageRef = useRef(null);
-    const formRef = useRef(null);
 
     const changeInputType = (event) => {
         setInputType(event.target.value);
@@ -40,15 +39,24 @@ function NewMessage(props) {
     const submit = () => {
         let obj = {}
         obj.messageType = inputType.toLowerCase();
-        if (message) {
-            if (message.length === 0) return;
+        if (obj.messageType === "text") {
+            if (!message) return;
             obj.text = message;
         }
-        if (image) {
+        if (obj.messageType === "image") {
+            if (!image) return;
             obj.image = image;
             obj.imageName = imageName;
         }
-        props.handleSubmit(obj);
+        props.handleSubmit(obj).then((res) => {
+            if (res) {
+                setMessage("");
+                setImage(null);
+                setImageUrl(null);
+                setImageName(null);
+                if (imageRef) imageRef.current.value = "";
+            }
+        })
     }
 
     return (
@@ -92,8 +100,8 @@ function NewMessage(props) {
                             />
                         </Form.Group>
                     }
-                    {inputType === "Image" &&
-                        <img src={imageUrl} className="preview-message-upload-image"></img>
+                    {inputType === "Image" && imageUrl &&
+                        <img src={imageUrl} alt="uploaded img" className="preview-message-upload-image"></img>
                     }
                     <div id="new-message-footer">
                         <Form.Select onChange={changeInputType} defaultValue="Text" required>

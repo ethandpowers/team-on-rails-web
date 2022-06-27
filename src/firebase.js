@@ -3,8 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { get, getDatabase, push, ref, set, update, remove } from "firebase/database";
-import { getStorage, uploadBytes, ref as storageRef } from "firebase/storage";
-import NewMessage from "./routes/dashboard/components/chat/newmessage";
+import { getStorage, uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAfvt67zQjyY_D9NlwNwNhVMPN7CtucsGA",
@@ -139,21 +138,13 @@ export async function createConversation(recipients, message) {
         conversationId: conversationRef.key,
     });
     if (message.messageType === 'image') {
-        //check if image is already in storage
-        let unique = false
-        while (!unique) {
-            let imageRef = await storageRef.child(`conversations/${conversationRef.key}/${message.imageName}`);
-            unique = await imageRef.getMetadata().then(metadata => metadata.size > 0);
-            if (unique) break;
-            message.imageName = `${message.imageName}_${Math.floor(Math.random() * 100)}`;
-        }
         await uploadBytes(storageRef(storage, `/conversations/${conversationRef.key}/${message.imageName}`), message.image).then(snapshot => {
             message.image = snapshot.ref.fullPath;
         });
     }
     await push(ref(database, `/conversations/${conversationRef.key}/messages`), {
         ...message,
-        sender: {userId: auth.currentUser.uid, name: await getName(auth.currentUser.uid)},
+        sender: { userId: auth.currentUser.uid, name: await getName(auth.currentUser.uid) },
         messageTimeStamp: Date.now(),
     });
     recipients.forEach(async (recipient) => {
@@ -168,8 +159,8 @@ export async function newMessage(conversation, message) {
         //check if image is already in storage
         let unique = false
         while (!unique) {
-            let imageRef = await storageRef.child(`conversations/${conversation.conversationId}/${message.imageName}`);
-            unique = await imageRef.getMetadata().then(metadata => metadata.size > 0);
+            let imageRef = storageRef(storage, `conversations/${conversation.conversationId}/${message.imageName}`);
+            unique = !!imageRef
             if (unique) break;
             message.imageName = `${message.imageName}_${Math.floor(Math.random() * 100)}`;
         }
@@ -179,11 +170,21 @@ export async function newMessage(conversation, message) {
     }
     await push(ref(database, `/conversations/${conversation.conversationId}/messages`), {
         ...message,
-        sender: {userId: auth.currentUser.uid, name: await getName(auth.currentUser.uid)},
+        sender: { userId: auth.currentUser.uid, name: await getName(auth.currentUser.uid) },
         messageTimeStamp: Date.now(),
     });
+    //true for success, false for failure
+    return true;
 }
 
-export async function getName(userId){
+export async function getName(userId) {
     return (await get(ref(database, `users/${userId}/name`))).val();
+}
+
+export async function getImageUrl(imagePath) {
+    let url = ""
+    await getDownloadURL(storageRef(storage, imagePath)).then((res) => {
+        url = res;
+    });
+    return url;
 }

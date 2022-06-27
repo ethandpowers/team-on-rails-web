@@ -1,8 +1,9 @@
 import { onValue, ref } from 'firebase/database';
-import { database, auth, newMessage } from '../../../../firebase';
+import { database, auth, newMessage, getImageUrl } from '../../../../firebase';
 import { useState, useRef, useEffect } from 'react';
 import NewMessage from './newmessage';
 import moment from 'moment';
+import ImageMessage from './imagemessage';
 
 function FullConversation(props) {
     const [messages, setMessages] = useState([]);
@@ -44,6 +45,7 @@ function FullConversation(props) {
                         width: 100%;
                         display: flex;
                         flex-direction: column;
+                        margin-bottom: 20px;
                     }
                     .your-message{
                         align-items: flex-end;
@@ -84,12 +86,15 @@ function FullConversation(props) {
                                         {message.text}
                                     </div>
                                 }
+                                {message.messageType === "image" &&
+                                    <ImageMessage message={message} />
+                                }
                             </div>
                         );
                     })}
                     <div ref={bottomRef}></div>
                 </div>
-                <NewMessage handleSubmit={(message) => newMessage(props.conversation, message)} />
+                <NewMessage handleSubmit={(message) => { return newMessage(props.conversation, message) }} />
             </div>
         </>
     );
