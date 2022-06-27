@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { get, getDatabase, push, ref, set, update, remove } from "firebase/database";
+import { getStorage, uploadFile } from "firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAfvt67zQjyY_D9NlwNwNhVMPN7CtucsGA",
@@ -16,9 +17,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+getAnalytics(app);
 export const auth = getAuth(app);
 export const database = getDatabase(app);
+export const storage = getStorage(app);
 
 export function loggedIn() {
     console.log(`loggedIn: ${auth.currentUser !== null}`);
@@ -128,7 +130,7 @@ export async function deleteEvent(group, event) {
     await remove(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
 }
 
-export async function createConversation(recipients, message){
+export async function createConversation(recipients, message) {
     let conversationRef = await push(ref(database, `/conversations`), {
         recipients: recipients,
     });
@@ -136,8 +138,9 @@ export async function createConversation(recipients, message){
         conversationId: conversationRef.key,
     });
     await push(ref(database, `/conversations/${conversationRef.key}/messages`), {
-        message: message,
+        ...message,
         sender: auth.currentUser.uid,
+        messageTimeStamp: Date.now(),
     });
     recipients.forEach(async (recipient) => {
         await push(ref(database, `/users/${recipient.userId}/conversations`), {

@@ -31,7 +31,8 @@ function NewMessage(props) {
     const submit = (event) => {
         event.preventDefault();
         let obj = {}
-        if (message) obj.message = message;
+        obj.messageType = inputType.toLowerCase();
+        if (message) obj.text = message;
         if (image) obj.image = image;
         props.handleSubmit(obj);
     }

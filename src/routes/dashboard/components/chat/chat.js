@@ -3,6 +3,7 @@ import { React, useState } from 'react';
 import { Button, ListGroup, Offcanvas } from 'react-bootstrap';
 import { auth, database } from '../../../../firebase';
 import CreateConversationMenu from './createconversationmenu';
+import ConversationPreview from './conversationpreview';
 
 function Chat(props) {
     const [conversations, setConversations] = useState([]);
@@ -10,9 +11,9 @@ function Chat(props) {
     const [createConversation, setCreateConversation] = useState(null);
 
     onValue(ref(database, `users/${auth.currentUser.uid}/conversations`), snapshot => {
-        const conversations = snapshot.val();
-        if (conversations && Object.values(conversations).length !== conversations.length) {
-            setConversations(Object.values(conversations));
+        const data = snapshot.val();
+        if (data && Object.values(data).length !== conversations.length) {
+            setConversations(Object.values(data));
         }
     });
 
@@ -50,19 +51,19 @@ function Chat(props) {
                 <Offcanvas.Body>
 
                     {!selectedConversation && createConversation &&
-                       <CreateConversationMenu groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} name={props.name} closeMenu={()=> setCreateConversation(false)}/>
+                        <CreateConversationMenu groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} name={props.name} closeMenu={() => setCreateConversation(false)} />
                     }
 
                     {!selectedConversation && !createConversation &&
-                        <ListGroup variant="flush">
+                        <>
                             {conversations.map((conversation, index) => {
-                                return (
-                                    <ListGroup.Item key={index} onClick={() => setSelectedConversation(conversation)}>
-                                        {/* {conversation.name} */}
-                                    </ListGroup.Item>
-                                );
+                                return <ConversationPreview
+                                    conversation={conversation}
+                                    key={index}
+                                    onClick={() => setSelectedConversation(conversation)}
+                                />
                             })}
-                        </ListGroup>}
+                        </>}
                 </Offcanvas.Body>
             </Offcanvas>
         </>

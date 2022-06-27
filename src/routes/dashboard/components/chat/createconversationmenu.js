@@ -57,9 +57,11 @@ function CreateConversationMenu(props) {
     }
 
     const handleCreateConversation = (msg) => {
-        let fullRecipients = [...recipients, { userId: auth.currentUser.uid, name: props.name }];
-        createConversation(fullRecipients, msg);
-        props.closeMenu();
+        if (recipients.length > 0) {
+            let fullRecipients = [...recipients, { userId: auth.currentUser.uid, name: props.name }];
+            createConversation(fullRecipients, msg);
+            props.closeMenu();
+        }
     }
 
     useEffect(() => {
@@ -123,7 +125,7 @@ function CreateConversationMenu(props) {
                             })}
                         </Dropdown.Menu>
                     </Dropdown>
-                    <NewMessage handleSubmit={handleCreateConversation}/>
+                    <NewMessage handleSubmit={handleCreateConversation} />
                 </div>
             </>
         )
