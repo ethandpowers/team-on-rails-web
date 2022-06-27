@@ -54,7 +54,7 @@ function NewMessage(props) {
                 setImage(null);
                 setImageUrl(null);
                 setImageName(null);
-                if (imageRef) imageRef.current.value = "";
+                if (imageRef.current) imageRef.current.value = "";
             }
         })
     }

@@ -19,7 +19,7 @@ function FullConversation(props) {
     useEffect(() => {
         setTimeout(() => {
             bottomRef.current.scrollIntoView({ behavior: 'smooth' });
-        }, 500);
+        }, 1000);
     }, [messages]);
     return (
         <>
@@ -60,6 +60,9 @@ function FullConversation(props) {
                         padding-top: 5px;
                         padding-bottom: 5px;
                         border-radius: 10px;
+                        width: 70%;
+                        white-space: normal;
+                        overflow-wrap: break-word;
                     }
 
                     .your-message-body{
@@ -78,7 +81,7 @@ function FullConversation(props) {
                         return (
                             <div key={index} className={`message ${yourMessage ? "your-message" : "their-message"}`}>
                                 <div className="message-timestamp">
-                                    <div>{!yourMessage && message.sender.name}</div>
+                                    <div>{!yourMessage && props.recipients.length > 2 && message.sender.name}</div>
                                     {moment(message.timestamp).format("MMM Do YYYY, h:mm:ss A")}
                                 </div>
                                 {message.messageType === "text" &&

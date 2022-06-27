@@ -109,6 +109,7 @@ function Chat(props) {
                     {selectedConversation &&
                         <FullConversation
                             conversation={selectedConversation}
+                            recipients={recipients}
                         />
                     }
                 </Offcanvas.Body>
