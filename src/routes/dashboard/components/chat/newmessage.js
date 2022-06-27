@@ -40,7 +40,10 @@ function NewMessage(props) {
     const submit = () => {
         let obj = {}
         obj.messageType = inputType.toLowerCase();
-        if (message) obj.text = message;
+        if (message) {
+            if (message.length === 0) return;
+            obj.text = message;
+        }
         if (image) {
             obj.image = image;
             obj.imageName = imageName;
