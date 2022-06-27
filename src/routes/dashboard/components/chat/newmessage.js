@@ -10,6 +10,7 @@ function NewMessage(props) {
     const [imageUrl, setImageUrl] = useState(null);
     const [imageName, setImageName] = useState(null);
     const imageRef = useRef(null);
+    const formRef = useRef(null);
 
     const changeInputType = (event) => {
         setInputType(event.target.value);
@@ -21,7 +22,13 @@ function NewMessage(props) {
     }
 
     const handleMessageChange = (event) => {
-        setMessage(event.target.value.substring(0, maxMessageLength));
+        // submit message if enter is pressed
+        if (event.nativeEvent.inputType === "insertLineBreak") {
+            submit();
+            setMessage("");
+        } else {
+            setMessage(event.target.value.substring(0, maxMessageLength));
+        }
     }
 
     const handleImageChange = (event) => {
@@ -30,8 +37,7 @@ function NewMessage(props) {
         setImageUrl(url);
     }
 
-    const submit = (event) => {
-        event.preventDefault();
+    const submit = () => {
         let obj = {}
         obj.messageType = inputType.toLowerCase();
         if (message) obj.text = message;
@@ -68,7 +74,7 @@ function NewMessage(props) {
                 `}
             </style>
             <div id="new-message">
-                <Form onSubmit={submit}>
+                <Form>
                     {inputType === "Text" &&
                         <Form.Group>
                             <Form.Control
@@ -100,7 +106,7 @@ function NewMessage(props) {
                                 setImageName={setImageName}
                             />
                         }
-                        <Button className="no-wrap" variant="clear" type="submit">
+                        <Button className="no-wrap" variant="clear" onClick={submit}>
                             <i className="bi bi-send" />{inputType === "Text" && " Send"}
                         </Button>
                     </div>

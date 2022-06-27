@@ -1,11 +1,12 @@
 import { onValue, ref } from 'firebase/database';
-import { database, auth, newMessage, getName } from '../../../../firebase';
-import { useState } from 'react';
+import { database, auth, newMessage } from '../../../../firebase';
+import { useState, useRef, useEffect } from 'react';
 import NewMessage from './newmessage';
 import moment from 'moment';
 
 function FullConversation(props) {
     const [messages, setMessages] = useState([]);
+    const bottomRef = useRef(null);
 
     onValue(ref(database, `conversations/${props.conversation.conversationId}/messages`), snapshot => {
         let data = Object.values(snapshot.val());
@@ -13,6 +14,12 @@ function FullConversation(props) {
             setMessages(data);
         }
     });
+
+    useEffect(() => {
+        setTimeout(() => {
+            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+    }, [messages]);
     return (
         <>
             <style>
@@ -25,11 +32,13 @@ function FullConversation(props) {
                     #display-messages{
                         display: flex;
                         flex-direction: column;
-                        overflow-y: scroll;
+                        overflow-y: auto;
                         height: 100%;
                     }
                     .message-timestamp{
                         font-size: 12px;
+                        display: flex;
+                        flex-direction: column;
                     }
                     .message{
                         width: 100%;
@@ -44,7 +53,10 @@ function FullConversation(props) {
                     }
 
                     .message-body{
-                        padding: 10px;
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        padding-top: 5px;
+                        padding-bottom: 5px;
                         border-radius: 10px;
                     }
 
@@ -64,8 +76,8 @@ function FullConversation(props) {
                         return (
                             <div key={index} className={`message ${yourMessage ? "your-message" : "their-message"}`}>
                                 <div className="message-timestamp">
-
-                                    {`${!yourMessage ? message.sender.name: ""} ${moment(message.timestamp).format("MMM Do YYYY, h:mm:ss A")}`}
+                                    <div>{!yourMessage && message.sender.name}</div>
+                                    {moment(message.timestamp).format("MMM Do YYYY, h:mm:ss A")}
                                 </div>
                                 {message.messageType === "text" &&
                                     <div className={`message-body ${yourMessage ? "your-message-body" : "their-message-body"}`}>
@@ -75,6 +87,7 @@ function FullConversation(props) {
                             </div>
                         );
                     })}
+                    <div ref={bottomRef}></div>
                 </div>
                 <NewMessage handleSubmit={(message) => newMessage(props.conversation, message)} />
             </div>
