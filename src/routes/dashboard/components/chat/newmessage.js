@@ -7,6 +7,7 @@ function NewMessage(props) {
     const [message, setMessage] = useState("");
     const [inputType, setInputType] = useState("Text");
     const [image, setImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
     const [imageName, setImageName] = useState(null);
     const imageRef = useRef(null);
 
@@ -25,7 +26,8 @@ function NewMessage(props) {
 
     const handleImageChange = (event) => {
         let url = URL.createObjectURL(event.target.files[0]);
-        setImage(url);
+        setImage(event.target.files[0]);
+        setImageUrl(url);
     }
 
     const submit = (event) => {
@@ -33,7 +35,10 @@ function NewMessage(props) {
         let obj = {}
         obj.messageType = inputType.toLowerCase();
         if (message) obj.text = message;
-        if (image) obj.image = image;
+        if (image) {
+            obj.image = image;
+            obj.imageName = imageName;
+        }
         props.handleSubmit(obj);
     }
 
@@ -44,7 +49,7 @@ function NewMessage(props) {
                     #new-message{
                         display: flex;
                         flex-direction: column-reverse;
-                        height: 100%;
+                        margin-top: 10px;
                     }
 
                     #new-message-footer{
@@ -79,7 +84,7 @@ function NewMessage(props) {
                         </Form.Group>
                     }
                     {inputType === "Image" &&
-                        <img src={image} className="preview-message-upload-image"></img>
+                        <img src={imageUrl} className="preview-message-upload-image"></img>
                     }
                     <div id="new-message-footer">
                         <Form.Select onChange={changeInputType} defaultValue="Text" required>

@@ -125,6 +125,7 @@ function CreateConversationMenu(props) {
                             })}
                         </Dropdown.Menu>
                     </Dropdown>
+                    <div className="grow-height"></div>
                     <NewMessage handleSubmit={handleCreateConversation} />
                 </div>
             </>

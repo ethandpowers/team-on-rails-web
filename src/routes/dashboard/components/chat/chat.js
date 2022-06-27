@@ -1,13 +1,15 @@
-import { onValue, ref } from 'firebase/database';
-import { React, useState } from 'react';
-import { Button, ListGroup, Offcanvas } from 'react-bootstrap';
+import { get, onValue, ref } from 'firebase/database';
+import { React, useEffect, useState } from 'react';
+import { Button, Offcanvas } from 'react-bootstrap';
 import { auth, database } from '../../../../firebase';
 import CreateConversationMenu from './createconversationmenu';
 import ConversationPreview from './conversationpreview';
+import FullConversation from './fullconversation';
 
 function Chat(props) {
     const [conversations, setConversations] = useState([]);
     const [selectedConversation, setSelectedConversation] = useState(null);
+    const [recipients, setRecipients] = useState([]);
     const [createConversation, setCreateConversation] = useState(null);
 
     onValue(ref(database, `users/${auth.currentUser.uid}/conversations`), snapshot => {
@@ -16,6 +18,14 @@ function Chat(props) {
             setConversations(Object.values(data));
         }
     });
+    useEffect(() => {
+        if (selectedConversation) {
+            get(ref(database, `conversations/${selectedConversation.conversationId}/recipients`)).then(snapshot => {
+                let data = snapshot.val();
+                setRecipients(Object.values(data.filter(recipient => recipient.userId !== auth.currentUser.uid)));
+            });
+        }
+    }, [selectedConversation]);
 
     return (
         <>
@@ -27,6 +37,17 @@ function Chat(props) {
                         justify-content: space-between;
                         align-items: center;
                         width: 100%;
+                    }
+                    #conversations-header-participants{
+                        display: flex;
+                        flex-direction: row;
+                        overflow-x: scroll;
+                        overflow-y: hidden;
+                    }
+
+                    .conversation-header-participant{
+                        margin-right: 10px;
+                        white-space: nowrap;
                     }
                 `}
             </style>
@@ -47,6 +68,26 @@ function Chat(props) {
                             <Offcanvas.Title>Create Conversation</Offcanvas.Title>
                         </>
                     }
+                    {selectedConversation &&
+                        <>
+                            <Button variant="clear" onClick={() => setSelectedConversation(null)}><i className="bi bi-arrow-left"></i></Button>
+                            {recipients.length === 1 ?
+                                <Offcanvas.Title>{recipients.map((recipient, index) => {
+                                    return (
+                                        <div key={index}>{recipient.name}</div>
+                                    )
+                                })}</Offcanvas.Title> :
+                                
+                                <div id="conversations-header-participants">
+                                    {recipients.map((recipient, index) => {
+                                        return (
+                                            <div className="chip conversation-header-participant" key={index}>{recipient.name}</div>
+                                        )
+                                    })}
+                                </div>
+                            }
+                        </>
+                    }
                 </Offcanvas.Header>
                 <Offcanvas.Body>
 
@@ -60,10 +101,16 @@ function Chat(props) {
                                 return <ConversationPreview
                                     conversation={conversation}
                                     key={index}
-                                    onClick={() => setSelectedConversation(conversation)}
+                                    setSelectedConversation={setSelectedConversation}
                                 />
                             })}
-                        </>}
+                        </>
+                    }
+                    {selectedConversation &&
+                        <FullConversation
+                            conversation={selectedConversation}
+                        />
+                    }
                 </Offcanvas.Body>
             </Offcanvas>
         </>
