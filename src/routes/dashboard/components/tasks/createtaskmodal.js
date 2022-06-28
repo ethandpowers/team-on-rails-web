@@ -32,7 +32,7 @@ function CreateTaskModal(props) {
     }
     return (
         <Modal
-            show={true}
+            show={props.showModal}
             onHide={props.hideModal}
             backdrop="static"
             keyboard={false}

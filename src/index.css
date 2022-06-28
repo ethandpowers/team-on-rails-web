@@ -59,3 +59,8 @@ code {
   flex-direction: column;
   flex-grow: 1;
 }
+
+.no-outline{
+  outline: none !important;
+  box-shadow: none !important;
+}

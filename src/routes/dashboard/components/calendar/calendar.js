@@ -12,6 +12,7 @@ function Calendar(props) {
     const [showCreateEventModal, setShowCreateEventModal] = useState(false);
     const [eventDetailsModal, setEventDetailsModal] = useState(false);
     const [editEvent, setEditEvent] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(props.events[0]);
 
     const removeEvent = (event) => {
         deleteEvent(props.group, event);
@@ -44,9 +45,31 @@ function Calendar(props) {
                 }
             `}
             </style>
-            {showCreateEventModal && <CreateEventModal hideModal={() => setShowCreateEventModal(false)} year={props.year} month={props.month} date={props.date} group={props.group} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} />}
-            {eventDetailsModal && <EventDetailsModal hideModal={() => setEventDetailsModal(false)} event={eventDetailsModal} editEvent={setEditEvent} />}
-            {editEvent && <EditEventModal isAdmin={props.isAdmin} hideModal={() => setEditEvent(false)} updateEventUI={setEventDetailsModal} event={editEvent} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} group={props.group} removeEvent={removeEvent}/>}
+            <CreateEventModal
+                showModal={showCreateEventModal}
+                hideModal={() => setShowCreateEventModal(false)}
+                year={props.year}
+                month={props.month}
+                date={props.date}
+                group={props.group}
+                groupAdmin={props.groupAdmin}
+                groupMembers={props.groupMembers}
+            />
+            <EventDetailsModal
+                showModal={eventDetailsModal}
+                hideModal={() => setEventDetailsModal(false)}
+                event={selectedEvent}
+                editEvent={setEditEvent} />
+            <EditEventModal
+                isAdmin={props.isAdmin}
+                showModal={editEvent}
+                hideModal={() => setEditEvent(false)}
+                updateEventUI={setSelectedEvent}
+                event={editEvent}
+                groupAdmin={props.groupAdmin}
+                groupMembers={props.groupMembers}
+                group={props.group}
+                removeEvent={removeEvent} />
             <Card id="main-calendar">
                 <Card.Body id="calendar-body">
                     <MonthDisplay
@@ -68,7 +91,7 @@ function Calendar(props) {
                         tasks={props.tasks}
                         events={props.events}
                         createEvent={() => setShowCreateEventModal(true)}
-                        setEvent={setEventDetailsModal}
+                        setEvent={(event) => { setSelectedEvent(event); setEventDetailsModal(true) }}
                     />
                 </Card.Body>
             </Card>

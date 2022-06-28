@@ -60,7 +60,7 @@ function FullConversation(props) {
                         padding-top: 5px;
                         padding-bottom: 5px;
                         border-radius: 10px;
-                        width: 70%;
+                        max-width: 70%;
                         white-space: normal;
                         overflow-wrap: break-word;
                     }

@@ -16,7 +16,7 @@ function JoinGroupModal(props) {
     }
     return (
         <Modal
-            show={true}
+            show={props.showModal}
             backdrop="static"
             keyboard={false}
             centered

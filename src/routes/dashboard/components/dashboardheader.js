@@ -44,7 +44,7 @@ function DashboardHeader(props) {
             </style>
             <div id="dashboard-header-container">
                 <div id="group-nav-div">
-                    <Button variant="clear" onClick={props.toggleChat} id="chat-button"><i className="bi bi-chat-left-text-fill"></i></Button>
+                    <Button className="no-outline" variant="clear" onClick={props.toggleChat} id="chat-button"><i className="bi bi-chat-left-text-fill"></i></Button>
                     <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
                     <Button variant="clear" id="copy-id-button" onClick={() => {
                         navigator.clipboard.writeText(props.currentGroup.groupId);

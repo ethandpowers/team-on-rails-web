@@ -109,7 +109,7 @@ function DateDetails(props) {
             </style>
             <div id="date-details">
                 <h4>Details for {daysOfWeek[new Date(props.year, props.month, props.date).getDay()] + " " + dateString}</h4>
-                <Button variant="outline-warning" onClick={props.createEvent}>Create Event</Button>
+                <Button className="no-outline" variant="outline-warning" onClick={props.createEvent}>Create Event</Button>
                 {todaysEvents.length > 0 ? <div id="day-details-items">
                     <HorizontalDivider />
                     <h5>Events</h5>

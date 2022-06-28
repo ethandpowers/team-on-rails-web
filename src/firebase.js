@@ -4,6 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { get, getDatabase, push, ref, set, update, remove } from "firebase/database";
 import { getStorage, uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
+import { sortPeople } from "./routes/dashboard/utilities";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAfvt67zQjyY_D9NlwNwNhVMPN7CtucsGA",
@@ -187,4 +188,31 @@ export async function getImageUrl(imagePath) {
         url = res;
     });
     return url;
+}
+
+export async function getAllContacts(groupsAsAdmin, groupsAsMember) {
+    let contacts = [];
+    for (let i = 0; i < groupsAsAdmin.length; i++) {
+        let group = groupsAsAdmin[i];
+        let snapshot = await get(ref(database, `groups/${group.groupId}/members`))
+        const members = snapshot.val();
+        if (members) {
+            contacts = [...contacts, ...Object.values(members)];
+        }
+    }
+    for (let i = 0; i < groupsAsMember.length; i++) {
+        let group = groupsAsMember[i];
+        await get(ref(database, `groups/${group.groupId}/members`)).then(snapshot => {
+            const members = Object.values(snapshot.val());
+            if (members) {
+                contacts = [...contacts, ...members];
+            }
+        });
+
+        await get(ref(database, `groups/${group.groupId}/administrator`)).then(snapshot => {
+            const administrator = snapshot.val();
+            contacts = [...contacts, administrator];
+        });
+    }
+    return contacts.filter(user => user.userId !== auth.currentUser.uid).sort(sortPeople);
 }

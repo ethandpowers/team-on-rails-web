@@ -5,8 +5,8 @@ import Button3 from "../../../../components/buttons/button3";
 function Settings(props) {
     return (
         <Modal
-            show={true}
-            onHide={props.hideSettings}
+            show={props.showModal}
+            onHide={props.hideModal}
             backdrop="static"
             keyboard={false}
             centered
@@ -19,7 +19,7 @@ function Settings(props) {
                 settings here
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="clear" onClick={props.hideSettings}>
+                <Button variant="clear" onClick={props.hideModal}>
                     Cancel
                 </Button>
                 <Button3>Save</Button3>

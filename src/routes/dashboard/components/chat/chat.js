@@ -18,8 +18,9 @@ function Chat(props) {
             setConversations(Object.values(data));
         }
     });
+
     useEffect(() => {
-        if (selectedConversation) {
+        if (selectedConversation && !recipients) {
             get(ref(database, `conversations/${selectedConversation.conversationId}/recipients`)).then(snapshot => {
                 let data = snapshot.val();
                 setRecipients(Object.values(data.filter(recipient => recipient.userId !== auth.currentUser.uid)));
@@ -77,7 +78,7 @@ function Chat(props) {
                                         <div key={index}>{recipient.name}</div>
                                     )
                                 })}</Offcanvas.Title> :
-                                
+
                                 <div id="conversations-header-participants">
                                     {recipients.map((recipient, index) => {
                                         return (
@@ -92,7 +93,12 @@ function Chat(props) {
                 <Offcanvas.Body>
 
                     {!selectedConversation && createConversation &&
-                        <CreateConversationMenu groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} name={props.name} closeMenu={() => setCreateConversation(false)} />
+                        <CreateConversationMenu
+                            groupsAsAdmin={props.groupsAsAdmin}
+                            groupsAsMember={props.groupsAsMember}
+                            name={props.name}
+                            closeMenu={() => setCreateConversation(false)}
+                        />
                     }
 
                     {!selectedConversation && !createConversation &&

@@ -48,15 +48,12 @@ function NewMessage(props) {
             obj.image = image;
             obj.imageName = imageName;
         }
-        props.handleSubmit(obj).then((res) => {
-            if (res) {
-                setMessage("");
-                setImage(null);
-                setImageUrl(null);
-                setImageName(null);
-                if (imageRef.current) imageRef.current.value = "";
-            }
-        })
+        props.handleSubmit(obj)
+        setMessage("");
+        setImage(null);
+        setImageUrl(null);
+        setImageName(null);
+        if (imageRef.current) imageRef.current.value = "";
     }
 
     return (

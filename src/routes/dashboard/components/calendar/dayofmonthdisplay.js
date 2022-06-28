@@ -28,6 +28,7 @@ function DayOfMonthDisplay(props) {
 
                     .today{
                         // border: 1px solid #53bf00;
+                        border-bottom: 1px solid #53bf00;
                     }
 
                     .calendar-display-item{

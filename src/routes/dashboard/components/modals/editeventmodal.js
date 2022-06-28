@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Form, Button } from "react-bootstrap";
-import { updateEvent, deleteEvent } from "../../../../firebase"
+import { updateEvent } from "../../../../firebase"
 import Button5 from "../../../../components/buttons/button5";
 import moment from "moment";
 
@@ -35,7 +35,7 @@ function EditEventModal(props) {
     const toggleAllParticipants = (source) => {
         var checkboxes = document.querySelectorAll('input[name="participant"]');
         for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked != source.target.checked)
+            if (checkboxes[i].checked !== source.target.checked)
                 checkboxes[i].checked = source.target.checked;
         }
     }
@@ -95,7 +95,7 @@ function EditEventModal(props) {
             `}
             </style>
             <Modal
-                show={true}
+                show={props.showModal}
                 onHide={props.hideModal}
                 backdrop="static"
                 keyboard={false}

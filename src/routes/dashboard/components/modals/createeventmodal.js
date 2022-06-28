@@ -75,7 +75,7 @@ function CreateEventModal(props) {
             `}
             </style>
             <Modal
-                show={true}
+                show={props.showModal}
                 onHide={props.hideModal}
                 backdrop="static"
                 keyboard={false}

@@ -1,8 +1,7 @@
-import { onValue, ref } from "firebase/database";
-import { React, useState } from "react";
+import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import Button3 from "../../../../components/buttons/button3";
-import { database, updateTask } from "../../../../firebase";
+import { updateTask } from "../../../../firebase";
 import moment from "moment";
 
 function EditTaskModal(props) {
@@ -31,70 +30,74 @@ function EditTaskModal(props) {
         props.hideModal();
     }
 
-    return (
-        <>
-            <style type="text/css">
-                {`
+    if (props.task) {
+        return (
+            <>
+                <style type="text/css">
+                    {`
                 #edit-task-footer {
                     display: flex;
                     flex-direction: row;
                     justify-content: space-between;
                 }
             `}
-            </style>
-            <Modal
-                show={true}
-                onHide={props.hideModal}
-                backdrop="static"
-                keyboard={false}
-                centered
-                size="lg"
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit Task</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form id="create-task-form" onSubmit={handleSubmit}>
-                        <Form.Group controlId="title" className="mb-3">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control type="text" defaultValue={props.task.title} required />
-                        </Form.Group>
-                        <Form.Group controlId="description" className="mb-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" rows="3" placeholder="Enter description" defaultValue={props.task.description ? props.task.description : ""} />
-                        </Form.Group>
-                        <Form.Group controlId="deadline" className="mb-3">
-                            <Form.Label>Deadline</Form.Label>
-                            <Form.Control type="date" defaultValue={props.task.deadline ? moment(props.task.deadline, "MM/DD/YYYY").format("YYYY-MM-DD") : ""} />
-                        </Form.Group>
-                        <Form.Group controlId="assignedTo" className="mb-3">
-                            <Form.Label>Assigned To</Form.Label>
-                            <Form.Control as="select" defaultValue={props.task.assignedTo ? props.task.assignedTo.userId : "sel"}>
-                                <option key="sel">Select User</option>
-                                <option key={props.groupAdmin.userId} value={props.groupAdmin.userId}>{props.groupAdmin.name}</option>
-                                {props.groupMembers.map((user) => {
-                                    return (
-                                        <option key={user.userId} value={user.userId}>{user.name}</option>
-                                    )
-                                })}
-                            </Form.Control>
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer id="edit-task-footer">
-                    <div>
-                        {props.isAdmin && <Button variant="danger" onClick={() => props.deleteTask(props.task)}>Delete Task</Button>}
-                    </div>
-                    <div>
-                        <Button variant="clear" onClick={props.hideModal}>
-                            Cancel
-                        </Button>
-                        <Button3 type="submit" form="create-task-form">Save</Button3>
-                    </div>
-                </Modal.Footer>
-            </Modal>
-        </>
-    );
+                </style>
+                <Modal
+                    show={props.showModal}
+                    onHide={props.hideModal}
+                    backdrop="static"
+                    keyboard={false}
+                    centered
+                    size="lg"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Task</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form id="create-task-form" onSubmit={handleSubmit}>
+                            <Form.Group controlId="title" className="mb-3">
+                                <Form.Label>Title</Form.Label>
+                                <Form.Control type="text" defaultValue={props.task.title} required />
+                            </Form.Group>
+                            <Form.Group controlId="description" className="mb-3">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control as="textarea" rows="3" placeholder="Enter description" defaultValue={props.task.description ? props.task.description : ""} />
+                            </Form.Group>
+                            <Form.Group controlId="deadline" className="mb-3">
+                                <Form.Label>Deadline</Form.Label>
+                                <Form.Control type="date" defaultValue={props.task.deadline ? moment(props.task.deadline, "MM/DD/YYYY").format("YYYY-MM-DD") : ""} />
+                            </Form.Group>
+                            <Form.Group controlId="assignedTo" className="mb-3">
+                                <Form.Label>Assigned To</Form.Label>
+                                <Form.Control as="select" defaultValue={props.task.assignedTo ? props.task.assignedTo.userId : "sel"}>
+                                    <option key="sel">Select User</option>
+                                    <option key={props.groupAdmin.userId} value={props.groupAdmin.userId}>{props.groupAdmin.name}</option>
+                                    {props.groupMembers.map((user) => {
+                                        return (
+                                            <option key={user.userId} value={user.userId}>{user.name}</option>
+                                        )
+                                    })}
+                                </Form.Control>
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer id="edit-task-footer">
+                        <div>
+                            {props.isAdmin && <Button variant="danger" onClick={() => props.deleteTask(props.task)}>Delete Task</Button>}
+                        </div>
+                        <div>
+                            <Button variant="clear" onClick={props.hideModal}>
+                                Cancel
+                            </Button>
+                            <Button3 type="submit" form="create-task-form">Save</Button3>
+                        </div>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        );
+    } else {
+        return null;
+    }
 }
 
 export default EditTaskModal;

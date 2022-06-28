@@ -21,9 +21,6 @@ function MainDashboard() {
 	const [groupsAsAdmin, setGroupsAsAdmin] = useState([]);
 	const [groupsAsMember, setGroupsAsMember] = useState([]);
 	const [name, setName] = useState("");
-	const [showSettingsState, setShowSettingsState] = useState(false);
-	const [showJoinGroupModal, setShowJoinGroupModal] = useState(false);
-	const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
 	const [currentGroup, setCurrentGroup] = useState(null);
 	const [isAdmin, setIsAdmin] = useState(false);
 	const [yourTasks, setYourTasks] = useState([]);
@@ -36,13 +33,10 @@ function MainDashboard() {
 	const [date, setDate] = useState(new Date().getDate());
 	const [showChat, setShowChat] = useState(false);
 
-	//modal control functions
-	const showSettings = () => setShowSettingsState(true);
-	const hideSettings = () => setShowSettingsState(false);
-	const showJoinGroupModalFunc = () => setShowJoinGroupModal(true);
-	const showCreateGroupModalFunc = () => setShowCreateGroupModal(true);
-	const hideCreateGroupModal = () => setShowCreateGroupModal(false);
-	const hideJoinGroupModal = () => setShowJoinGroupModal(false);
+	//modal states
+	const [showSettings, setShowSettings] = useState(false);
+	const [showJoinGroupModal, setShowJoinGroupModal] = useState(false);
+	const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
 
 	//Realtime listener for user account data
 	onValue(ref(database, 'users/' + auth.currentUser.uid), (snapshot) => {
@@ -155,20 +149,23 @@ function MainDashboard() {
         		`}
 				</style>
 
-				{showSettingsState && <Settings hideSettings={hideSettings}></Settings>}
-				{showJoinGroupModal && <JoinGroupModal hideModal={hideJoinGroupModal} />}
-				{showCreateGroupModal && <CreateGroupModal hideModal={hideCreateGroupModal} />}
-				<Chat showChat={showChat} hideChat={() => setShowChat(false)} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} name={name}/>
+				<Settings showModal={showSettings} hideModal={() => setShowSettings(false)}></Settings>
+				<JoinGroupModal showModal={showJoinGroupModal} hideModal={() => setShowJoinGroupModal(false)}/>
+				<CreateGroupModal
+					showModal={showCreateGroupModal}
+					hideModal={() => setShowCreateGroupModal(false)}
+				/>
+				<Chat showChat={showChat} hideChat={() => setShowChat(false)} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} name={name} />
 				<DashboardHeader
 					name={name}
-					showSettings={showSettings}
+					showSettings={() => setShowSettings(true)}
 					currentGroup={currentGroup}
 					setCurrentGroup={setCurrentGroup}
 					groupsAsAdmin={groupsAsAdmin}
 					groupsAsMember={groupsAsMember}
-					joinGroup={showJoinGroupModalFunc}
-					createGroup={showCreateGroupModalFunc}
-					toggleChat={() => setShowChat(true)}
+					joinGroup={() => setShowJoinGroupModal(true)}
+					createGroup={() => setShowCreateGroupModal(true)}
+					toggleChat={() => setShowChat(!showChat)}
 				/>
 
 				<div id="dashboard-main-container">

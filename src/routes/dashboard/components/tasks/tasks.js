@@ -12,6 +12,7 @@ function Tasks(props) {
     const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
     const [showTaskDetailsModal, setShowTaskDetailsModal] = useState(null);
     const [showEditTaskModal, setShowEditTaskModal] = useState(null);
+    const [selectedTask, setSelectedTask] = useState(props.tasks[0]);
 
     const deleteTask = (task) => {
         FBDeleteTask(props.group, task);
@@ -55,7 +56,13 @@ function Tasks(props) {
                     }
                 `}
                 </style>
-                {showCreateTaskModal && <CreateTaskModal hideModal={() => setShowCreateTaskModal(false)} group={props.group} name={props.name} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} />}
+                <CreateTaskModal
+                    group={props.group}
+                    name={props.name}
+                    groupAdmin={props.groupAdmin}
+                    groupMembers={props.groupMembers}
+                    showModal={showCreateTaskModal}
+                    hideModal={() => setShowCreateTaskModal(false)} />
                 <Card id="tasks-container">
                     <Card.Header id="tasks-empty-header">
                         <i className="bi bi-list-task"></i>
@@ -114,9 +121,34 @@ function Tasks(props) {
                     }
                 `}
             </style>
-            {showCreateTaskModal && <CreateTaskModal hideModal={() => setShowCreateTaskModal(false)} group={props.group} name={props.name} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} />}
-            {showTaskDetailsModal && <TaskDetailsModal hideModal={() => setShowTaskDetailsModal(false)} group={props.group} task={showTaskDetailsModal} name={props.name} showEditModal={() => { setShowEditTaskModal(showTaskDetailsModal) }} />}
-            {showEditTaskModal && <EditTaskModal hideModal={() => setShowEditTaskModal(false)} updateTaskUI={setShowTaskDetailsModal} deleteTask={deleteTask} group={props.group} task={showEditTaskModal} name={props.name} isAdmin={props.isAdmin} groupAdmin={props.groupAdmin} groupMembers={props.groupMembers} />}
+            
+            <CreateTaskModal
+                group={props.group}
+                name={props.name}
+                groupAdmin={props.groupAdmin}
+                groupMembers={props.groupMembers}
+                showModal={showCreateTaskModal}
+                hideModal={() => setShowCreateTaskModal(false)}
+            />
+            <TaskDetailsModal
+                hideModal={() => setShowTaskDetailsModal(false)}
+                showModal={showTaskDetailsModal}
+                group={props.group}
+                task={selectedTask}
+                name={props.name}
+                showEditModal={() => { setShowEditTaskModal(true) }}
+            />
+            <EditTaskModal
+                hideModal={() => setShowEditTaskModal(false)}
+                showModal={showEditTaskModal}
+                updateTaskUI={setSelectedTask}
+                deleteTask={deleteTask}
+                group={props.group}
+                task={selectedTask}
+                name={props.name}
+                isAdmin={props.isAdmin}
+                groupAdmin={props.groupAdmin}
+                groupMembers={props.groupMembers} />
             <Card id="tasks-container">
                 <Tab.Container defaultActiveKey={props.yourTasks.length > 0 ? "your-tasks" : "all-tasks"}>
                     <Card.Header>
@@ -148,7 +180,10 @@ function Tasks(props) {
                                 <ListGroup className="list-group-flush">
                                     {props.tasks.sort(sortTasks).map((task, index) => {
                                         return (
-                                            <ListGroup.Item key={index} action onClick={() => { setShowTaskDetailsModal(task) }}>
+                                            <ListGroup.Item key={index} action onClick={() => {
+                                                setSelectedTask(task);
+                                                setShowTaskDetailsModal(true)
+                                            }}>
                                                 <TaskPreview task={task} showName={true} />
                                             </ListGroup.Item>
                                         );
