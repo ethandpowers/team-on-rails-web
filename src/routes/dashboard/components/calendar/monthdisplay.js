@@ -131,6 +131,7 @@ function MonthDisplay(props) {
                                 yourTasks={props.yourTasks}
                                 tasks={props.tasks}
                                 events={props.events}
+                                personalEvents={props.personalEvents}
                             >
                                 {index + 1}
                             </DayOfMonthDisplay>

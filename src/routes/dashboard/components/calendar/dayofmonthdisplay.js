@@ -55,6 +55,10 @@ function DayOfMonthDisplay(props) {
                     .your-event-calendar-display{
                         background-color: #b597ff;
                     }
+
+                    .personal-event-calendar-display{
+                        background-color: #90CAF9;
+                    }
                 `}
             </style>
             <div onClick={props.onClick}
@@ -62,11 +66,21 @@ function DayOfMonthDisplay(props) {
                 className={`clickable day-of-month ${(props.date.year === currentYear && props.date.month === currentMonth && props.date.day === currentDate) ? "today" : ""}`}
             >
                 <div className="date-number">{props.date.day}</div>
+                {props.personalEvents.map((event, index) => {
+                    let date = new Date(event.dateString);
+                    if (props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()) {
+                        return (
+                            <div key={index} className={`calendar-display-item personal-event-calendar-display clickables`}>
+                                {event.title}
+                            </div>
+                        )
+                    }
+                })}
                 {props.events.map((event, index) => {
                     let date = new Date(event.dateString);
                     if (props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()) {
                         return (
-                            <div key={index} className={`event-calendar-display ${isYourEvent(event)? "your-event-calendar-display" : ""} calendar-display-item`}>
+                            <div key={index} className={`event-calendar-display ${isYourEvent(event) ? "your-event-calendar-display" : ""} calendar-display-item`}>
                                 {event.title}
                             </div>
                         );

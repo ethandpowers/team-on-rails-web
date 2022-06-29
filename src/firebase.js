@@ -107,28 +107,49 @@ export async function completeTask(group, task) {
     });
 }
 
-export async function createEvent(group, event) {
+export async function createEvent(group, event, personalEvent) {
     let date = new Date(event.dateString);
-    let eventref = await push(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events`), {
-        ...event,
-        creationTimeStamp: Date.now(),
-    });
-    await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${eventref.key}`), {
-        eventId: eventref.key,
-    });
+    if (personalEvent) {
+        let eventref = await push(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events`), {
+            ...event,
+            creationTimeStamp: Date.now(),
+        });
+        await update(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${eventref.key}`), {
+            eventId: eventref.key,
+        });
+    } else {
+        let eventref = await push(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events`), {
+            ...event,
+            creationTimeStamp: Date.now(),
+        });
+        await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${eventref.key}`), {
+            eventId: eventref.key,
+        });
+    }
 }
 
 export async function updateEvent(group, event) {
     let date = new Date(event.dateString);
-    await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`), {
-        ...event,
-        updateTimeStamp: Date.now(),
-    });
+    if (event.personalEvent) {
+        await update(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`), {
+            ...event,
+            updateTimeStamp: Date.now(),
+        });
+    } else {
+        await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`), {
+            ...event,
+            updateTimeStamp: Date.now(),
+        });
+    }
 }
 
 export async function deleteEvent(group, event) {
     let date = new Date(event.dateString);
-    await remove(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
+    if (event.personalEvent) {
+        await remove(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
+    } else {
+        await remove(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
+    }
 }
 
 export async function createConversation(recipients, message) {

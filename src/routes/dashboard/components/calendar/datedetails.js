@@ -14,6 +14,11 @@ function DateDetails(props) {
         let res = props.year === date.getFullYear() && props.month === date.getMonth() && props.date === date.getDate()
         return res;
     });
+    let todaysPersonalEvents = props.personalEvents.filter(event => {
+        let date = new Date(event.dateString);
+        let res = props.year === date.getFullYear() && props.month === date.getMonth() && props.date === date.getDate()
+        return res;
+    })
 
     return (
         <>
@@ -95,6 +100,10 @@ function DateDetails(props) {
                         align-items: center;
                     }
 
+                    .day-details-personal-event-display{
+                        background-color: #90CAF9;
+                    }
+
                     @media screen and (max-width: 1000px) {
                         #date-details {
                             width: 100%;
@@ -110,10 +119,32 @@ function DateDetails(props) {
             <div id="date-details">
                 <h4>Details for {daysOfWeek[new Date(props.year, props.month, props.date).getDay()] + " " + dateString}</h4>
                 <Button className="no-outline" variant="outline-warning" onClick={props.createEvent}>Create Event</Button>
-                {todaysEvents.length > 0 ? <div id="day-details-items">
+                {todaysEvents.length > 0 || todaysPersonalEvents.length > 0 ? <div id="day-details-items">
                     <HorizontalDivider />
                     <h5>Events</h5>
                     <div className="day-details-item-list">
+                        {todaysPersonalEvents.map((event, index) => {
+                            return (
+                                <div className={`day-details-event-display day-details-personal-event-display clickable`}
+                                    key={index}
+                                    onClick={() => { props.setEvent(event) }}
+                                >
+                                    <div className="event-preview-container">
+                                        <div className="fw-bold">
+                                            {event.title}
+                                        </div>
+                                        {event.startTime &&
+                                            <div className="flex-row">
+                                                <i className="bi bi-clock text-icon"></i>
+                                                {moment(event.startTime, "H:mm").format("h:mm A")}
+                                                {event.endTime && <>{` - ${moment(event.endTime, "H:mm").format("h:mm A")}`}</>}
+                                            </div>
+
+                                        }
+                                    </div>
+                                </div>
+                            );
+                        })}
                         {todaysEvents.map((event, index) => {
                             return (
                                 <div className={`day-details-event-display clickable ${isYourEvent(event) ? "day-details-your-event-display" : ""}`}

@@ -9,13 +9,15 @@ function EditEventModal(props) {
         event.preventDefault();
 
         let participants = [];
-        event.target.participants.forEach((participant, index) => {
-            if (index === 1 && participant.checked) {
-                participants.push(props.groupAdmin);
-            } else if (index > 1 && participant.checked) {
-                participants.push(props.groupMembers[index - 2]);
-            }
-        })
+        if (!props.event.personalEvent) {
+            event.target.participants.forEach((participant, index) => {
+                if (index === 1 && participant.checked) {
+                    participants.push(props.groupAdmin);
+                } else if (index > 1 && participant.checked) {
+                    participants.push(props.groupMembers[index - 2]);
+                }
+            })
+        }
 
         let newEvent = {
             title: event.target.title.value,
@@ -25,6 +27,7 @@ function EditEventModal(props) {
             endTime: event.target.endTime.value ? event.target.endTime.value : null,
             participants: participants,
             eventId: props.event.eventId,
+            personalEvent: props.event.personalEvent,
         }
 
         updateEvent(props.group, newEvent);
@@ -129,23 +132,25 @@ function EditEventModal(props) {
                             <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows="3" placeholder="Enter description" defaultValue={props.event.description ? props.event.description : ""} />
                         </Form.Group>
-                        <Form.Group controlId="participants" className="mb-3">
-                            <Form.Label>Participants</Form.Label>
-                            <Form.Check type="checkbox" label="All" onChange={(item) => toggleAllParticipants(item)} />
-                            <div id="edit-event-participants">
-                                <Form.Check className="separated-horizontal-checkbox" type="checkbox" name="participant" label={props.groupAdmin.name} defaultChecked={isParticipant(props.groupAdmin.userId)} />
-                                {props.groupMembers.map((user, index) => {
-                                    return (
-                                        <Form.Check key={index} className="separated-horizontal-checkbox" type="checkbox" name="participant" label={user.name} defaultChecked={isParticipant(user.userId)} />
-                                    )
-                                })}
-                            </div>
-                        </Form.Group>
+                        {!props.event.personalEvent &&
+                            <Form.Group controlId="participants" className="mb-3">
+                                <Form.Label>Participants</Form.Label>
+                                <Form.Check type="checkbox" label="All" onChange={(item) => toggleAllParticipants(item)} />
+                                <div id="edit-event-participants">
+                                    <Form.Check className="separated-horizontal-checkbox" type="checkbox" name="participant" label={props.groupAdmin.name} defaultChecked={isParticipant(props.groupAdmin.userId)} />
+                                    {props.groupMembers.map((user, index) => {
+                                        return (
+                                            <Form.Check key={index} className="separated-horizontal-checkbox" type="checkbox" name="participant" label={user.name} defaultChecked={isParticipant(user.userId)} />
+                                        )
+                                    })}
+                                </div>
+                            </Form.Group>
+                        }
                     </Form>
                 </Modal.Body>
                 <Modal.Footer id="edit-event-footer">
                     <div>
-                        {props.isAdmin && <Button variant="danger" onClick={() => props.removeEvent(props.event)}>Delete Event</Button>}
+                        {(props.isAdmin || props.event.personalEvent) && <Button variant="danger" onClick={() => props.removeEvent(props.event)}>Delete Event</Button>}
                     </div>
                     <div>
                         <Button variant="clear" onClick={props.hideModal}>

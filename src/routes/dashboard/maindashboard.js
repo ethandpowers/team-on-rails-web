@@ -6,7 +6,7 @@ import NoGroupsModal from "./components/modals/nogroupsmodal";
 import ElementBG from "../../components/backgrounds/elementbg";
 import FloatingBubbles from "../../components/backgrounds/floatingbubbles";
 import DashboardHeader from "./components/dashboardheader";
-import Settings from "./components/modals/accountsettings";
+import Settings from "./components/modals/settingsmodal";
 import JoinGroupModal from "./components/modals/joingroupmodal";
 import CreateGroupModal from "./components/modals/creategroupmodal";
 import Calendar from "./components/calendar/calendar";
@@ -28,12 +28,13 @@ function MainDashboard() {
 	const [groupMembers, setGroupMembers] = useState([]);
 	const [groupAdministrator, setGroupAdministrator] = useState(null);
 	const [events, setEvents] = useState([]);
+	const [personalEvents, setPersonalEvents] = useState([]);
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [month, setMonth] = useState(new Date().getMonth());
 	const [date, setDate] = useState(new Date().getDate());
 	const [accountSettings, setAccountSettings] = useState(false);
 
-	//ui states
+	//UI states
 	const [showSettings, setShowSettings] = useState(false);
 	const [showJoinGroupModal, setShowJoinGroupModal] = useState(false);
 	const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
@@ -67,7 +68,6 @@ function MainDashboard() {
 		}
 
 		if (data.name !== name) setName(data.name);
-		// if(data.settings) setAccountSettings(data.settings);
 		if (!accountLoaded) setAccountLoaded(true);
 	});
 
@@ -106,7 +106,7 @@ function MainDashboard() {
 		});
 	}
 
-	//Realtime listener for events
+	//Realtime listener for group events
 	if (currentGroup) {
 		onValue(ref(database, `groups/${currentGroup.groupId}/calendar/${year}/${month}/events`), (snapshot) => {
 			const data = snapshot.val();
@@ -117,6 +117,32 @@ function MainDashboard() {
 			}
 		});
 	}
+	
+	//Realtime listener for personal events
+	onValue(ref(database, `users/${auth.currentUser.uid}/calendar/${year}/${month}/events`), (snapshot) => {
+		const data = snapshot.val();
+		if (!data) {
+			personalEvents.length > 0 && setPersonalEvents([]);
+		} else if ((personalEvents.length !== Object.keys(data).length)) {
+			setPersonalEvents(Object.values(data));
+		}
+	})
+
+	//Realtime listener for group settings
+	if(isAdmin){
+		//TODO: setup group settings
+	}
+
+	//Realtime listener for user availablity
+	// if(currentGroup){
+	// 	onValue(ref(database, `groups/${currentGroup.groupId}/members/${auth.currentUser.uid}/availability`), (snapshot) => {
+	// 		const data = snapshot.val();
+	// 		if(data){
+	// 			setAccountSettings(data);
+	// 		}
+	// 	}
+	// 	);
+	// }
 
 	if (accountLoaded && groupsAsAdmin.length === 0 && groupsAsMember.length === 0) {
 		return (
@@ -178,6 +204,7 @@ function MainDashboard() {
 						groupAdmin={groupAdministrator}
 						groupMembers={groupMembers}
 						events={events}
+						personalEvents={personalEvents}
 						year={year}
 						setYear={setYear}
 						month={month}

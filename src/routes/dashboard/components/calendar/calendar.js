@@ -81,7 +81,8 @@ function Calendar(props) {
                         setDate={props.setDate}
                         yourTasks={props.yourTasks}
                         tasks={props.tasks}
-                        events={props.events} />
+                        events={props.events} 
+                        personalEvents={props.personalEvents} />
 
                     <DateDetails
                         year={props.year}
@@ -90,6 +91,7 @@ function Calendar(props) {
                         yourTasks={props.yourTasks}
                         tasks={props.tasks}
                         events={props.events}
+                        personalEvents={props.personalEvents}
                         createEvent={() => setShowCreateEventModal(true)}
                         setEvent={(event) => { setSelectedEvent(event); setEventDetailsModal(true) }}
                     />

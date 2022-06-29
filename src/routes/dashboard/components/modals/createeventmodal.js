@@ -1,32 +1,37 @@
-import React from "react";
+import { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import moment from "moment";
 import { createEvent } from "../../../../firebase"
 import Button5 from "../../../../components/buttons/button5";
 
 function CreateEventModal(props) {
+    const [personalEvent, setPersonalEvent] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
         let participants = [];
-        event.target.participants.forEach((participant, index) => {
-            if (index === 1 && participant.checked) {
-                participants.push(props.groupAdmin);
-            } else if (index > 1 && participant.checked) {
-                participants.push(props.groupMembers[index - 2]);
-            }
-        })
+        if (!personalEvent) {
+            event.target.participants.forEach((participant, index) => {
+                if (index === 1 && participant.checked) {
+                    participants.push(props.groupAdmin);
+                } else if (index > 1 && participant.checked) {
+                    participants.push(props.groupMembers[index - 2]);
+                }
+            })
+        }
 
         let newEvent = {
             title: event.target.title.value,
-            description: event.target.description ? event.target.description.value: null,
+            description: event.target.description ? event.target.description.value : null,
             dateString: moment(event.target.date.value, "YYYY-MM-DD").format("MM/DD/YYYY"),
             startTime: event.target.startTime.value ? event.target.startTime.value : null,
             endTime: event.target.endTime.value ? event.target.endTime.value : null,
             participants: participants,
+            personalEvent: personalEvent,
         }
 
-        createEvent(props.group, newEvent)
+        createEvent(props.group, newEvent, personalEvent)
         props.hideModal();
     }
 
@@ -37,7 +42,6 @@ function CreateEventModal(props) {
                 checkboxes[i].checked = source.target.checked;
         }
     }
-
     return (
         <>
             <style type="text/css">
@@ -62,6 +66,14 @@ function CreateEventModal(props) {
 
                 .separated-horizontal-checkbox{
                     margin-right: 25px;
+                }
+
+                #personal-event-label{
+                    margin-left: 10px;
+                }
+
+                #personal-event-div{
+                    margin-bottom: 15px;
                 }
 
                 @media screen and (max-width: 1000px) {
@@ -109,14 +121,21 @@ function CreateEventModal(props) {
                             <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows="3" placeholder="Enter description" />
                         </Form.Group>
+                        <div id="personal-event-div" className="flex-row">
+                            <Form.Check type="checkbox" value={personalEvent} onChange={() => setPersonalEvent(!personalEvent)} />
+                            <div id="personal-event-label" className="flex-col">
+                                <label>Personal Event</label>
+                                <div className="small-text">Personal events will only show up on your calendar.</div>
+                            </div>
+                        </div>
                         <Form.Group controlId="participants" className="mb-3">
                             <Form.Label>Participants</Form.Label>
-                            <Form.Check type="checkbox" label="All" onChange={(item) => toggleAllParticipants(item)} />
+                            <Form.Check type="checkbox" label="All" onChange={(item) => toggleAllParticipants(item)} disabled={personalEvent} />
                             <div id="create-event-participants">
-                                <Form.Check className="separated-horizontal-checkbox" type="checkbox" name="participant" label={props.groupAdmin.name} />
+                                <Form.Check className="separated-horizontal-checkbox" type="checkbox" name="participant" label={props.groupAdmin.name} disabled={personalEvent} />
                                 {props.groupMembers.map((user, index) => {
                                     return (
-                                        <Form.Check key={index} className="separated-horizontal-checkbox" type="checkbox" name="participant" label={user.name} />
+                                        <Form.Check key={index} className="separated-horizontal-checkbox" type="checkbox" name="participant" label={user.name} disabled={personalEvent} />
                                     )
                                 })}
                             </div>
