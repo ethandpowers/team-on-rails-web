@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import moment from "moment";
 import { createEvent } from "../../../../firebase"
-import Button5 from "../../../../components/buttons/button5";
+import { YellowButton } from "../../../../components/buttons/custombuttons";
 
 function CreateEventModal(props) {
     const [personalEvent, setPersonalEvent] = useState(false);
@@ -146,7 +146,7 @@ function CreateEventModal(props) {
                     <Button variant="clear" onClick={props.hideModal}>
                         Cancel
                     </Button>
-                    <Button5 type="submit" form="create-event-form">Create</Button5>
+                    <YellowButton type="submit" form="create-event-form">Create</YellowButton>
                 </Modal.Footer>
             </Modal>
         </>

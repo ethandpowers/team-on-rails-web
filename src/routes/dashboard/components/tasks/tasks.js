@@ -1,12 +1,12 @@
 import { React, useState } from "react";
 import { Card, ListGroup, Tab, Nav } from "react-bootstrap";
-import Button3 from "../../../../components/buttons/button3";
 import { deleteTask as FBDeleteTask } from "../../../../firebase";
 import CreateTaskModal from "./createtaskmodal";
 import TaskDetailsModal from "./taskdetailsmodal";
 import EditTaskModal from "./edittaskmodal";
 import TaskPreview from "./taskpreview";
 import { sortTasks } from "../../utilities"
+import { GreenButton } from "../../../../components/buttons/custombuttons";
 
 function Tasks(props) {
     const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
@@ -71,7 +71,7 @@ function Tasks(props) {
                     <Card.Body>
                         <div id="tasks-empty-body-div">
                             No tasks yet.  Create one now!
-                            <Button3 onClick={() => { setShowCreateTaskModal(true) }}>Create Task</Button3>
+                            <GreenButton onClick={() => { setShowCreateTaskModal(true) }}>Create Task</GreenButton>
                         </div>
                     </Card.Body>
                 </Card>
@@ -195,7 +195,7 @@ function Tasks(props) {
 
                 </Tab.Container>
                 <Card.Body id="tasks-body-button">
-                    <Button3 onClick={() => { setShowCreateTaskModal(true) }}>Create Task</Button3>
+                    <GreenButton onClick={() => { setShowCreateTaskModal(true) }}>Create Task</GreenButton>
                 </Card.Body>
             </Card>
         </>

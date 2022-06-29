@@ -1,8 +1,8 @@
 import React from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { updateEvent } from "../../../../firebase"
-import Button5 from "../../../../components/buttons/button5";
 import moment from "moment";
+import { YellowButton } from "../../../../components/buttons/custombuttons";
 
 function EditEventModal(props) {
     const handleSubmit = (event) => {
@@ -27,7 +27,7 @@ function EditEventModal(props) {
             endTime: event.target.endTime.value ? event.target.endTime.value : null,
             participants: participants,
             eventId: props.event.eventId,
-            personalEvent: props.event.personalEvent,
+            personalEvent: props.event.personalEvent ? props.event.personalEvent : false,
         }
 
         updateEvent(props.group, newEvent);
@@ -156,7 +156,7 @@ function EditEventModal(props) {
                         <Button variant="clear" onClick={props.hideModal}>
                             Cancel
                         </Button>
-                        <Button5 type="submit" form="edit-event-form">Save</Button5>
+                        <YellowButton type="submit" form="edit-event-form">Save</YellowButton>
                     </div>
                 </Modal.Footer>
             </Modal>

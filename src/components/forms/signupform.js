@@ -2,7 +2,7 @@ import React from "react";
 import { signUp } from "../../firebase";
 import { Link } from "react-router-dom";
 import { Form, Card } from "react-bootstrap";
-import Button3 from "../buttons/button3";
+import { GreenButton } from "../buttons/custombuttons";
 
 function SignupForm(props) {
     const handleSubmit = async (event) => {
@@ -55,9 +55,9 @@ function SignupForm(props) {
                         <Form.Check type="checkbox" required/>
                         <label id="signup-check-label">By creating an account, you agree to the <Link to="/terms">Terms of Service</Link></label>
                         </Form.Group>
-                        <Button3 type="submit">
+                        <GreenButton type="submit">
                             Sign Up
-                        </Button3>
+                        </GreenButton>
                     </Form>
                 </Card.Body>
                 <Card.Footer id="signup-form-footer">

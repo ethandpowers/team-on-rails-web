@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
-import Button3 from "../../../../components/buttons/button3";
+import { GreenButton } from "../../../../components/buttons/custombuttons";
 import { completeTask } from "../../../../firebase";
 
 function TaskDetailsModal(props) {
@@ -68,7 +68,7 @@ function TaskDetailsModal(props) {
                         {props.task.assignedTo && props.name !== props.task.assignedTo.name && `Assigned to ${props.task.assignedTo.name} by ${props.task.assignedBy.name}`}
                         {props.task.assignedTo && props.name === props.task.assignedTo.name && `Assigned to you by ${props.task.assignedBy.name}`}
                         <div></div>
-                        {!props.task.completed && <Button3 onClick={completeCurrentTask}><i className="bi bi-check-lg task-icon"></i>Mark Complete</Button3>}
+                        {!props.task.completed && <GreenButton onClick={completeCurrentTask}><i className="bi bi-check-lg task-icon"></i>Mark Complete</GreenButton>}
                     </Modal.Footer>}
                 </Modal>
             </>

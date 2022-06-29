@@ -1,10 +1,9 @@
-import { onValue, ref } from "firebase/database";
-import { React, useState } from "react";
+import { React } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import Button3 from "../../../../components/buttons/button3";
 import { createTask } from "../../../../firebase";
-import { auth, database } from "../../../../firebase";
+import { auth } from "../../../../firebase";
 import moment from "moment";
+import { GreenButton } from "../../../../components/buttons/custombuttons";
 
 function CreateTaskModal(props) {
     const handleSubmit = (event) => {
@@ -74,7 +73,7 @@ function CreateTaskModal(props) {
                 <Button variant="clear" onClick={props.hideModal}>
                     Cancel
                 </Button>
-                <Button3 type="submit" form="create-task-form">Create</Button3>
+                <GreenButton type="submit" form="create-task-form">Create</GreenButton>
             </Modal.Footer>
         </Modal>
     );

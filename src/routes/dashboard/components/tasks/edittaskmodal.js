@@ -1,8 +1,8 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import Button3 from "../../../../components/buttons/button3";
 import { updateTask } from "../../../../firebase";
 import moment from "moment";
+import { GreenButton } from "../../../../components/buttons/custombuttons";
 
 function EditTaskModal(props) {
 
@@ -89,7 +89,7 @@ function EditTaskModal(props) {
                             <Button variant="clear" onClick={props.hideModal}>
                                 Cancel
                             </Button>
-                            <Button3 type="submit" form="create-task-form">Save</Button3>
+                            <GreenButton type="submit" form="create-task-form">Save</GreenButton>
                         </div>
                     </Modal.Footer>
                 </Modal>

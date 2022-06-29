@@ -2,7 +2,7 @@ import React from "react";
 import { logIn } from "../../firebase";
 import { Link } from "react-router-dom";
 import { Card, Form } from "react-bootstrap";
-import Button3 from "../buttons/button3";
+import { GreenButton } from "../buttons/custombuttons";
 
 function LoginForm(props) {
     const handleSubmit = async (event) => {
@@ -42,9 +42,9 @@ function LoginForm(props) {
                             <Form.Label>Password</Form.Label>
                             <Form.Control name="password" type="password" placeholder="Password" required />
                         </Form.Group>
-                        <Button3 type="submit">
+                        <GreenButton type="submit">
                             Log In
-                        </Button3>
+                        </GreenButton>
                     </Form>
                 </Card.Body>
                 <Card.Footer id="login-form-footer">

@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { joinGroup as joinGroupDB } from "../../../../firebase";
-import Button3 from "../../../../components/buttons/button3";
+import { GreenButton } from "../../../../components/buttons/custombuttons";
 
 function JoinGroupModal(props) {
     const [error, setError] = useState(false);
@@ -57,7 +57,7 @@ function JoinGroupModal(props) {
                 <div>
                     {error && <div id="join-group-error-text"> Group not found</div>}
                 </div>
-                <Button3 type='submit' form="join-group">Join</Button3>
+                <GreenButton type='submit' form="join-group">Join</GreenButton>
             </Modal.Footer>
         </Modal>
     );

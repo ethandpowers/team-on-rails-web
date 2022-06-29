@@ -1,6 +1,6 @@
 import { React } from "react";
 import { Modal, Button } from "react-bootstrap";
-import Button3 from "../../../../components/buttons/button3";
+import { GreenButton } from "../../../../components/buttons/custombuttons";
 
 function Settings(props) {
     return (
@@ -22,7 +22,7 @@ function Settings(props) {
                 <Button variant="clear" onClick={props.hideModal}>
                     Cancel
                 </Button>
-                <Button3>Save</Button3>
+                <GreenButton>Save</GreenButton>
             </Modal.Footer>
         </Modal>
     );
