@@ -83,6 +83,9 @@ function EventDetailsModal(props) {
                                 </div>
                             }
                         </Modal.Body>}
+                    {!props.event.personalEvent && <Modal.Footer>
+                        Created by {props.event.createdBy.name}
+                    </Modal.Footer>}
                 </Modal>
             </>
         );

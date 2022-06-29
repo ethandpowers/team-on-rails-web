@@ -19,6 +19,7 @@ function Calendar(props) {
         setEditEvent(false);
         setEventDetailsModal(false);
     }
+
     return (
         <>
             <style>
@@ -54,12 +55,15 @@ function Calendar(props) {
                 group={props.group}
                 groupAdmin={props.groupAdmin}
                 groupMembers={props.groupMembers}
+                name={props.name}
             />
             <EventDetailsModal
                 showModal={eventDetailsModal}
                 hideModal={() => setEventDetailsModal(false)}
                 event={selectedEvent}
-                editEvent={setEditEvent} />
+                editEvent={setEditEvent}
+                name={props.name}
+            />
             <EditEventModal
                 isAdmin={props.isAdmin}
                 showModal={editEvent}
@@ -81,7 +85,7 @@ function Calendar(props) {
                         setDate={props.setDate}
                         yourTasks={props.yourTasks}
                         tasks={props.tasks}
-                        events={props.events} 
+                        events={props.events}
                         personalEvents={props.personalEvents} />
 
                     <DateDetails

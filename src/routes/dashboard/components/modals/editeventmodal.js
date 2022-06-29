@@ -28,6 +28,10 @@ function EditEventModal(props) {
             participants: participants,
             eventId: props.event.eventId,
             personalEvent: props.event.personalEvent ? props.event.personalEvent : false,
+            createdBy: {
+                userId: props.event.createdBy.userId,
+                name: props.event.createdBy.name
+            }
         }
 
         updateEvent(props.group, newEvent);

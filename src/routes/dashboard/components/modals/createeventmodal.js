@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import moment from "moment";
-import { createEvent } from "../../../../firebase"
+import { createEvent, auth } from "../../../../firebase"
 import { YellowButton } from "../../../../components/buttons/custombuttons";
 
 function CreateEventModal(props) {
@@ -29,6 +29,10 @@ function CreateEventModal(props) {
             endTime: event.target.endTime.value ? event.target.endTime.value : null,
             participants: participants,
             personalEvent: personalEvent,
+            createdBy: {
+                name: props.name,
+                userId: auth.currentUser.uid
+            }
         }
 
         createEvent(props.group, newEvent, personalEvent)

@@ -37,7 +37,6 @@ function FullConversation(props) {
                         height: 100%;
                     }
                     .message-timestamp{
-                        font-size: 12px;
                         display: flex;
                         flex-direction: column;
                     }
@@ -80,7 +79,7 @@ function FullConversation(props) {
                         let yourMessage = message.sender.userId === auth.currentUser.uid;
                         return (
                             <div key={index} className={`message ${yourMessage ? "your-message" : "their-message"}`}>
-                                <div className="message-timestamp">
+                                <div className="message-timestamp small-text">
                                     <div>{!yourMessage && props.recipients.length > 2 && message.sender.name}</div>
                                     {moment(message.messageTimeStamp).format("MMM Do YYYY, h:mm:ss A")}
                                 </div>

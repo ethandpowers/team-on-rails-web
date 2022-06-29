@@ -47,7 +47,6 @@ function ConversationPreview(props) {
                     display: flex;
                     flex-grow: 1;
                     justify-content: flex-end;
-                    font-size: 12px;
                 }
             `}
             </style>
@@ -61,7 +60,7 @@ function ConversationPreview(props) {
                         )
                     })}
                     {lastMessage &&
-                        <div className="preview-timestamp"> {moment(lastMessage.messageTimeStamp).format("MMM Do YYYY, h:mm:ss A")}</div>
+                        <div className="preview-timestamp small-text"> {moment(lastMessage.messageTimeStamp).format("MMM Do YYYY, h:mm:ss A")}</div>
                     }
                 </Card.Header>
                 <Card.Body>

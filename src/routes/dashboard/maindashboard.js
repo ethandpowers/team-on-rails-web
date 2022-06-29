@@ -117,7 +117,7 @@ function MainDashboard() {
 			}
 		});
 	}
-	
+
 	//Realtime listener for personal events
 	onValue(ref(database, `users/${auth.currentUser.uid}/calendar/${year}/${month}/events`), (snapshot) => {
 		const data = snapshot.val();
@@ -129,7 +129,7 @@ function MainDashboard() {
 	})
 
 	//Realtime listener for group settings
-	if(isAdmin){
+	if (isAdmin) {
 		//TODO: setup group settings
 	}
 
@@ -178,7 +178,7 @@ function MainDashboard() {
 				</style>
 
 				<Settings showModal={showSettings} hideModal={() => setShowSettings(false)}></Settings>
-				<JoinGroupModal showModal={showJoinGroupModal} hideModal={() => setShowJoinGroupModal(false)}/>
+				<JoinGroupModal showModal={showJoinGroupModal} hideModal={() => setShowJoinGroupModal(false)} />
 				<CreateGroupModal
 					showModal={showCreateGroupModal}
 					hideModal={() => setShowCreateGroupModal(false)}
@@ -211,7 +211,9 @@ function MainDashboard() {
 						setMonth={setMonth}
 						date={date}
 						setDate={setDate}
-						isAdmin={isAdmin} />
+						isAdmin={isAdmin}
+						name={name}
+					/>
 
 					<Tasks
 						group={currentGroup}
