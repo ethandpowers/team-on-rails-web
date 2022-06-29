@@ -58,7 +58,7 @@ function TaskDetailsModal(props) {
                         <Modal.Title>{props.task.title}</Modal.Title>
                         {props.task.deadline && <div id="task-details-deadline"><i className=" mr-2 bi bi-calendar-x task-icon"></i>{props.task.deadline}</div>}
                         <div id="task-details-completion-div">{props.task.completed && `Completed on ${(new Date(props.task.completionTimeStamp)).toLocaleDateString()}`}</div>
-                        <div><Button variant="clear" className="gray-icon" onClick={props.showEditModal}><i className="bi bi-pencil-square"></i></Button></div>
+                        <div><Button variant="clear" className="gray-icon no-outline" onClick={props.showEditModal}><i className="bi bi-pencil-square"></i></Button></div>
                     </Modal.Header>
 
                     {props.task.description && <Modal.Body>

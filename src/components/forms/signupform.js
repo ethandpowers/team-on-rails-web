@@ -29,6 +29,10 @@ function SignupForm(props) {
                         justify-content: center;
                         align-items: center;
                     }
+
+                    #signup-check-label{
+                        margin-left: 10px;
+                    }
                 `}
             </style>
             <Card className="signup-card">
@@ -47,8 +51,9 @@ function SignupForm(props) {
                             <Form.Label>Password</Form.Label>
                             <Form.Control name="password" type="password" placeholder="Password" required/>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formTOSCheckbox">
-                            <Form.Check type="checkbox" label={`By selecting this, you agree to our terms of service.`} required/>
+                        <Form.Group className="mb-3 flex-row" controlId="formTOSCheckbox">
+                        <Form.Check type="checkbox" required/>
+                        <label id="signup-check-label">By creating an account, you agree to the <Link to="/terms">Terms of Service</Link></label>
                         </Form.Group>
                         <Button3 type="submit">
                             Sign Up

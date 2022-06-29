@@ -23,7 +23,7 @@ root.render(
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/logout" element={<LogOut />} />
-        <Route path="termsofservice" element={<TermsOfService />} />
+        <Route path="terms" element={<TermsOfService />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

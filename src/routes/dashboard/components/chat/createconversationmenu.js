@@ -1,9 +1,7 @@
-import { get, ref } from "firebase/database";
 import { React, useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import Loading from "../../../../components/loading";
 import { auth, createConversation, getAllContacts } from "../../../../firebase";
-import { sortPeople } from "../../utilities";
 import NewMessage from "./newmessage";
 
 function CreateConversationMenu(props) {

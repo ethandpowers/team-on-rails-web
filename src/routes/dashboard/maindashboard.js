@@ -31,12 +31,13 @@ function MainDashboard() {
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [month, setMonth] = useState(new Date().getMonth());
 	const [date, setDate] = useState(new Date().getDate());
-	const [showChat, setShowChat] = useState(false);
+	const [accountSettings, setAccountSettings] = useState(false);
 
-	//modal states
+	//ui states
 	const [showSettings, setShowSettings] = useState(false);
 	const [showJoinGroupModal, setShowJoinGroupModal] = useState(false);
 	const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+	const [showChat, setShowChat] = useState(false);
 
 	//Realtime listener for user account data
 	onValue(ref(database, 'users/' + auth.currentUser.uid), (snapshot) => {
@@ -66,6 +67,7 @@ function MainDashboard() {
 		}
 
 		if (data.name !== name) setName(data.name);
+		// if(data.settings) setAccountSettings(data.settings);
 		if (!accountLoaded) setAccountLoaded(true);
 	});
 

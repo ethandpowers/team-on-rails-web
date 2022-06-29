@@ -82,7 +82,7 @@ function FullConversation(props) {
                             <div key={index} className={`message ${yourMessage ? "your-message" : "their-message"}`}>
                                 <div className="message-timestamp">
                                     <div>{!yourMessage && props.recipients.length > 2 && message.sender.name}</div>
-                                    {moment(message.timestamp).format("MMM Do YYYY, h:mm:ss A")}
+                                    {moment(message.messageTimeStamp).format("MMM Do YYYY, h:mm:ss A")}
                                 </div>
                                 {message.messageType === "text" &&
                                     <div className={`message-body ${yourMessage ? "your-message-body" : "their-message-body"}`}>

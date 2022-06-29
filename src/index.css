@@ -64,3 +64,7 @@ code {
   outline: none !important;
   box-shadow: none !important;
 }
+
+.center-text{
+  text-align: center;
+}

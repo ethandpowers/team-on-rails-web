@@ -114,7 +114,7 @@ function EditEventModal(props) {
                             </Form.Group>
                             <Form.Group controlId="date" className="mb-3 edit-event-horizontal-input">
                                 <Form.Label>Date</Form.Label>
-                                <Form.Control type="date" defaultValue={moment(props.event.dateString, "MM/DD/YYYY").format("YYYY-MM-DD")} required />
+                                <Form.Control type="date" defaultValue={props.event ? moment(props.event.dateString, "MM/DD/YYYY").format("YYYY-MM-DD") : ""} required />
                             </Form.Group>
                             <Form.Group controlId="startTime" className="mb-3 edit-event-horizontal-input" >
                                 <Form.Label>Start Time</Form.Label>
