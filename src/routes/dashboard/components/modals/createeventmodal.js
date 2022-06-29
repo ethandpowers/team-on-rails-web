@@ -32,7 +32,7 @@ function CreateEventModal(props) {
         }
 
         createEvent(props.group, newEvent, personalEvent)
-        props.hideModal();
+        hideModal();
     }
 
     const toggleAllParticipants = (source) => {
@@ -41,6 +41,11 @@ function CreateEventModal(props) {
             if (checkboxes[i].checked != source.target.checked)
                 checkboxes[i].checked = source.target.checked;
         }
+    }
+
+    const hideModal = () => {
+        setPersonalEvent(false);
+        props.hideModal();
     }
     return (
         <>
@@ -88,7 +93,7 @@ function CreateEventModal(props) {
             </style>
             <Modal
                 show={props.showModal}
-                onHide={props.hideModal}
+                onHide={hideModal}
                 backdrop="static"
                 keyboard={false}
                 centered
@@ -122,7 +127,7 @@ function CreateEventModal(props) {
                             <Form.Control as="textarea" rows="3" placeholder="Enter description" />
                         </Form.Group>
                         <div id="personal-event-div" className="flex-row">
-                            <Form.Check type="checkbox" value={personalEvent} onChange={() => setPersonalEvent(!personalEvent)} />
+                            <Form.Check type="checkbox" defaultValue={false} onChange={(event) => setPersonalEvent(event.target.checked)} />
                             <div id="personal-event-label" className="flex-col">
                                 <label>Personal Event</label>
                                 <div className="small-text">Personal events will only show up on your calendar.</div>
@@ -143,7 +148,7 @@ function CreateEventModal(props) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="clear" onClick={props.hideModal}>
+                    <Button variant="clear" onClick={hideModal}>
                         Cancel
                     </Button>
                     <YellowButton type="submit" form="create-event-form">Create</YellowButton>

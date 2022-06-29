@@ -10,10 +10,10 @@ export const GreenButton = styled(Button)`
     color: white;
 `;
 
+
 const YellowButtonStyle = styled(Button)`
     box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
 `;
-
 export const YellowButton = (props:any) => {
     return <YellowButtonStyle variant="warning" {...props} />;
 };
