@@ -1,11 +1,20 @@
 import React, { FC, useState } from "react";
 import AccountOptionsDropdown from "./dropdowns/accountoptionsdropdown";
 import SelectGroupDropdown from "./dropdowns/selectgroupdropdown";
-import { Button, Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import styled from "styled-components";
 
 const NavBar = styled(Navbar)`
     background-color: #2b3050;
+`
+
+const StyledNav = styled(Nav)`
+    @media (min-width: 1000px) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    };
 `
 
 const CopyId = styled(Nav.Link)`
@@ -14,6 +23,17 @@ const CopyId = styled(Nav.Link)`
 
 const ChatIcon = styled.i`
     color: white;
+`
+
+const ChatLink = styled(Nav.Link)`
+    margin-right: 20px;
+`
+
+const HorizontalDiv = styled.div`
+    @media (min-width: 1000px) {
+        display: flex;
+        flex-direction: row;
+    };
 `
 
 interface DashboardHeaderProps {
@@ -35,14 +55,16 @@ const DashboardHeader: FC<DashboardHeaderProps> = (props) => {
             <Container fluid>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav>
-                        <Nav.Link onClick={props.toggleChat}><ChatIcon className="bi bi-chat-left-text-fill"></ChatIcon></Nav.Link>
-                        <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
-                        <CopyId onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId); setCopiedId(true); }}>
-                            Group ID: {props.currentGroup.groupId} {copiedId ? <i className="bi bi-clipboard-check" /> : <i className="bi bi-clipboard" />}
-                        </CopyId>
+                    <StyledNav>
+                        <HorizontalDiv>
+                            <ChatLink onClick={props.toggleChat}><ChatIcon className="bi bi-chat-left-text-fill"></ChatIcon></ChatLink>
+                            <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
+                            <CopyId onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId); setCopiedId(true); }}>
+                                Group ID: {props.currentGroup.groupId} {copiedId ? <i className="bi bi-clipboard-check" /> : <i className="bi bi-clipboard" />}
+                            </CopyId>
+                        </HorizontalDiv>
                         <AccountOptionsDropdown currentUser={props.currentUser} showSettings={props.showSettings} joinGroup={props.joinGroup} createGroup={props.createGroup}></AccountOptionsDropdown>
-                    </Nav>
+                    </StyledNav>
                 </Navbar.Collapse>
             </Container>
         </NavBar>

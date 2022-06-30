@@ -16,6 +16,7 @@ const SelectGroupDropdown: FC<SelectGroupDropdownProps> = (props) => {
                 {`
                 #select-group-dropdown{
                     color: white;
+                    margin-right: 20px;
                 }
             `}
             </style>

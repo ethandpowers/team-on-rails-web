@@ -89,6 +89,13 @@ function MonthDisplay(props) {
                             height: 70vh;
                         }
                     }
+
+                    @media screen and (max-width: 600px) {
+                        #days-of-week {
+                            height: 0px;
+                            overflow: hidden;
+                        }
+                    }
                 `}
             </style>
             <div id="month-display">
