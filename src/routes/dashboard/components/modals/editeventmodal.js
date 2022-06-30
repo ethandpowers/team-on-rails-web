@@ -34,7 +34,7 @@ function EditEventModal(props) {
             }
         }
 
-        updateEvent(props.group, newEvent);
+        updateEvent(props.group, newEvent, props.event);
         props.updateEventUI(newEvent);
         props.hideModal();
     }

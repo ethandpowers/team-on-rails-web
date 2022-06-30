@@ -127,18 +127,27 @@ export async function createEvent(group: Group, event: any, personalEvent: any) 
     }
 }
 
-export async function updateEvent(group: Group, event: any) {
-    let date = new Date(event.dateString);
-    if (event.personalEvent) {
-        await update(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`), {
-            ...event,
+export async function updateEvent(group: Group, newEvent: any, oldEvent:any) {
+    let newDate = new Date(newEvent.dateString);
+    let oldDate = new Date(oldEvent.dateString);
+    if (newEvent.personalEvent) {
+        await update(ref(database, `users/${auth.currentUser.uid}/calendar/${newDate.getFullYear()}/${newDate.getMonth()}/events/${newEvent.eventId}`), {
+            ...newEvent,
             updateTimeStamp: Date.now(),
         });
+        //if it's a different month, delete the old one
+        if(oldDate.getMonth() !== newDate.getMonth()) {
+            await remove(ref(database, `users/${auth.currentUser.uid}/calendar/${oldDate.getFullYear()}/${oldDate.getMonth()}/events/${oldEvent.eventId}`));
+        }
     } else {
-        await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`), {
-            ...event,
+        await update(ref(database, `groups/${group.groupId}/calendar/${newDate.getFullYear()}/${newDate.getMonth()}/events/${newEvent.eventId}`), {
+            ...newEvent,
             updateTimeStamp: Date.now(),
         });
+        //if it's a different month, delete the old one
+        if(oldDate.getMonth() !== newDate.getMonth()) {
+            await remove(ref(database, `groups/${group.groupId}/calendar/${oldDate.getFullYear()}/${oldDate.getMonth()}/events/${oldEvent.eventId}`));
+        }
     }
 }
 
