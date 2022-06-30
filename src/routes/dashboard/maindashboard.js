@@ -133,17 +133,6 @@ function MainDashboard() {
 		//TODO: setup group settings
 	}
 
-	//Realtime listener for user availablity
-	// if(currentGroup){
-	// 	onValue(ref(database, `groups/${currentGroup.groupId}/members/${auth.currentUser.uid}/availability`), (snapshot) => {
-	// 		const data = snapshot.val();
-	// 		if(data){
-	// 			setAccountSettings(data);
-	// 		}
-	// 	}
-	// 	);
-	// }
-
 	if (accountLoaded && groupsAsAdmin.length === 0 && groupsAsMember.length === 0) {
 		return (
 			<>
@@ -177,7 +166,11 @@ function MainDashboard() {
         		`}
 				</style>
 
-				<Settings showModal={showSettings} hideModal={() => setShowSettings(false)}></Settings>
+				<Settings
+					showModal={showSettings}
+					hideModal={() => setShowSettings(false)}
+					group={currentGroup}
+				/>
 				<JoinGroupModal showModal={showJoinGroupModal} hideModal={() => setShowJoinGroupModal(false)} />
 				<CreateGroupModal
 					showModal={showCreateGroupModal}

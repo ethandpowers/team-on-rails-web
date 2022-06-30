@@ -71,7 +71,7 @@ function Tasks(props) {
                     <Card.Body>
                         <div id="tasks-empty-body-div">
                             No tasks yet.  Create one now!
-                            <GreenButton onClick={() => { setShowCreateTaskModal(true) }}>Create Task</GreenButton>
+                            <GreenButton className="no-wrap" onClick={() => { setShowCreateTaskModal(true) }}>Create Task</GreenButton>
                         </div>
                     </Card.Body>
                 </Card>

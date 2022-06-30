@@ -19,16 +19,16 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
-export const auth = getAuth(app);
-export const database = getDatabase(app);
-export const storage = getStorage(app);
+export const auth:any = getAuth(app);
+export const database:any = getDatabase(app);
+export const storage:any = getStorage(app);
 
-export function loggedIn() {
+export function loggedIn():boolean {
     console.log(`loggedIn: ${auth.currentUser !== null}`);
     return auth.currentUser !== null;
 }
 
-export async function signUp(name, email, password) {
+export async function signUp(name:string, email:string, password:string) {
     await createUserWithEmailAndPassword(auth, email, password).then(() => {
         set(ref(database, `users/${auth.currentUser.uid}`), {
             name,
@@ -38,7 +38,7 @@ export async function signUp(name, email, password) {
     });
 }
 
-export async function logIn(email, password) {
+export async function logIn(email:string, password:string) {
     await signInWithEmailAndPassword(auth, email, password);
 }
 
@@ -46,7 +46,7 @@ export async function logOut() {
     await auth.signOut();
 }
 
-export async function joinGroup(id) {
+export async function joinGroup(id:string) {
     let group = await (await get(ref(database, `groups/${id}`))).val();
     if (group) {
         await push(ref(database, `users/${auth.currentUser.uid}/groupsAsMember`), {
@@ -66,7 +66,7 @@ export async function joinGroup(id) {
     return true;
 }
 
-export async function createGroup(groupName) {
+export async function createGroup(groupName:string) {
     let name = await (await get(ref(database, `users/${auth.currentUser.uid}/name`))).val();
     let groupRef = await push(ref(database, 'groups/'), {
         name: groupName,
@@ -79,7 +79,7 @@ export async function createGroup(groupName) {
     });
 }
 
-export async function createTask(group, task) {
+export async function createTask(group:Group, task:any) {
     let taskref = await push(ref(database, `groups/${group.groupId}/tasks`), {
         ...task,
         creationTimeStamp: Date.now(),
@@ -89,25 +89,25 @@ export async function createTask(group, task) {
     });
 }
 
-export async function updateTask(group, task) {
+export async function updateTask(group:Group, task:any) {
     await update(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`), {
         ...task,
         updateTimeStamp: Date.now(),
     });
 }
 
-export async function deleteTask(group, task) {
+export async function deleteTask(group:Group, task:any) {
     await remove(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`));
 }
 
-export async function completeTask(group, task) {
+export async function completeTask(group:Group, task:any) {
     await update(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`), {
         completed: true,
         completionTimeStamp: Date.now(),
     });
 }
 
-export async function createEvent(group, event, personalEvent) {
+export async function createEvent(group:Group, event:any, personalEvent:any) {
     let date = new Date(event.dateString);
     if (personalEvent) {
         let eventref = await push(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events`), {
@@ -128,7 +128,7 @@ export async function createEvent(group, event, personalEvent) {
     }
 }
 
-export async function updateEvent(group, event) {
+export async function updateEvent(group:Group, event:any) {
     let date = new Date(event.dateString);
     if (event.personalEvent) {
         await update(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`), {
@@ -143,7 +143,7 @@ export async function updateEvent(group, event) {
     }
 }
 
-export async function deleteEvent(group, event) {
+export async function deleteEvent(group:Group, event:any) {
     let date = new Date(event.dateString);
     if (event.personalEvent) {
         await remove(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
@@ -152,7 +152,7 @@ export async function deleteEvent(group, event) {
     }
 }
 
-export async function createConversation(recipients, message) {
+export async function createConversation(recipients:any, message:any) {
     let conversationRef = await push(ref(database, `/conversations`), {
         recipients: recipients,
     });
@@ -169,14 +169,14 @@ export async function createConversation(recipients, message) {
         sender: { userId: auth.currentUser.uid, name: await getName(auth.currentUser.uid) },
         messageTimeStamp: Date.now(),
     });
-    recipients.forEach(async (recipient) => {
+    recipients.forEach(async (recipient:User) => {
         await push(ref(database, `/users/${recipient.userId}/conversations`), {
             conversationId: conversationRef.key,
         });
     });
 }
 
-export async function newMessage(conversation, message) {
+export async function newMessage(conversation:any, message:any) {
     if (message.messageType === 'image') {
         //check if image is already in storage
         let unique = false
@@ -199,11 +199,11 @@ export async function newMessage(conversation, message) {
     return true;
 }
 
-export async function getName(userId) {
+export async function getName(userId:string) {
     return (await get(ref(database, `users/${userId}/name`))).val();
 }
 
-export async function getImageUrl(imagePath) {
+export async function getImageUrl(imagePath:string) {
     let url = ""
     await getDownloadURL(storageRef(storage, imagePath)).then((res) => {
         url = res;
@@ -211,12 +211,12 @@ export async function getImageUrl(imagePath) {
     return url;
 }
 
-export async function getAllContacts(groupsAsAdmin, groupsAsMember) {
-    let contacts = [];
+export async function getAllContacts(groupsAsAdmin:Group[], groupsAsMember:Group[]): Promise<User[]> {
+    let contacts:User[] = [];
     for (let i = 0; i < groupsAsAdmin.length; i++) {
         let group = groupsAsAdmin[i];
         let snapshot = await get(ref(database, `groups/${group.groupId}/members`))
-        const members = snapshot.val();
+        const members:Object = snapshot.val();
         if (members) {
             contacts = [...contacts, ...Object.values(members)];
         }
@@ -224,7 +224,7 @@ export async function getAllContacts(groupsAsAdmin, groupsAsMember) {
     for (let i = 0; i < groupsAsMember.length; i++) {
         let group = groupsAsMember[i];
         await get(ref(database, `groups/${group.groupId}/members`)).then(snapshot => {
-            const members = Object.values(snapshot.val());
+            const members:User[] = Object.values(snapshot.val());
             if (members) {
                 contacts = [...contacts, ...members];
             }

@@ -75,7 +75,7 @@ function CreateConversationMenu(props) {
                         })}
                     </div>
                     <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        <Dropdown.Toggle variant="warning" id="dropdown-basic">
                             Add Recipient
                         </Dropdown.Toggle>
 

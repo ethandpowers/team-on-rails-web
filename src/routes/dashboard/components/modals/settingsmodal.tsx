@@ -1,8 +1,26 @@
-import { React } from "react";
+import React, { FC, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { GreenButton } from "../../../../components/buttons/custombuttons";
+import { onValue, ref } from "firebase/database";
+import { auth, database } from "../../../../firebase";
 
-function Settings(props) {
+interface SettingsModalProps {
+    showModal: boolean;
+    hideModal: () => void;
+    group:Group
+}
+
+const Settings: FC<SettingsModalProps> = (props) => {
+    const [availability, setAvailability] = useState(null);
+
+    //Realtime listener for user availablity
+    onValue(ref(database, `groups/${props.group.groupId}/members/${auth.currentUser.uid}/availability`), (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            setAvailability(data);
+        }
+    });
+
     return (
         <Modal
             show={props.showModal}
