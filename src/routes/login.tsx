@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { Navigate } from "react-router-dom";
 import { auth } from "../firebase";
 import LoginForm from "../components/forms/loginform";
@@ -6,17 +6,16 @@ import ElementBG from "../components/backgrounds/elementbg";
 import FloatingSquares from "../components/backgrounds/floatingbubbles";
 import Alert from "../components/alert";
 
-function Login() {
-    const colors = ["#53bf00", "#00bf6c", "#00b2bf", "#6c00bf"];
+const Login: FC = () => {
     const [loggedInState, setLoggedInState] = React.useState(false);
     const [alertState, setAlertState] = React.useState(false);
 
     const accountnotfound = () => {
         setAlertState(true);
     }
-    
-    auth.onAuthStateChanged(user => {
-        if (user) {
+
+    auth.onAuthStateChanged((user: any) => {
+        if (user && !loggedInState) {
             setLoggedInState(true);
         }
     });
@@ -30,14 +29,13 @@ function Login() {
                 .signup-page{
                     width: 100%;
                     height: 100vh;
-                    // background: linear-gradient(35deg, ${colors[0]}, ${colors[1]}, ${colors[2]}, ${colors[3]});
                     display: flex;
                     align-items: center;
                     justify-content: center;
                 }
             `}
             </style>
-            {alertState && <Alert>Incorrect email or password</Alert>}
+            {alertState && <Alert message="Incorrect email or password" />}
             <ElementBG>
                 <FloatingSquares></FloatingSquares>
             </ElementBG>

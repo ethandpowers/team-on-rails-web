@@ -1,17 +1,22 @@
-import React from "react";
+import React, { FC } from "react";
 import { signUp } from "../../firebase";
 import { Link } from "react-router-dom";
 import { Form, Card } from "react-bootstrap";
 import { GreenButton } from "../buttons/custombuttons";
 
-function SignupForm(props) {
-    const handleSubmit = async (event) => {
+interface SignUpFormProps {
+    badPassword: () => void;
+}
+
+const SignupForm:FC<SignUpFormProps> = (props) => {
+    const handleSubmit = async (event:any) => {
         event.preventDefault();
         const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
         try { await signUp(name, email, password); }
         catch (error) {
+            console.error(error);
             props.badPassword();
         }
     }
@@ -32,6 +37,18 @@ function SignupForm(props) {
 
                     #signup-check-label{
                         margin-left: 10px;
+                    }
+
+                    @media screen and (max-width: 1000px) {
+                        .signup-card{
+                            width: 55%;
+                        }
+                    }
+
+                    @media screen and (max-width: 500px) {
+                        .signup-card{
+                            width: 90%;
+                        }
                     }
                 `}
             </style>

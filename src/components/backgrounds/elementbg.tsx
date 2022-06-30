@@ -1,6 +1,6 @@
 import React from "react";
 
-function ElementBG(props) {
+const ElementBG = (props:any) => {
     return (
         <>
             <style type="text/css">

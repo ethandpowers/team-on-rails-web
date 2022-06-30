@@ -1,10 +1,15 @@
-import { React, useState } from "react";
+import React, { FC, useState } from "react";
 import { Alert as BSAlert } from "react-bootstrap";
+import { propTypes } from "react-bootstrap/esm/Image";
 
-function Alert(props) {
+interface AlertProps {
+    message: string;
+}
+
+const Alert:FC<AlertProps> = (props) => {
     const [show, setShow] = useState(true);
 
-    if (show)
+    if (show) {
         return (
             <>
                 <style type="text/css">
@@ -21,12 +26,15 @@ function Alert(props) {
                 `}
                 </style>
                 <div className="alert-div">
-                    <BSAlert variant="danger" onClose={() => setShow(false)} dismissible>
-                        {props.children}
+                    <BSAlert variant="danger" onClose={() => setShow(false)} dismissible >
+                        {props.message}
                     </BSAlert>
                 </div>
             </>
         );
+    } else {
+        return null;
+    }
 }
 
 export default Alert;

@@ -32,7 +32,7 @@ function MainDashboard() {
 	const [year, setYear] = useState(new Date().getFullYear());
 	const [month, setMonth] = useState(new Date().getMonth());
 	const [date, setDate] = useState(new Date().getDate());
-	const [accountSettings, setAccountSettings] = useState(false);
+
 
 	//UI states
 	const [showSettings, setShowSettings] = useState(false);
@@ -41,39 +41,44 @@ function MainDashboard() {
 	const [showChat, setShowChat] = useState(false);
 
 	//Realtime listener for user account data
-	onValue(ref(database, 'users/' + auth.currentUser.uid), (snapshot) => {
-		const data = snapshot.val();
-		let group = currentGroup;
-		if (data.groupsAsAdmin) {
-			if (Object.keys(data.groupsAsAdmin).length !== groupsAsAdmin.length) {
-				setGroupsAsAdmin(Object.values(data.groupsAsAdmin));
-				if (group === null) group = Object.values(data.groupsAsAdmin)[0];
-			}
-		} else if (groupsAsAdmin.length > 0) {
-			setGroupsAsAdmin([]);
-		}
+	useEffect(() => {
+		if (!accountLoaded) {
+			onValue(ref(database, 'users/' + auth.currentUser.uid), (snapshot) => {
+				const data = snapshot.val();
+				let group = currentGroup;
+				if (data.groupsAsAdmin) {
+					if (Object.keys(data.groupsAsAdmin).length !== groupsAsAdmin.length) {
+						setGroupsAsAdmin(Object.values(data.groupsAsAdmin));
+						if (group === null) group = Object.values(data.groupsAsAdmin)[0];
+					}
+				} else if (groupsAsAdmin.length > 0) {
+					setGroupsAsAdmin([]);
+				}
 
-		if (data.groupsAsMember) {
-			if (Object.keys(data.groupsAsMember).length !== groupsAsMember.length) {
-				setGroupsAsMember(Object.values(data.groupsAsMember));
-				if (group === null) group = Object.values(data.groupsAsMember)[0];
-			}
-		} else if (groupsAsMember.length > 0) {
-			setGroupsAsMember([]);
-		}
-		if (!currentUser) {
-			setCurrentUser({
-				name: data.name,
-				userId: auth.currentUser.uid,
+				if (data.groupsAsMember) {
+					if (Object.keys(data.groupsAsMember).length !== groupsAsMember.length) {
+						setGroupsAsMember(Object.values(data.groupsAsMember));
+						if (group === null) group = Object.values(data.groupsAsMember)[0];
+					}
+				} else if (groupsAsMember.length > 0) {
+					setGroupsAsMember([]);
+				}
+				if (!currentUser) {
+					setCurrentUser({
+						name: data.name,
+						userId: auth.currentUser.uid,
+					});
+				}
+				if (!currentGroup) setCurrentGroup(group);
+				if (!accountLoaded) setAccountLoaded(true);
 			});
 		}
-		if (!currentGroup) setCurrentGroup(group);
-		if (!accountLoaded) setAccountLoaded(true);
-	});
+	},[]);
 
 	//event listeners that depend on data
 	const [unsubs, setUnsubs] = useState([]);
 	useEffect(() => {
+		if (!auth.currentUser) return;
 		unsubs.forEach(unsub => unsub());
 		let newUnsubs = [];
 

@@ -1,11 +1,15 @@
-import React from "react";
+import React, { FC } from "react";
 import { logIn } from "../../firebase";
 import { Link } from "react-router-dom";
 import { Card, Form } from "react-bootstrap";
 import { GreenButton } from "../buttons/custombuttons";
 
-function LoginForm(props) {
-    const handleSubmit = async (event) => {
+interface LoginFormProps {
+    accountnotfound: () => void;
+}
+
+const LoginForm:FC<LoginFormProps> = (props) => {
+    const handleSubmit = async (event:any) => {
         event.preventDefault();
         const email = event.target.email.value;
         const password = event.target.password.value;
@@ -27,6 +31,17 @@ function LoginForm(props) {
                         flex-direction: row;
                         justify-content: center;
                         align-items: center;
+                    }
+                    @media screen and (max-width: 1000px) {
+                        .login-card{
+                            width: 45%;
+                        }
+                    }
+                    
+                    @media screen and (max-width: 500px) {
+                        .login-card{
+                            width: 90%;
+                        }
                     }
                 `}
             </style>
