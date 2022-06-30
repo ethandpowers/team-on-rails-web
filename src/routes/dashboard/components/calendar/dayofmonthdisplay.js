@@ -74,6 +74,8 @@ function DayOfMonthDisplay(props) {
                                 {event.title}
                             </div>
                         )
+                    }else{
+                        return null;
                     }
                 })}
                 {props.events.map((event, index) => {
@@ -84,6 +86,8 @@ function DayOfMonthDisplay(props) {
                                 {event.title}
                             </div>
                         );
+                    }else{
+                        return null;
                     }
                 })}
                 {props.tasks.sort(sortTasks).map((task, index) => {

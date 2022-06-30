@@ -42,7 +42,7 @@ function CreateEventModal(props) {
     const toggleAllParticipants = (source) => {
         var checkboxes = document.querySelectorAll('input[name="participant"]');
         for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked != source.target.checked)
+            if (checkboxes[i].checked !== source.target.checked)
                 checkboxes[i].checked = source.target.checked;
         }
     }

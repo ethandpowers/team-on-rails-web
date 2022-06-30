@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
 
 function ImageUploadButton(props) {
@@ -9,7 +9,7 @@ function ImageUploadButton(props) {
     const handleDisplayFileDetails = (event) => {
         props.imageRef.current?.files &&
             props.setImageName(props.imageRef.current.files[0].name);
-            props.onChange(event);
+        props.onChange(event);
     };
     return (
         <div id="image-upload-button">

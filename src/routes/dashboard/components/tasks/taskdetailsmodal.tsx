@@ -1,9 +1,18 @@
-import React from "react";
+import React, { FC } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { GreenButton } from "../../../../components/buttons/custombuttons";
 import { completeTask } from "../../../../firebase";
 
-function TaskDetailsModal(props) {
+interface TaskDetailsModalProps {
+    showModal: boolean;
+    hideModal: () => void;
+    showEditTaskModal: () => void;
+    task: Task;
+    group: Group;
+    currentUser: User;
+}
+
+const TaskDetailsModal:FC<TaskDetailsModalProps> = (props) => {
     const completeCurrentTask = () => {
         completeTask(props.group, props.task);
         props.hideModal();
@@ -57,18 +66,18 @@ function TaskDetailsModal(props) {
                     <Modal.Header closeButton>
                         <Modal.Title>{props.task.title}</Modal.Title>
                         {props.task.deadline && <div id="task-details-deadline"><i className=" mr-2 bi bi-calendar-x task-icon"></i>{props.task.deadline}</div>}
-                        <div id="task-details-completion-div">{props.task.completed && `Completed on ${(new Date(props.task.completionTimeStamp)).toLocaleDateString()}`}</div>
-                        <div><Button variant="clear" className="gray-icon no-outline" onClick={props.showEditModal}><i className="bi bi-pencil-square"></i></Button></div>
+                        <div id="task-details-completion-div">{props.task.completionTimeStamp && `Completed on ${(new Date(props.task.completionTimeStamp)).toLocaleDateString()}`}</div>
+                        <div><Button variant="clear" className="gray-icon no-outline" onClick={props.showEditTaskModal}><i className="bi bi-pencil-square"></i></Button></div>
                     </Modal.Header>
 
                     {props.task.description && <Modal.Body>
                         <p>{props.task.description}</p>
                     </Modal.Body>}
-                    {(!props.task.completed || props.task.assignedTo) && <Modal.Footer id="task-details-footer">
-                        {props.task.assignedTo && props.name !== props.task.assignedTo.name && `Assigned to ${props.task.assignedTo.name} by ${props.task.assignedBy.name}`}
-                        {props.task.assignedTo && props.name === props.task.assignedTo.name && `Assigned to you by ${props.task.assignedBy.name}`}
+                    {(!props.task.completionTimeStamp || props.task.assignedTo) && <Modal.Footer id="task-details-footer">
+                        {props.task.assignedTo && props.currentUser.userId !== props.task.assignedTo.userId && `Assigned to ${props.task.assignedTo.name} by ${props.task.assignedBy.name}`}
+                        {props.task.assignedTo && props.currentUser.userId === props.task.assignedTo.userId && `Assigned to you by ${props.task.assignedBy.name}`}
                         <div></div>
-                        {!props.task.completed && <GreenButton onClick={completeCurrentTask}><i className="bi bi-check-lg task-icon"></i>Mark Complete</GreenButton>}
+                        {!props.task.completionTimeStamp && <GreenButton onClick={completeCurrentTask}><i className="bi bi-check-lg task-icon"></i>Mark Complete</GreenButton>}
                     </Modal.Footer>}
                 </Modal>
             </>

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { Card, ListGroup, Tab, Nav } from "react-bootstrap";
 import { deleteTask as FBDeleteTask } from "../../../../firebase";
 import CreateTaskModal from "./createtaskmodal";
@@ -8,13 +8,13 @@ import TaskPreview from "./taskpreview";
 import { sortTasks } from "../../utilities"
 import { GreenButton } from "../../../../components/buttons/custombuttons";
 
-function Tasks(props) {
-    const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
-    const [showTaskDetailsModal, setShowTaskDetailsModal] = useState(null);
-    const [showEditTaskModal, setShowEditTaskModal] = useState(null);
+function Tasks(props: any) {
+    const [showCreateTaskModal, setShowCreateTaskModal] = useState<boolean>(false);
+    const [showTaskDetailsModal, setShowTaskDetailsModal] = useState<any>(null);
+    const [showEditTaskModal, setShowEditTaskModal] = useState<any>(null);
     const [selectedTask, setSelectedTask] = useState(props.tasks[0]);
 
-    const deleteTask = (task) => {
+    const deleteTask = (task: any) => {
         FBDeleteTask(props.group, task);
         setShowEditTaskModal(false);
         setShowTaskDetailsModal(false); // This is to close the modal when the task is deleted
@@ -58,7 +58,7 @@ function Tasks(props) {
                 </style>
                 <CreateTaskModal
                     group={props.group}
-                    name={props.name}
+                    currentUser={props.currentUser}
                     groupAdmin={props.groupAdmin}
                     groupMembers={props.groupMembers}
                     showModal={showCreateTaskModal}
@@ -121,22 +121,21 @@ function Tasks(props) {
                     }
                 `}
             </style>
-            
+
             <CreateTaskModal
                 group={props.group}
-                name={props.name}
+                currentUser={props.currentUser}
                 groupAdmin={props.groupAdmin}
                 groupMembers={props.groupMembers}
                 showModal={showCreateTaskModal}
-                hideModal={() => setShowCreateTaskModal(false)}
-            />
+                hideModal={() => setShowCreateTaskModal(false)} />
             <TaskDetailsModal
                 hideModal={() => setShowTaskDetailsModal(false)}
                 showModal={showTaskDetailsModal}
                 group={props.group}
                 task={selectedTask}
-                name={props.name}
-                showEditModal={() => { setShowEditTaskModal(true) }}
+                currentUser={props.currentUser}
+                showEditTaskModal={() => { setShowEditTaskModal(true) }}
             />
             <EditTaskModal
                 hideModal={() => setShowEditTaskModal(false)}
@@ -145,7 +144,6 @@ function Tasks(props) {
                 deleteTask={deleteTask}
                 group={props.group}
                 task={selectedTask}
-                name={props.name}
                 isAdmin={props.isAdmin}
                 groupAdmin={props.groupAdmin}
                 groupMembers={props.groupMembers} />
@@ -165,9 +163,12 @@ function Tasks(props) {
                         <Tab.Content>
                             <Tab.Pane eventKey="your-tasks">
                                 <ListGroup className="list-group-flush">
-                                    {props.yourTasks.sort(sortTasks).map((task, index) => {
+                                    {props.yourTasks.sort(sortTasks).map((task:Task, index:number) => {
                                         return (
-                                            <ListGroup.Item key={index} action onClick={() => setShowTaskDetailsModal(task)}>
+                                            <ListGroup.Item key={index} action onClick={() => {
+                                                setSelectedTask(task);
+                                                setShowTaskDetailsModal(true)
+                                            }}>
                                                 <TaskPreview task={task} showName={false} />
                                             </ListGroup.Item>
                                         );
@@ -178,7 +179,7 @@ function Tasks(props) {
 
                             <Tab.Pane eventKey="all-tasks">
                                 <ListGroup className="list-group-flush">
-                                    {props.tasks.sort(sortTasks).map((task, index) => {
+                                    {props.tasks.sort(sortTasks).map((task:Task, index:number) => {
                                         return (
                                             <ListGroup.Item key={index} action onClick={() => {
                                                 setSelectedTask(task);

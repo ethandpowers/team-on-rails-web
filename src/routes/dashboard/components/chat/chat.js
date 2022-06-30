@@ -26,7 +26,7 @@ function Chat(props) {
                 setRecipients(Object.values(data.filter(recipient => recipient.userId !== auth.currentUser.uid)));
             });
         }
-    }, [selectedConversation]);
+    }, [selectedConversation, recipients]);
 
     return (
         <>

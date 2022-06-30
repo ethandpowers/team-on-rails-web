@@ -1,5 +1,5 @@
 import { onValue, ref } from 'firebase/database';
-import { database, auth, newMessage, getImageUrl } from '../../../../firebase';
+import { database, auth, newMessage } from '../../../../firebase';
 import { useState, useRef, useEffect } from 'react';
 import NewMessage from './newmessage';
 import moment from 'moment';
@@ -11,7 +11,7 @@ function FullConversation(props) {
 
     onValue(ref(database, `conversations/${props.conversation.conversationId}/messages`), snapshot => {
         let data = Object.values(snapshot.val());
-        if (data.length != messages.length) {
+        if (data.length !== messages.length) {
             setMessages(data);
         }
     });

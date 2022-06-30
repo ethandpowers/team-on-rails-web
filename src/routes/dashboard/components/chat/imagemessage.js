@@ -7,7 +7,7 @@ function ImageMessage(props) {
         getImageUrl(props.message.image).then((url) => {
             setUrl(url);
         });
-    }, []);
+    }, [props.message.image]);
 
     if (url) return (
         <>

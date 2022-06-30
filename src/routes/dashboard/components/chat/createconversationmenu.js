@@ -34,7 +34,7 @@ function CreateConversationMenu(props) {
                 setYourPeople(res);
             })
         }
-    }, []);
+    }, [props.groupsAsAdmin, props.groupsAsMember, yourPeople.length]);
 
     if (yourPeople.length > 0) {
         return (

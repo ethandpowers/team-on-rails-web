@@ -1,30 +1,40 @@
-import { React } from "react";
+import React, { FC } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { createTask } from "../../../../firebase";
 import { auth } from "../../../../firebase";
 import moment from "moment";
 import { GreenButton } from "../../../../components/buttons/custombuttons";
 
-function CreateTaskModal(props) {
-    const handleSubmit = (event) => {
+interface CreateTaskModalProps {
+    showModal: boolean;
+    hideModal: () => void;
+    group: Group;
+    currentUser: User;
+    groupAdmin: User;
+    groupMembers: User[];
+}
+
+const CreateTaskModal:FC<CreateTaskModalProps> = (props) => {
+    const handleSubmit = (event:any) => {
         event.preventDefault();
-        let assignedTo = null;
+        let assignedTo:Task["assignedTo"] = null;
         if (event.target.assignedTo.value !== "Select User") {
             assignedTo = event.target.assignedTo.value;
-            if (props.groupAdmin.userId === assignedTo) {
+            if (props.groupAdmin.userId === event.target.assignedTo.value) {
                 assignedTo = props.groupAdmin;
             } else {
-                assignedTo = props.groupMembers.filter(member => member.userId === assignedTo)[0];
+                assignedTo = props.groupMembers.filter(member => member.userId === event.target.assignedTo.value)[0];
             }
         }
 
-        let task = {
+        let task:Task = {
             title: event.target.title.value,
             description: event.target.description.value ? event.target.description.value : null,
             deadline: event.target.deadline.value ? moment(event.target.deadline.value, "YYYY-MM-DD").format("MM/DD/YYYY") : null,
             assignedTo: assignedTo,
-            assignedBy: { userId: auth.currentUser.uid, name: props.name },
-            completed: false,
+            assignedBy: { userId: auth.currentUser.uid, name: props.currentUser.name },
+            creationTimeStamp: -1,
+            taskId: ""
         }
         createTask(props.group, task);
         props.hideModal();
@@ -49,7 +59,7 @@ function CreateTaskModal(props) {
                     </Form.Group>
                     <Form.Group controlId="description" className="mb-3">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" rows="3" placeholder="Enter description" />
+                        <Form.Control as="textarea" rows={3} placeholder="Enter description" />
                     </Form.Group>
                     <Form.Group controlId="deadline" className="mb-3">
                         <Form.Label>Deadline</Form.Label>

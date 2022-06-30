@@ -1,24 +1,35 @@
-import React from "react";
+import React, { FC } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { updateTask } from "../../../../firebase";
 import moment from "moment";
 import { GreenButton } from "../../../../components/buttons/custombuttons";
 
-function EditTaskModal(props) {
+interface EditTaskModalProps {
+    showModal: boolean;
+    hideModal: () => void;
+    task: Task;
+    group: Group;
+    updateTaskUI: (task: Task) => void;
+    deleteTask: (task: Task) => void;
+    groupAdmin: User;
+    groupMembers: User[];
+    isAdmin: boolean;
+}
 
-    const handleSubmit = (event) => {
+const EditTaskModal: FC<EditTaskModalProps> = (props) => {
+
+    const handleSubmit = (event: any) => {
         event.preventDefault();
-        let assignedTo = null;
+        let assignedTo: Task["assignedTo"] = null;
         if (event.target.assignedTo.value !== "Select User") {
-            assignedTo = event.target.assignedTo.value;
-            if (props.groupAdmin.userId === assignedTo) {
+            if (props.groupAdmin.userId === event.target.assignedTo.value) {
                 assignedTo = props.groupAdmin;
             } else {
-                assignedTo = props.groupMembers.filter(member => member.userId === assignedTo)[0];
+                assignedTo = props.groupMembers.filter((member: User) => member.userId === event.target.assignedTo.value)[0];
             }
         }
 
-        let task = {
+        let task: Task = {
             ...props.task,
             title: event.target.title.value,
             description: event.target.description.value ? event.target.description.value : null,
@@ -61,7 +72,7 @@ function EditTaskModal(props) {
                             </Form.Group>
                             <Form.Group controlId="description" className="mb-3">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control as="textarea" rows="3" placeholder="Enter description" defaultValue={props.task.description ? props.task.description : ""} />
+                                <Form.Control as="textarea" rows={3} placeholder="Enter description" defaultValue={props.task.description ? props.task.description : ""} />
                             </Form.Group>
                             <Form.Group controlId="deadline" className="mb-3">
                                 <Form.Label>Deadline</Form.Label>
