@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { DropdownButton, Dropdown } from "react-bootstrap";
+import { NavDropdown } from "react-bootstrap";
 
 interface SelectGroupDropdownProps {
     groupsAsAdmin: Group[];
@@ -14,29 +14,29 @@ const SelectGroupDropdown: FC<SelectGroupDropdownProps> = (props) => {
         <>
             <style>
                 {`
-                #groups-dropdown-menu {
+                #select-group-dropdown{
                     color: white;
                 }
             `}
             </style>
-            <DropdownButton id="groups-dropdown-menu" variant="clear" title={props.currentGroup.name}>
+            <NavDropdown id="select-group-dropdown" title={props.currentGroup.name}>
                 {
                     props.groupsAsAdmin.map((group: Group, index: number) => {
                         return (
-                            <Dropdown.Item key={index} onClick={() => props.setCurrentGroup(group)}>
+                            <NavDropdown.Item key={index} onClick={() => props.setCurrentGroup(group)}>
                                 {group.name}
-                            </Dropdown.Item>
+                            </NavDropdown.Item>
                         )
                     })}
                 {
                     props.groupsAsMember.map((group, index) => {
                         return (
-                            <Dropdown.Item key={index} onClick={() => props.setCurrentGroup(group)}>
+                            <NavDropdown.Item key={index} onClick={() => props.setCurrentGroup(group)}>
                                 {group.name}
-                            </Dropdown.Item>
+                            </NavDropdown.Item>
                         );
                     })}
-            </DropdownButton>
+            </NavDropdown>
         </>
     );
 }

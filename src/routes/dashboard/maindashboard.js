@@ -64,7 +64,7 @@ function MainDashboard() {
 		if (!currentUser) {
 			setCurrentUser({
 				name: data.name,
-				userId: data.userId,
+				userId: auth.currentUser.uid,
 			});
 		}
 		if (!currentGroup) setCurrentGroup(group);
@@ -148,7 +148,7 @@ function MainDashboard() {
 				<NoGroupsModal></NoGroupsModal>
 			</>
 		);
-	} else if (tasksLoaded && groupAdministrator) {
+	} else if (tasksLoaded && groupAdministrator && currentUser) {
 		return (
 			<>
 				<style type="text/css">
@@ -184,7 +184,7 @@ function MainDashboard() {
 				/>
 				<Chat showChat={showChat} hideChat={() => setShowChat(false)} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} name={currentUser.name} />
 				<DashboardHeader
-					name={currentUser.name}
+					currentUser={currentUser}
 					showSettings={() => setShowSettings(true)}
 					currentGroup={currentGroup}
 					setCurrentGroup={setCurrentGroup}
