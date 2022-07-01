@@ -1,12 +1,26 @@
 import React from "react";
 import { auth } from "../../../../firebase";
 import { sortTasks } from "../../utilities";
-import { isYourEvent } from "../../utilities";
+import { isYourEvent, sortEvents } from "../../utilities";
 
 function DayOfMonthDisplay(props) {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
     const currentDate = new Date().getDate();
+
+    const todaysTasks = props.tasks.filter(task => task.deadline && (new Date(task.deadline).toDateString() === new Date(props.date.year, props.date.month, props.date.day).toDateString()));
+    const todaysEvents = props.events.filter(event => {
+        let date = new Date(event.dateString);
+        let res = props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()
+        return res;
+    });
+    const todaysPersonalEvents = props.personalEvents.filter(event => {
+        let date = new Date(event.dateString);
+        let res = props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()
+        return res;
+    })
+
+    const sortedEvents = [...todaysEvents, ...todaysPersonalEvents].sort(sortEvents);
 
     return (
         <>
@@ -66,7 +80,14 @@ function DayOfMonthDisplay(props) {
                 className={`clickable day-of-month ${(props.date.year === currentYear && props.date.month === currentMonth && props.date.day === currentDate) ? "today" : ""}`}
             >
                 <div className="date-number">{props.date.day}</div>
-                {props.personalEvents.map((event, index) => {
+                {sortedEvents.map((event, index) => {
+                    return (
+                        <div key={index} className={`event-calendar-display calendar-display-item ${isYourEvent(event) ? "your-event-calendar-display" : ""} ${event.personalEvent ? "personal-event-calendar-display" : ""}`}>
+                            {event.title}
+                        </div>
+                    );
+                })}
+                {/* {props.personalEvents.map((event, index) => {
                     let date = new Date(event.dateString);
                     if (props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()) {
                         return (
@@ -89,20 +110,13 @@ function DayOfMonthDisplay(props) {
                     }else{
                         return null;
                     }
-                })}
-                {props.tasks.sort(sortTasks).map((task, index) => {
-                    if (task.deadline) {
-                        //if task is for that day
-                        let deadline = new Date(task.deadline);
-                        if (deadline.getFullYear() === props.date.year && deadline.getMonth() === props.date.month && deadline.getDate() === props.date.day) {
-                            return (
-                                <div className={`${task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid) ? "your-task-calendar-display" : ""} calendar-display-item`} key={index}>
-                                    {task.title}
-                                </div>
-                            );
-                        }
-                    }
-                    return null;
+                })} */}
+                {todaysTasks.sort(sortTasks).map((task, index) => {
+                    return (
+                        <div className={`${task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid) ? "your-task-calendar-display" : ""} calendar-display-item`} key={index}>
+                            {task.title}
+                        </div>
+                    );
                 })}
             </div>
         </>

@@ -34,6 +34,27 @@ export const isYourEvent = (event: any): boolean => {
     return res;
 }
 
+export const sortEvents = (a: any, b: any): number => {
+    if (a.startTime && !b.startTime) return -1;
+    if (!a.startTime && b.startTime) return 1;
+    if (a.startTime && b.startTime) {
+        if (a.startTime < b.startTime) {
+            return -1;
+        } else if (a.startTime > b.startTime) {
+            return 1;
+        }
+    }
+
+    if(a.personalEvent && !b.personalEvent) return -1;
+    if(!a.personalEvent && b.personalEvent) return 1;
+
+    if (a.assignedTo && a.assignedTo.userId === auth.currentUser.uid) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+
 export const sortPeople = (a: User, b: User): number => {
     if (a.name < b.name) {
         return -1;

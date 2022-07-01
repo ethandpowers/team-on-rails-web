@@ -26,7 +26,8 @@ function ConversationPreview(props) {
                 {`
                 .conversation-preview{
                     width: 100%;
-                    margin-bottom: 20px;
+                    margin-bottom: 30px;
+                    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
                 }
                 .conversation-preview:hover{
                     cursor: pointer;
