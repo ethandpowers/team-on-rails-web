@@ -1,10 +1,18 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
-import { primaryColor, accentColor } from "../../colorscheme";
+import { primaryColor, accentColor, secondaryColor, secondaryAccentColor } from "../../colorscheme";
 
 export const PrimaryButton = styled(Button)`
     background-image: linear-gradient(-180deg, ${primaryColor}, ${accentColor});
+    border: none;
+    padding: 10px 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px !important;
+    color: white;
+`
+
+export const SecondaryButton = styled(Button)`
+    background-image: linear-gradient(-180deg, ${secondaryColor}, ${secondaryAccentColor});
     border: none;
     padding: 10px 20px;
     box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px !important;
@@ -23,6 +31,6 @@ export const GreenButton = styled(Button)`
 const YellowButtonStyle = styled(Button)`
     box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
 `;
-export const YellowButton = (props:any) => {
+export const YellowButton = (props: any) => {
     return <YellowButtonStyle variant="warning" {...props} />;
 };

@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 import ElementBG from "../components/backgrounds/elementbg";
 import Waves from "../components/backgrounds/waves";
 import Alert from "../components/alert";
+import Header from "../components/header";
 
 const Signup: FC = () => {
     const [loggedInState, setLoggedInState] = React.useState(false);
@@ -40,6 +41,7 @@ const Signup: FC = () => {
             <ElementBG>
                 <Waves></Waves>
             </ElementBG>
+            <Header transparent={true} />
             <div className="signup-page">
                 <SignupForm badPassword={badPassword}></SignupForm>
             </div>

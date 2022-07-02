@@ -1,10 +1,14 @@
 import React, { FC } from "react";
+import Header from "../components/header";
 
-const Home:FC = () => {
+const Home: FC = () => {
     return (
-        <div>
-            <h1>Home</h1>
-        </div>
+        <>
+            <Header />
+            <div>
+                <h1>Home</h1>
+            </div>
+        </>
     );
 }
 

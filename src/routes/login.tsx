@@ -5,6 +5,7 @@ import LoginForm from "../components/forms/loginform";
 import ElementBG from "../components/backgrounds/elementbg";
 import FloatingSquares from "../components/backgrounds/floatingbubbles";
 import Alert from "../components/alert";
+import Header from "../components/header";
 
 const Login: FC = () => {
     const [loggedInState, setLoggedInState] = React.useState(false);
@@ -39,6 +40,7 @@ const Login: FC = () => {
             <ElementBG>
                 <FloatingSquares></FloatingSquares>
             </ElementBG>
+            <Header transparent={true} />
             <div className="signup-page">
                 <LoginForm accountnotfound={accountnotfound}></LoginForm>
             </div>
