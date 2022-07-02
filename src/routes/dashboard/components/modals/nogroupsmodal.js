@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
 import React from "react";
 import { joinGroup as joinGroupFirebase, createGroup as createGroupFirebase } from "../../../../firebase";
-import { GreenButton } from "../../../../components/buttons/custombuttons";
+import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 
 function NoGroupsModal() {
     const [create, setCreate] = React.useState(false);
@@ -65,7 +65,7 @@ function NoGroupsModal() {
                     <div>
                         {error && <div id="join-group-error-text"> Group not found</div>}
                     </div>
-                    <GreenButton type='submit' form="join-group">Join</GreenButton>
+                    <PrimaryButton type='submit' form="join-group">Join</PrimaryButton>
                 </Modal.Footer>
             </Modal>
         );
@@ -106,7 +106,7 @@ function NoGroupsModal() {
             </Modal.Body>
             <Modal.Footer id="create-footer">
                 Note: You will be the administrator of this group.
-                <GreenButton type='submit' form="create-group">Create</GreenButton>
+                <PrimaryButton type='submit' form="create-group">Create</PrimaryButton>
             </Modal.Footer>
         </Modal>);
     }
@@ -127,7 +127,7 @@ function NoGroupsModal() {
                 <Button variant="clear" onClick={() => setJoin(true)}>
                     Join Group
                 </Button>
-                <GreenButton variant="primary" onClick={() => setCreate(true)}>Create Group</GreenButton>
+                <PrimaryButton variant="primary" onClick={() => setCreate(true)}>Create Group</PrimaryButton>
             </Modal.Footer>
         </Modal>
     );

@@ -1,11 +1,14 @@
 import React, { FC, useState } from "react";
 import AccountOptionsDropdown from "./dropdowns/accountoptionsdropdown";
 import SelectGroupDropdown from "./dropdowns/selectgroupdropdown";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import styled from "styled-components";
+import { darkColor } from "../../../colorscheme";
+import Logo from '../../../assets/partial-logo.png';
+import { Navigate } from "react-router-dom";
 
 const NavBar = styled(Navbar)`
-    background-color: #2b3050;
+    background-color: ${darkColor};
 `
 
 const StyledNav = styled(Nav)`
@@ -50,6 +53,10 @@ interface DashboardHeaderProps {
 
 const DashboardHeader: FC<DashboardHeaderProps> = (props) => {
     const [copiedId, setCopiedId] = useState(false);
+    const [navHome, setNavHome] = useState(false);
+    if (navHome) {
+        return <Navigate to="/" />
+    }
     return (
         <NavBar expand="lg" variant="dark">
             <Container fluid>
@@ -57,6 +64,13 @@ const DashboardHeader: FC<DashboardHeaderProps> = (props) => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <StyledNav>
                         <HorizontalDiv>
+                            <Navbar.Brand className="clickable" onClick={() => setNavHome(true)}>
+                                <img
+                                    src={Logo}
+                                    alt="logo"
+                                    height="30"
+                                    className="d-inline-block align-top" />
+                            </Navbar.Brand>
                             <ChatLink onClick={props.toggleChat}><ChatIcon className="bi bi-chat-left-text-fill"></ChatIcon></ChatLink>
                             <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
                             <CopyId onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId); setCopiedId(true); }}>

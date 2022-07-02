@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { GreenButton } from "../../../../components/buttons/custombuttons";
+import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 import { createGroup as createGroupDB } from "../../../../firebase";
 
 function CreateGroupModal(props) {
@@ -48,7 +48,7 @@ function CreateGroupModal(props) {
             </Modal.Body>
             <Modal.Footer id="create-footer">
                 Note: You will be the administrator of this group.
-                <GreenButton type='submit' form="create-group">Create</GreenButton>
+                <PrimaryButton type='submit' form="create-group">Create</PrimaryButton>
             </Modal.Footer>
         </Modal>
     );

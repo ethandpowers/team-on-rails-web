@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { signUp } from "../../firebase";
 import { Link } from "react-router-dom";
 import { Form, Card } from "react-bootstrap";
-import { GreenButton } from "../buttons/custombuttons";
+import { PrimaryButton } from "../buttons/custombuttons";
 
 interface SignUpFormProps {
     badPassword: () => void;
@@ -72,9 +72,9 @@ const SignupForm:FC<SignUpFormProps> = (props) => {
                         <Form.Check type="checkbox" required/>
                         <label id="signup-check-label">By creating an account, you agree to the <Link to="/terms">Terms of Service</Link></label>
                         </Form.Group>
-                        <GreenButton type="submit">
+                        <PrimaryButton type="submit">
                             Sign Up
-                        </GreenButton>
+                        </PrimaryButton>
                     </Form>
                 </Card.Body>
                 <Card.Footer id="signup-form-footer">

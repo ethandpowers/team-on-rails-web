@@ -47,7 +47,7 @@ function EventDetailsModal(props) {
                 <Modal
                     show={props.showModal}
                     onHide={props.hideModal}
-                    backdrop="static"
+                    // backdrop="static"
                     keyboard={false}
                     centered
                     size="lg"

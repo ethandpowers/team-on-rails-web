@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { GreenButton } from "../../../../components/buttons/custombuttons";
+import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 import { onValue, ref } from "firebase/database";
 import { auth, database } from "../../../../firebase";
 
@@ -40,7 +40,7 @@ const Settings: FC<SettingsModalProps> = (props) => {
                 <Button variant="clear" onClick={props.hideModal}>
                     Cancel
                 </Button>
-                <GreenButton>Save</GreenButton>
+                <PrimaryButton>Save</PrimaryButton>
             </Modal.Footer>
         </Modal>
     );

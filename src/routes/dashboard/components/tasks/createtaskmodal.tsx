@@ -3,7 +3,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { createTask } from "../../../../firebase";
 import { auth } from "../../../../firebase";
 import moment from "moment";
-import { GreenButton } from "../../../../components/buttons/custombuttons";
+import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 
 interface CreateTaskModalProps {
     showModal: boolean;
@@ -43,7 +43,7 @@ const CreateTaskModal:FC<CreateTaskModalProps> = (props) => {
         <Modal
             show={props.showModal}
             onHide={props.hideModal}
-            backdrop="static"
+            // backdrop="static"
             keyboard={false}
             centered
             size="lg"
@@ -83,7 +83,7 @@ const CreateTaskModal:FC<CreateTaskModalProps> = (props) => {
                 <Button variant="clear" onClick={props.hideModal}>
                     Cancel
                 </Button>
-                <GreenButton type="submit" form="create-task-form">Create</GreenButton>
+                <PrimaryButton type="submit" form="create-task-form">Create</PrimaryButton>
             </Modal.Footer>
         </Modal>
     );

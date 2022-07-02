@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { GreenButton } from "../../../../components/buttons/custombuttons";
+import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 import { completeTask } from "../../../../firebase";
 
 interface TaskDetailsModalProps {
@@ -58,7 +58,7 @@ const TaskDetailsModal:FC<TaskDetailsModalProps> = (props) => {
                 <Modal
                     show={props.showModal}
                     onHide={props.hideModal}
-                    backdrop="static"
+                    // backdrop="static"
                     keyboard={false}
                     centered
                     size="lg"
@@ -77,7 +77,7 @@ const TaskDetailsModal:FC<TaskDetailsModalProps> = (props) => {
                         {props.task.assignedTo && props.currentUser.userId !== props.task.assignedTo.userId && `Assigned to ${props.task.assignedTo.name} by ${props.task.assignedBy.name}`}
                         {props.task.assignedTo && props.currentUser.userId === props.task.assignedTo.userId && `Assigned to you by ${props.task.assignedBy.name}`}
                         <div></div>
-                        {!props.task.completionTimeStamp && <GreenButton onClick={completeCurrentTask}><i className="bi bi-check-lg task-icon"></i>Mark Complete</GreenButton>}
+                        {!props.task.completionTimeStamp && <PrimaryButton onClick={completeCurrentTask}><i className="bi bi-check-lg task-icon"></i>Mark Complete</PrimaryButton>}
                     </Modal.Footer>}
                 </Modal>
             </>

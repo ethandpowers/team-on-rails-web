@@ -6,7 +6,7 @@ import TaskDetailsModal from "./taskdetailsmodal";
 import EditTaskModal from "./edittaskmodal";
 import TaskPreview from "./taskpreview";
 import { sortTasks } from "../../utilities"
-import { GreenButton } from "../../../../components/buttons/custombuttons";
+import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 
 function Tasks(props: any) {
     const [showCreateTaskModal, setShowCreateTaskModal] = useState<boolean>(false);
@@ -71,7 +71,7 @@ function Tasks(props: any) {
                     <Card.Body>
                         <div id="tasks-empty-body-div">
                             No tasks yet.  Create one now!
-                            <GreenButton className="no-wrap" onClick={() => { setShowCreateTaskModal(true) }}>Create Task</GreenButton>
+                            <PrimaryButton className="no-wrap" onClick={() => { setShowCreateTaskModal(true) }}>Create Task</PrimaryButton>
                         </div>
                     </Card.Body>
                 </Card>
@@ -196,7 +196,7 @@ function Tasks(props: any) {
 
                 </Tab.Container>
                 <Card.Body id="tasks-body-button">
-                    <GreenButton onClick={() => { setShowCreateTaskModal(true) }}>Create Task</GreenButton>
+                    <PrimaryButton onClick={() => { setShowCreateTaskModal(true) }}>Create Task</PrimaryButton>
                 </Card.Body>
             </Card>
         </>

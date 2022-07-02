@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { logIn } from "../../firebase";
 import { Link } from "react-router-dom";
 import { Card, Form } from "react-bootstrap";
-import { GreenButton } from "../buttons/custombuttons";
+import { PrimaryButton } from "../buttons/custombuttons";
 
 interface LoginFormProps {
     accountnotfound: () => void;
@@ -57,9 +57,9 @@ const LoginForm:FC<LoginFormProps> = (props) => {
                             <Form.Label>Password</Form.Label>
                             <Form.Control name="password" type="password" placeholder="Password" required />
                         </Form.Group>
-                        <GreenButton type="submit">
+                        <PrimaryButton type="submit">
                             Log In
-                        </GreenButton>
+                        </PrimaryButton>
                     </Form>
                 </Card.Body>
                 <Card.Footer id="login-form-footer">
