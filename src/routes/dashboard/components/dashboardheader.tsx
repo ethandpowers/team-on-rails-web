@@ -4,7 +4,7 @@ import SelectGroupDropdown from "./dropdowns/selectgroupdropdown";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import styled from "styled-components";
 import { darkColor } from "../../../colorscheme";
-import Logo from '../../../assets/partial-logo.png';
+import Logo from '../../../assets/partial_logo.png';
 import { Navigate } from "react-router-dom";
 
 const NavBar = styled(Navbar)`

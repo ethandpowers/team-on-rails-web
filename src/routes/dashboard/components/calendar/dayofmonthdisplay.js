@@ -1,7 +1,7 @@
 import React from "react";
 import { auth } from "../../../../firebase";
-import { sortTasks } from "../../utilities";
-import { isYourEvent, sortEvents } from "../../utilities";
+import { sortTasks, sortEvents, isYourEvent } from "../../utilities";
+import {primaryColor} from "../../../../colorscheme";
 
 function DayOfMonthDisplay(props) {
     const currentYear = new Date().getFullYear();
@@ -42,7 +42,7 @@ function DayOfMonthDisplay(props) {
 
                     .today{
                         // border: 1px solid #53bf00;
-                        border-bottom: 1px solid #53bf00;
+                        border-bottom: 1px solid ${primaryColor};
                     }
 
                     .calendar-display-item{
@@ -87,30 +87,6 @@ function DayOfMonthDisplay(props) {
                         </div>
                     );
                 })}
-                {/* {props.personalEvents.map((event, index) => {
-                    let date = new Date(event.dateString);
-                    if (props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()) {
-                        return (
-                            <div key={index} className={`calendar-display-item personal-event-calendar-display clickables`}>
-                                {event.title}
-                            </div>
-                        )
-                    }else{
-                        return null;
-                    }
-                })}
-                {props.events.map((event, index) => {
-                    let date = new Date(event.dateString);
-                    if (props.date.year === date.getFullYear() && props.date.month === date.getMonth() && props.date.day === date.getDate()) {
-                        return (
-                            <div key={index} className={`event-calendar-display ${isYourEvent(event) ? "your-event-calendar-display" : ""} calendar-display-item`}>
-                                {event.title}
-                            </div>
-                        );
-                    }else{
-                        return null;
-                    }
-                })} */}
                 {todaysTasks.sort(sortTasks).map((task, index) => {
                     return (
                         <div className={`${task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid) ? "your-task-calendar-display" : ""} calendar-display-item`} key={index}>

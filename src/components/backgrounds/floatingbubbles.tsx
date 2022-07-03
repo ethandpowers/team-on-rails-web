@@ -1,13 +1,13 @@
 import React from "react";
+import { darkColor, primaryColor } from "../../colorscheme";
 
 function FloatingBubbles() {
-    const colors = ["#2b3050", "#53bf00"];
     return (
         <>
             <style type="text/css">
                 {`
                 .area{
-                    background: ${colors[0]};;  
+                    background: ${darkColor};;  
                     background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  
                     width: 100%;
                     height:100vh;
@@ -31,7 +31,7 @@ function FloatingBubbles() {
                     width: 20px;
                     height: 20px;
                     background: rgba(255, 255, 255, 0.2);
-                    background-color: ${colors[1]};
+                    background-color: ${primaryColor};
                     animation: animate 25s linear infinite;
                     bottom: -150px;
                     

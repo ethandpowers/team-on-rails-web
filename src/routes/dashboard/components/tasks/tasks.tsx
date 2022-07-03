@@ -6,7 +6,8 @@ import TaskDetailsModal from "./taskdetailsmodal";
 import EditTaskModal from "./edittaskmodal";
 import TaskPreview from "./taskpreview";
 import { sortTasks } from "../../utilities"
-import { PrimaryButton } from "../../../../components/buttons/custombuttons";
+import { PrimaryButton, SecondaryButton } from "../../../../components/buttons/custombuttons";
+import { primaryColor } from "../../../../colorscheme";
 
 function Tasks(props: any) {
     const [showCreateTaskModal, setShowCreateTaskModal] = useState<boolean>(false);
@@ -91,7 +92,7 @@ function Tasks(props: any) {
                     }
 
                     .task-tab{
-                        color: #53bf00;
+                        color: ${primaryColor};
                     }
 
                     .task-tab:hover{

@@ -1,5 +1,6 @@
 import React from "react";
 import Wave from 'react-wavify'
+import { primaryColor } from "../../colorscheme";
 
 function Waves() {
     return (
@@ -16,7 +17,7 @@ function Waves() {
                     }
                 `}
             </style>
-            <Wave fill='#53bf00'
+            <Wave fill={primaryColor}
                 paused={false}
                 options={{
                     height: 20,
