@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 import { get, getDatabase, push, ref, set, update, remove } from "firebase/database";
 import { getStorage, uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
 import { sortPeople } from "./routes/dashboard/utilities";
@@ -30,6 +30,9 @@ export function loggedIn(): boolean {
 
 export async function signUp(name: string, email: string, password: string) {
     await createUserWithEmailAndPassword(auth, email, password).then(() => {
+        updateProfile(auth.currentUser, {
+            displayName: name
+        })
         set(ref(database, `users/${auth.currentUser.uid}`), {
             name,
             email,
@@ -127,7 +130,7 @@ export async function createEvent(group: Group, event: any, personalEvent: any) 
     }
 }
 
-export async function updateEvent(group: Group, newEvent: any, oldEvent:any) {
+export async function updateEvent(group: Group, newEvent: any, oldEvent: any) {
     let newDate = new Date(newEvent.dateString);
     let oldDate = new Date(oldEvent.dateString);
     if (newEvent.personalEvent) {
@@ -136,7 +139,7 @@ export async function updateEvent(group: Group, newEvent: any, oldEvent:any) {
             updateTimeStamp: Date.now(),
         });
         //if it's a different month, delete the old one
-        if(oldDate.getMonth() !== newDate.getMonth()) {
+        if (oldDate.getMonth() !== newDate.getMonth()) {
             await remove(ref(database, `users/${auth.currentUser.uid}/calendar/${oldDate.getFullYear()}/${oldDate.getMonth()}/events/${oldEvent.eventId}`));
         }
     } else {
@@ -145,7 +148,7 @@ export async function updateEvent(group: Group, newEvent: any, oldEvent:any) {
             updateTimeStamp: Date.now(),
         });
         //if it's a different month, delete the old one
-        if(oldDate.getMonth() !== newDate.getMonth()) {
+        if (oldDate.getMonth() !== newDate.getMonth()) {
             await remove(ref(database, `groups/${group.groupId}/calendar/${oldDate.getFullYear()}/${oldDate.getMonth()}/events/${oldEvent.eventId}`));
         }
     }
@@ -242,4 +245,17 @@ export async function getAllContacts(groupsAsAdmin: Group[], groupsAsMember: Gro
         contacts = [...contacts, administrator];
     }
     return contacts.filter(user => user.userId !== auth.currentUser.uid).sort(sortPeople);
+}
+
+export async function resetPasswordEmail(email: string) {
+    let res = 0;
+    await sendPasswordResetEmail(auth, email).then(() => {
+        res = 1;
+    }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        res = -1;
+    });
+    return res;
+
 }

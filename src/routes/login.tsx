@@ -9,11 +9,9 @@ import Header from "../components/header";
 
 const Login: FC = () => {
     const [loggedInState, setLoggedInState] = React.useState(false);
-    const [alertState, setAlertState] = React.useState(false);
-
-    const accountnotfound = () => {
-        setAlertState(true);
-    }
+    const [accountNotFound, setAccountNotFound] = React.useState(false);
+    const [resetPasswordAlert, setResetPasswordAlert] = React.useState(false);
+    const [invalidEmail, setInvalidEmail] = React.useState(false);
 
     auth.onAuthStateChanged((user: any) => {
         if (user && !loggedInState) {
@@ -36,13 +34,19 @@ const Login: FC = () => {
                 }
             `}
             </style>
-            {alertState && <Alert message="Incorrect email or password" />}
+            {accountNotFound && <Alert message="Incorrect email or password" />}
+            {resetPasswordAlert && <Alert type="success" message="Reset password email sent" />}
+            {invalidEmail && <Alert type="danger" message="Invalid email" />}
             <ElementBG>
                 <FloatingSquares></FloatingSquares>
             </ElementBG>
             <Header transparent={true} />
             <div className="signup-page">
-                <LoginForm accountnotfound={accountnotfound}></LoginForm>
+                <LoginForm
+                    accountnotfound={() => setAccountNotFound(true)}
+                    resetpassword={() => setResetPasswordAlert(true)}
+                    invalidEmail={() => setInvalidEmail(true)}
+                ></LoginForm>
             </div>
         </>
     );

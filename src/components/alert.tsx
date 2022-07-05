@@ -4,6 +4,7 @@ import { propTypes } from "react-bootstrap/esm/Image";
 
 interface AlertProps {
     message: string;
+    type?: "success" | "danger" | "warning" | "info";
 }
 
 const Alert:FC<AlertProps> = (props) => {
@@ -26,7 +27,7 @@ const Alert:FC<AlertProps> = (props) => {
                 `}
                 </style>
                 <div className="alert-div">
-                    <BSAlert variant="danger" onClose={() => setShow(false)} dismissible >
+                    <BSAlert variant={props.type ? props.type : "danger"} onClose={() => setShow(false)} dismissible >
                         {props.message}
                     </BSAlert>
                 </div>

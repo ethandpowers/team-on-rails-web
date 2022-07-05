@@ -1,21 +1,35 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { logIn } from "../../firebase";
 import { Link } from "react-router-dom";
 import { Card, Form } from "react-bootstrap";
 import { PrimaryButton } from "../buttons/custombuttons";
+import { resetPasswordEmail } from "../../firebase";
 
 interface LoginFormProps {
     accountnotfound: () => void;
+    resetpassword: () => void;
+    invalidEmail: () => void;
 }
 
-const LoginForm:FC<LoginFormProps> = (props) => {
-    const handleSubmit = async (event:any) => {
+const LoginForm: FC<LoginFormProps> = (props) => {
+    const [email, setEmail] = useState<string>("");
+
+    const handleSubmit = async (event: any) => {
         event.preventDefault();
         const email = event.target.email.value;
         const password = event.target.password.value;
         try { await logIn(email, password); }
         catch (error) {
             props.accountnotfound();
+        }
+    }
+
+    const resetPassword = async () => {
+        let res = await resetPasswordEmail(email);
+        if (res === 1) {
+            props.resetpassword();
+        }else{
+            props.invalidEmail();
         }
     }
     return (
@@ -50,12 +64,13 @@ const LoginForm:FC<LoginFormProps> = (props) => {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control name="email" type="email" placeholder="Enter email" required />
+                            <Form.Control name="email" type="email" placeholder="Enter email" required value={email} onChange={(event) => setEmail(event.target.value)} />
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
                             <Form.Control name="password" type="password" placeholder="Password" required />
+                            <a href="#" onClick={resetPassword}>Forgot Password?</a>
                         </Form.Group>
                         <PrimaryButton type="submit">
                             Log In

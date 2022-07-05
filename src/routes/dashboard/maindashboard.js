@@ -73,7 +73,7 @@ function MainDashboard() {
 				if (!accountLoaded) setAccountLoaded(true);
 			});
 		}
-	},[]);
+	}, []);
 
 	//event listeners that depend on data
 	const [unsubs, setUnsubs] = useState([]);
@@ -143,7 +143,6 @@ function MainDashboard() {
 		setUnsubs(newUnsubs);
 		// eslint-disable-next-line
 	}, [currentGroup, year, month]);
-
 	if (accountLoaded && groupsAsAdmin.length === 0 && groupsAsMember.length === 0) {
 		return (
 			<>
