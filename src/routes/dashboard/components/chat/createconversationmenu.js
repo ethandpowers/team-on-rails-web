@@ -8,6 +8,7 @@ function CreateConversationMenu(props) {
 
     const [recipients, setRecipients] = useState([]);
     const [yourPeople, setYourPeople] = useState([]);
+    const [loadedPeople, setLoadedPeople] = useState(false);
 
     const addRecipient = (person) => {
         //check if person is already in recipients
@@ -36,7 +37,11 @@ function CreateConversationMenu(props) {
         }
     }, [props.groupsAsAdmin, props.groupsAsMember, yourPeople.length]);
 
-    if (yourPeople.length > 0) {
+    if(loadedPeople){
+        return <Loading />
+    }else if (yourPeople.length === 0) {
+        return "You don't have any contacts";
+    }else{
         return (
             <>
                 <style>
@@ -94,9 +99,6 @@ function CreateConversationMenu(props) {
                 </div>
             </>
         )
-    }
-    else {
-        return <Loading />
     }
 }
 

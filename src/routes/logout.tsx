@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { logOut } from "../firebase";
 
-function LogOut(){
+const LogOut = () => {
     logOut();
     return (
         <Navigate to="/login" />

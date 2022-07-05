@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 
-function TermsOfService() {
+const TermsOfService = () => {
     return (
         <Container className="center-text">
             <h1>Terms of Service</h1>
