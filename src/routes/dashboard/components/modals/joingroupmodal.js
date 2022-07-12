@@ -3,16 +3,18 @@ import { Modal } from "react-bootstrap";
 import { joinGroup as joinGroupDB } from "../../../../firebase";
 import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 
-function JoinGroupModal(props) {
+function JoinGroupModal (props) {
     const [error, setError] = useState(false);
+
     const joinGroup = async (event) => {
         event.preventDefault();
         let code = event.target.code.value;
-        let joinSuccess = await joinGroupDB(code);
-        setError(!joinSuccess);
-        if (joinSuccess) {
-            props.hideModal();
-        }
+        joinGroupDB(code).then((joinSuccess) => {
+            setError(!joinSuccess);
+            if (joinSuccess) {
+                props.hideModal();
+            }
+        });
     }
     return (
         <Modal

@@ -1,9 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "firebase/auth";
 import { get, getDatabase, push, ref, set, update, remove } from "firebase/database";
 import { getStorage, uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { sortPeople } from "./routes/dashboard/utilities";
 
 const firebaseConfig = {
@@ -22,6 +23,7 @@ getAnalytics(app);
 export const auth: any = getAuth(app);
 export const database: any = getDatabase(app);
 export const storage: any = getStorage(app);
+const functions = getFunctions(app);
 
 export function loggedIn(): boolean {
     console.log(`loggedIn: ${auth.currentUser !== null}`);
@@ -29,16 +31,18 @@ export function loggedIn(): boolean {
 }
 
 export async function signUp(name: string, email: string, password: string) {
-    await createUserWithEmailAndPassword(auth, email, password).then(() => {
-        updateProfile(auth.currentUser, {
-            displayName: name
-        })
-        set(ref(database, `users/${auth.currentUser.uid}`), {
-            name,
-            email,
-            accountCreationTimeStamp: Date.now(),
-        });
-    });
+    // await createUserWithEmailAndPassword(auth, email, password).then(() => {
+    //     updateProfile(auth.currentUser, {
+    //         displayName: name
+    //     })
+    //     set(ref(database, `users/${auth.currentUser.uid}`), {
+    //         name,
+    //         email,
+    //         accountCreationTimeStamp: Date.now(),
+    //     });
+    // });
+    const createAccount = httpsCallable(functions, "createAccount");
+    createAccount({ name: name, email: email, password: password });
 }
 
 export async function logIn(email: string, password: string) {
@@ -50,23 +54,13 @@ export async function logOut() {
 }
 
 export async function joinGroup(id: string) {
-    let group = await (await get(ref(database, `groups/${id}`))).val();
-    if (group) {
-        await push(ref(database, `users/${auth.currentUser.uid}/groupsAsMember`), {
-            groupId: id,
-            name: group.name,
-            joinedTimeStamp: Date.now()
-        });
-
-        let name = await (await get(ref(database, `users/${auth.currentUser.uid}/name`))).val();
-        await push(ref(database, `groups/${id}/members`), {
-            userId: auth.currentUser.uid,
-            name: name,
-        });
-    } else {
-        return false;
-    }
-    return true;
+    const join = httpsCallable(functions, "joinGroup");
+    let success: any = false;
+    await join({ groupId: id }).then((res) => {
+        //return true if successful, false otherwise
+        success = res.data;
+    });
+    return success;
 }
 
 export async function createGroup(groupName: string) {
@@ -223,26 +217,37 @@ export async function getImageUrl(imagePath: string) {
 }
 
 export async function getAllContacts(groupsAsAdmin: Group[], groupsAsMember: Group[]): Promise<User[]> {
+    //TODO: remove duplicates from list
+    const containsUser = (arr: User[], element: User) => {
+        return arr.some(e => e.userId === element.userId);
+    }
     let contacts: User[] = [];
     for (let i = 0; i < groupsAsAdmin.length; i++) {
         let group = groupsAsAdmin[i];
         let snapshot = await get(ref(database, `groups/${group.groupId}/members`))
-        //Note: Since we only know that there is a group admin, we don;t know if any members
-        const members: Object = snapshot.val();
-        if (members) {
-            contacts = [...contacts, ...Object.values(members)];
-        }
+        //Note: Since we only know that there is a group admin, we don't know if any members
+        const members: User[] = Object.values(snapshot.val());
+
+        members.forEach((member: User) => {
+            if (!containsUser(contacts, member)) {
+                contacts.push(member);
+            }
+        });
     }
     for (let i = 0; i < groupsAsMember.length; i++) {
         let group = groupsAsMember[i];
         let memberSnapshot = await get(ref(database, `groups/${group.groupId}/members`));
         //Note: Object.values can't fail since there is at least one member, the current user
         const members: User[] = Object.values(memberSnapshot.val());
-        contacts = [...contacts, ...members];
+        members.forEach((member: User) => {
+            if (!containsUser(contacts, member)) {
+                contacts.push(member);
+            }
+        });
 
         let adminSnapshot = await get(ref(database, `groups/${group.groupId}/administrator`))
-        const administrator = adminSnapshot.val();
-        contacts = [...contacts, administrator];
+        const administrator: User = adminSnapshot.val();
+        if (!containsUser(contacts, administrator)) contacts.push(administrator);
     }
     return contacts.filter(user => user.userId !== auth.currentUser.uid).sort(sortPeople);
 }
@@ -252,8 +257,8 @@ export async function resetPasswordEmail(email: string) {
     await sendPasswordResetEmail(auth, email).then(() => {
         res = 1;
     }).catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
         res = -1;
     });
     return res;

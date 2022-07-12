@@ -2,6 +2,15 @@ import { Button, Modal } from "react-bootstrap";
 import React from "react";
 import { joinGroup as joinGroupFirebase, createGroup as createGroupFirebase } from "../../../../firebase";
 import { PrimaryButton } from "../../../../components/buttons/custombuttons";
+import { logOut } from "../../../../firebase";
+import styled from "styled-components";
+
+const IconDiv = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+`
 
 function NoGroupsModal() {
     const [create, setCreate] = React.useState(false);
@@ -25,13 +34,18 @@ function NoGroupsModal() {
         return (
             <Modal
                 show={true}
-                backdrop="static"
+                backdrop={false}
                 keyboard={false}
                 centered
                 animation={false}
             >
                 <Modal.Header>
                     <Modal.Title>Enter the group ID:</Modal.Title>
+                    <IconDiv>
+                        <Button variant="clear" onClick={logOut}>
+                            <i className="bi bi-box-arrow-in-right"></i>
+                        </Button>
+                    </IconDiv>
                 </Modal.Header>
                 <Modal.Body>
                     <form id="join-group" onSubmit={joinGroup}>
@@ -79,6 +93,11 @@ function NoGroupsModal() {
         >
             <Modal.Header>
                 <Modal.Title>What will the group be called?</Modal.Title>
+                <IconDiv>
+                    <Button variant="clear" onClick={logOut}>
+                        <i className="bi bi-box-arrow-in-right"></i>
+                    </Button>
+                </IconDiv>
             </Modal.Header>
             <Modal.Body>
                 <form id="create-group" onSubmit={createGroup}>
@@ -119,6 +138,11 @@ function NoGroupsModal() {
         >
             <Modal.Header>
                 <Modal.Title>You're not in any groups!</Modal.Title>
+                <IconDiv>
+                    <Button variant="clear" onClick={logOut}>
+                        <i className="bi bi-box-arrow-in-right"></i>
+                    </Button>
+                </IconDiv>
             </Modal.Header>
             <Modal.Body>
                 You can join an existing group or create a new one.

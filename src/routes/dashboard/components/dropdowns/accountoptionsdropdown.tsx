@@ -8,7 +8,6 @@ interface AccountOptionsDropdownProps {
     joinGroup: () => void;
     showSettings: () => void;
 }
-
 const AccountOptionsDropdown: FC<AccountOptionsDropdownProps> = (props) => {
     return (
         <>
@@ -19,7 +18,7 @@ const AccountOptionsDropdown: FC<AccountOptionsDropdownProps> = (props) => {
                     }
                 `}
             </style>
-            <NavDropdown id="account-options-dropdown" title={props.currentUser.name}>
+            <NavDropdown id="account-options-dropdown" title={props.currentUser.name} align="end">
                 <NavDropdown.Item onClick={props.createGroup}>Create Group</NavDropdown.Item>
                 <NavDropdown.Item onClick={props.joinGroup}>Join Group</NavDropdown.Item>
                 <NavDropdown.Item onClick={props.showSettings}>Settings</NavDropdown.Item>

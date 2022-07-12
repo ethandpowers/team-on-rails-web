@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { darkColor, secondaryColor } from "../colorscheme";
+import { darkColor, primaryColor } from "../colorscheme";
 import Logo from "../assets/logo.png";
 import { auth, database, logOut } from "../firebase";
 import { get, ref } from "firebase/database";
@@ -28,7 +28,7 @@ const StyledLink = styled(Nav.Link)`
     color: white;
     text-decoration: none;
     &:hover {
-        color: ${secondaryColor};
+        color: ${primaryColor};
     }
 `
 
@@ -80,7 +80,7 @@ const Header: FC<HeaderProps> = (props) => {
                             </HorizontalDiv>
                             {loggedIn ?
 
-                                <NavDropdown id="header-account-dropdown" title={name}>
+                                <NavDropdown id="header-account-dropdown" title={name} align="end">
                                     <NavDropdown.Item as={Link} to="/dashboard">Dashboard</NavDropdown.Item>
                                     <NavDropdown.Item onClick={logOut}>Log Out</NavDropdown.Item>
                                 </NavDropdown>
