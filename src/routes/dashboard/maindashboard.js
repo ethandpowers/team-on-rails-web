@@ -11,7 +11,7 @@ import JoinGroupModal from "./components/modals/joingroupmodal";
 import CreateGroupModal from "./components/modals/creategroupmodal";
 import Calendar from "./components/calendar/calendar";
 import Tasks from "./components/tasks/tasks";
-import Chat from "./components/chat/chat";
+// import Chat from "./components/chat/chat";
 
 function MainDashboard() {
 	//loading states
@@ -38,7 +38,7 @@ function MainDashboard() {
 	const [showSettings, setShowSettings] = useState(false);
 	const [showJoinGroupModal, setShowJoinGroupModal] = useState(false);
 	const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
-	const [showChat, setShowChat] = useState(false);
+	// const [showChat, setShowChat] = useState(false);
 
 	//Realtime listener for user account data
 	useEffect(() => {
@@ -186,7 +186,7 @@ function MainDashboard() {
 					showModal={showCreateGroupModal}
 					hideModal={() => setShowCreateGroupModal(false)}
 				/>
-				<Chat showChat={showChat} hideChat={() => setShowChat(false)} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} name={currentUser.name} />
+				{/* <Chat showChat={showChat} hideChat={() => setShowChat(false)} groupsAsAdmin={groupsAsAdmin} groupsAsMember={groupsAsMember} name={currentUser.name} /> */}
 				<DashboardHeader
 					currentUser={currentUser}
 					showSettings={() => setShowSettings(true)}
@@ -196,7 +196,7 @@ function MainDashboard() {
 					groupsAsMember={groupsAsMember}
 					joinGroup={() => setShowJoinGroupModal(true)}
 					createGroup={() => setShowCreateGroupModal(true)}
-					toggleChat={() => setShowChat(!showChat)}
+					// toggleChat={() => setShowChat(!showChat)}
 				/>
 
 				<div id="dashboard-main-container">

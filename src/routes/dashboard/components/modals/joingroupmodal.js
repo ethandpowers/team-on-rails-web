@@ -1,15 +1,18 @@
 import { React, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { joinGroup as joinGroupDB } from "../../../../firebase";
 import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 
-function JoinGroupModal (props) {
+function JoinGroupModal(props) {
     const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const joinGroup = async (event) => {
         event.preventDefault();
         let code = event.target.code.value;
+        setLoading(true);
         joinGroupDB(code).then((joinSuccess) => {
+            setLoading(false);
             setError(!joinSuccess);
             if (joinSuccess) {
                 props.hideModal();
@@ -28,9 +31,10 @@ function JoinGroupModal (props) {
                 <Modal.Title>Enter the group ID:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <form id="join-group" onSubmit={joinGroup} autoComplete="off">
-                    <style type="text/css">
-                        {`
+                {loading ? <Spinner animation="border" /> :
+                    <form id="join-group" onSubmit={joinGroup} autoComplete="off">
+                        <style type="text/css">
+                            {`
                             #join-group-input {
                                 width: 100%;
                                 height: 100%;
@@ -51,9 +55,10 @@ function JoinGroupModal (props) {
                                 justify-content: space-between;
                             }
                         `}
-                    </style>
-                    <input type="text" name="code" id="join-group-input" placeholder="Group ID" autoFocus />
-                </form>
+                        </style>
+                        <input type="text" name="code" id="join-group-input" placeholder="Group ID" autoFocus />
+                    </form>
+                }
             </Modal.Body>
             <Modal.Footer id="join-footer">
                 <div>

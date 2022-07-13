@@ -5,9 +5,9 @@ admin.initializeApp();
 const db = admin.database();
 
 exports.createAccount = functions.https.onCall(async (data, context) => {
-    const email = data.email;
-    const password = data.password;
-    const name = data.name;
+    const email:string = data.email;
+    const password:string = data.password;
+    const name:string = data.name;
     let user = await admin.auth().createUser({
         email: email,
         emailVerified: false,

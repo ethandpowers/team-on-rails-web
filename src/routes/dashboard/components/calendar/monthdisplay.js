@@ -1,4 +1,5 @@
 import { React } from "react";
+import { primaryColor } from "../../../../colorscheme";
 import HorizontalDivider from "../../../../components/horizontaldivider";
 import DayOfMonthDisplay from "./dayofmonthdisplay";
 
@@ -80,8 +81,8 @@ function MonthDisplay(props) {
                         height: calc(100% / 7);
                     }
 
-                    .green-hover:hover {
-                        color: #53bf00;
+                    .primary-hover:hover {
+                        color: ${primaryColor};
                     }
                     @media screen and (max-width: 1000px) {
                         #month-display-body {
@@ -100,12 +101,12 @@ function MonthDisplay(props) {
             </style>
             <div id="month-display">
                 <div id="month-display-header">
-                    <i className="green-hover clickable bi bi-caret-left-fill" onClick={previousMonth}></i>
+                    <i className="primary-hover clickable bi bi-caret-left-fill" onClick={previousMonth}></i>
                     <div id="month-over-year">
                         <h2>{months[props.month]}</h2>
                         <h5>{props.year}</h5>
                     </div>
-                    <i className="green-hover clickable bi bi-caret-right-fill" onClick={nextMonth}></i>
+                    <i className="primary-hover clickable bi bi-caret-right-fill" onClick={nextMonth}></i>
                 </div>
                 <HorizontalDivider />
                 <div id="days-of-week">

@@ -1,4 +1,4 @@
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import React from "react";
 import { joinGroup as joinGroupFirebase, createGroup as createGroupFirebase } from "../../../../firebase";
 import { PrimaryButton } from "../../../../components/buttons/custombuttons";
@@ -16,11 +16,15 @@ function NoGroupsModal() {
     const [create, setCreate] = React.useState(false);
     const [join, setJoin] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
     const joinGroup = async (event) => {
         event.preventDefault();
         let code = event.target.code.value;
+        setLoading(true);
         let joinSuccess = await joinGroupFirebase(code);
+        console.log(joinSuccess);
+        setLoading(false);
         setError(!joinSuccess);
     }
 
@@ -48,9 +52,10 @@ function NoGroupsModal() {
                     </IconDiv>
                 </Modal.Header>
                 <Modal.Body>
-                    <form id="join-group" onSubmit={joinGroup}>
-                        <style type="text/css">
-                            {`
+                    {loading ? <Spinner animation="border" /> :
+                        <form id="join-group" onSubmit={joinGroup}>
+                            <style type="text/css">
+                                {`
                             #join-group-input {
                                 width: 100%;
                                 height: 100%;
@@ -71,9 +76,10 @@ function NoGroupsModal() {
                                 justify-content: space-between;
                             }
                         `}
-                        </style>
-                        <input type="text" name="code" id="join-group-input" placeholder="Group ID" autoFocus />
-                    </form>
+                            </style>
+                            <input type="text" name="code" id="join-group-input" placeholder="Group ID" autoFocus />
+                        </form>
+                    }
                 </Modal.Body>
                 <Modal.Footer id="join-footer">
                     <div>

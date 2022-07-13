@@ -24,13 +24,13 @@ const CopyId = styled(Nav.Link)`
     color: white !important;
 `
 
-const ChatIcon = styled.i`
-    color: white;
-`
+// const ChatIcon = styled.i`
+//     color: white;
+// `
 
-const ChatLink = styled(Nav.Link)`
-    margin-right: 20px;
-`
+// const ChatLink = styled(Nav.Link)`
+//     margin-right: 20px;
+// `
 
 const HorizontalDiv = styled.div`
     @media (min-width: 1000px) {
@@ -71,7 +71,7 @@ const DashboardHeader: FC<DashboardHeaderProps> = (props) => {
                                     height="30"
                                     className="d-inline-block align-top" />
                             </Navbar.Brand>
-                            <ChatLink onClick={props.toggleChat}><ChatIcon className="bi bi-chat-left-text-fill"></ChatIcon></ChatLink>
+                            {/* <ChatLink onClick={props.toggleChat}><ChatIcon className="bi bi-chat-left-text-fill"></ChatIcon></ChatLink> */}
                             <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
                             <CopyId onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId); setCopiedId(true); }}>
                                 Group ID: {props.currentGroup.groupId} {copiedId ? <i className="bi bi-clipboard-check" /> : <i className="bi bi-clipboard" />}

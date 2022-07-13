@@ -31,18 +31,19 @@ export function loggedIn(): boolean {
 }
 
 export async function signUp(name: string, email: string, password: string) {
-    // await createUserWithEmailAndPassword(auth, email, password).then(() => {
-    //     updateProfile(auth.currentUser, {
-    //         displayName: name
-    //     })
-    //     set(ref(database, `users/${auth.currentUser.uid}`), {
-    //         name,
-    //         email,
-    //         accountCreationTimeStamp: Date.now(),
-    //     });
-    // });
-    const createAccount = httpsCallable(functions, "createAccount");
-    createAccount({ name: name, email: email, password: password });
+    await createUserWithEmailAndPassword(auth, email, password).then(() => {
+        updateProfile(auth.currentUser, {
+            displayName: name
+        })
+        set(ref(database, `users/${auth.currentUser.uid}`), {
+            name,
+            email,
+            accountCreationTimeStamp: Date.now(),
+        });
+    });
+    // const createAccount = httpsCallable(functions, "createAccount");
+    // createAccount({ name: name, email: email, password: password });
+    
 }
 
 export async function logIn(email: string, password: string) {
