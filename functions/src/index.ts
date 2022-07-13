@@ -4,27 +4,27 @@ import * as admin from "firebase-admin";
 admin.initializeApp();
 const db = admin.database();
 
-exports.createAccount = functions.https.onCall(async (data, context) => {
-    const email:string = data.email;
-    const password:string = data.password;
-    const name:string = data.name;
-    let user = await admin.auth().createUser({
-        email: email,
-        emailVerified: false,
-        password: password,
-        displayName: name,
-        disabled: false
-    })
+// exports.createAccount = functions.https.onCall(async (data, context) => {
+//     const email:string = data.email;
+//     const password:string = data.password;
+//     const name:string = data.name;
+//     let user = await admin.auth().createUser({
+//         email: email,
+//         emailVerified: false,
+//         password: password,
+//         displayName: name,
+//         disabled: false
+//     })
 
-    await db.ref(`users/${user.uid}`).set({
-        name,
-        email,
-        accountCreationTimeStamp: Date.now(),
-    });
+//     await db.ref(`users/${user.uid}`).set({
+//         name,
+//         email,
+//         accountCreationTimeStamp: Date.now(),
+//     });
 
-    functions.logger.log(`created user ${user.uid}`);
-    return user;
-});
+//     functions.logger.log(`created user ${user.uid}`);
+//     return user;
+// });
 
 exports.deleteAccount = functions.auth.user().onDelete(async (user) => {
     //TODO: remove user from all groups and conversations

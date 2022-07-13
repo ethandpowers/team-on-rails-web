@@ -1,10 +1,10 @@
 import React, { FC, useState } from "react";
-import AccountOptionsDropdown from "./dropdowns/accountoptionsdropdown";
-import SelectGroupDropdown from "./dropdowns/selectgroupdropdown";
+import AccountOptionsDropdown from "./components/dropdowns/accountoptionsdropdown";
+import SelectGroupDropdown from "./components/dropdowns/selectgroupdropdown";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import styled from "styled-components";
-import { darkColor } from "../../../colorscheme";
-import Logo from '../../../assets/partial_logo.png';
+import { darkColor } from "../../colorscheme";
+import Logo from '../../assets/partial_logo.png';
 import { Navigate } from "react-router-dom";
 
 const NavBar = styled(Navbar)`
@@ -45,7 +45,7 @@ interface DashboardHeaderProps {
     groupsAsAdmin: Group[];
     groupsAsMember: Group[];
     setCurrentGroup: (group: Group) => void;
-    toggleChat: () => void;
+    // // toggleChat: () => void;
     showSettings: () => void;
     createGroup: () => void;
     joinGroup: () => void;
