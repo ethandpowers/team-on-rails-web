@@ -9,19 +9,19 @@ function DateDetails(props) {
     const dateString = `${props.month + 1}/${props.date}/${props.year}`;
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-    const todaysTasks = props.tasks.filter(task => task.deadline && (new Date(task.deadline).toDateString() === new Date(props.year, props.month, props.date).toDateString()));
-    const todaysEvents = props.events.filter(event => {
+    let todaysTasks = props.tasks.filter(task => task.deadline && (new Date(task.deadline).toDateString() === new Date(props.year, props.month, props.date).toDateString()));
+    let todaysEvents = props.events.filter(event => {
         let date = new Date(event.dateString);
         let res = props.year === date.getFullYear() && props.month === date.getMonth() && props.date === date.getDate()
         return res;
     });
-    const todaysPersonalEvents = props.personalEvents.filter(event => {
+    let todaysPersonalEvents = props.personalEvents.filter(event => {
         let date = new Date(event.dateString);
         let res = props.year === date.getFullYear() && props.month === date.getMonth() && props.date === date.getDate()
         return res;
     })
 
-    const sortedEvents = [...todaysEvents, ...todaysPersonalEvents].sort(sortEvents);
+    let sortedEvents = [...todaysEvents, ...todaysPersonalEvents].sort(sortEvents);
 
     return (
         <>

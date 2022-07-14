@@ -23,7 +23,6 @@ function NoGroupsModal() {
         let code = event.target.code.value;
         setLoading(true);
         let joinSuccess = await joinGroupFirebase(code);
-        console.log(joinSuccess);
         setLoading(false);
         setError(!joinSuccess);
     }

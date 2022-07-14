@@ -64,7 +64,10 @@ function EventDetailsModal(props) {
                                 </>
                             }
                         </div>
-                        <Button variant="clear" className="gray-icon no-outline" onClick={() => props.editEvent(props.event)}><i className="bi bi-pencil-square"></i></Button>
+                        <Button variant="clear" className="gray-icon no-outline" onClick={() => {
+                            props.setSelectedEvent(props.event);
+                            props.editSelectedEvent();
+                        }}><i className="bi bi-pencil-square"></i></Button>
                     </Modal.Header>
                     {(props.event.description || props.event.participants) &&
                         <Modal.Body>

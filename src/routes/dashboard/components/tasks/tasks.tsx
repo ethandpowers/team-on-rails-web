@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Card, ListGroup, Tab, Nav } from "react-bootstrap";
 import { deleteTask as FBDeleteTask } from "../../../../firebase";
 import CreateTaskModal from "./createtaskmodal";
@@ -6,21 +6,33 @@ import TaskDetailsModal from "./taskdetailsmodal";
 import EditTaskModal from "./edittaskmodal";
 import TaskPreview from "./taskpreview";
 import { sortTasks } from "../../utilities"
-import { PrimaryButton, SecondaryButton } from "../../../../components/buttons/custombuttons";
+import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 import { primaryColor } from "../../../../colorscheme";
 
-function Tasks(props: any) {
+interface TasksProps {
+    tasks: any[];
+    yourTasks: any[];
+    setSelectedTask: (task: any) => void;
+    selectedTask: any;
+    currentUser: any;
+    group: any;
+    groupAdmin: any;
+    groupMembers: any[];
+    isAdmin: boolean;
+}
+
+const Tasks:FC<TasksProps> = ({group, tasks, currentUser, groupAdmin, groupMembers, isAdmin, yourTasks, }) => {
     const [showCreateTaskModal, setShowCreateTaskModal] = useState<boolean>(false);
     const [showTaskDetailsModal, setShowTaskDetailsModal] = useState<any>(null);
     const [showEditTaskModal, setShowEditTaskModal] = useState<any>(null);
-    const [selectedTask, setSelectedTask] = useState(props.tasks[0]);
+    const [selectedTask, setSelectedTask] = useState(tasks[0]);
 
     const deleteTask = (task: any) => {
-        FBDeleteTask(props.group, task);
+        FBDeleteTask(group, task);
         setShowEditTaskModal(false);
         setShowTaskDetailsModal(false); // This is to close the modal when the task is deleted
     }
-    if (props.tasks.length === 0) {
+    if (tasks.length === 0) {
         return (
             <>
                 <style type="text/css">
@@ -58,10 +70,10 @@ function Tasks(props: any) {
                 `}
                 </style>
                 <CreateTaskModal
-                    group={props.group}
-                    currentUser={props.currentUser}
-                    groupAdmin={props.groupAdmin}
-                    groupMembers={props.groupMembers}
+                    group={group}
+                    currentUser={currentUser}
+                    groupAdmin={groupAdmin}
+                    groupMembers={groupMembers}
                     showModal={showCreateTaskModal}
                     hideModal={() => setShowCreateTaskModal(false)} />
                 <Card id="tasks-container">
@@ -124,18 +136,18 @@ function Tasks(props: any) {
             </style>
 
             <CreateTaskModal
-                group={props.group}
-                currentUser={props.currentUser}
-                groupAdmin={props.groupAdmin}
-                groupMembers={props.groupMembers}
+                group={group}
+                currentUser={currentUser}
+                groupAdmin={groupAdmin}
+                groupMembers={groupMembers}
                 showModal={showCreateTaskModal}
                 hideModal={() => setShowCreateTaskModal(false)} />
             <TaskDetailsModal
                 hideModal={() => setShowTaskDetailsModal(false)}
                 showModal={showTaskDetailsModal}
-                group={props.group}
+                group={group}
                 task={selectedTask}
-                currentUser={props.currentUser}
+                currentUser={currentUser}
                 showEditTaskModal={() => { setShowEditTaskModal(true) }}
             />
             <EditTaskModal
@@ -143,13 +155,13 @@ function Tasks(props: any) {
                 showModal={showEditTaskModal}
                 updateTaskUI={setSelectedTask}
                 deleteTask={deleteTask}
-                group={props.group}
+                group={group}
                 task={selectedTask}
-                isAdmin={props.isAdmin}
-                groupAdmin={props.groupAdmin}
-                groupMembers={props.groupMembers} />
+                isAdmin={isAdmin}
+                groupAdmin={groupAdmin}
+                groupMembers={groupMembers} />
             <Card id="tasks-container">
-                <Tab.Container defaultActiveKey={props.yourTasks.length > 0 ? "your-tasks" : "all-tasks"}>
+                <Tab.Container defaultActiveKey={yourTasks.length > 0 ? "your-tasks" : "all-tasks"}>
                     <Card.Header>
                         <Nav variant="tabs">
                             <Nav.Item>
@@ -164,7 +176,7 @@ function Tasks(props: any) {
                         <Tab.Content>
                             <Tab.Pane eventKey="your-tasks">
                                 <ListGroup className="list-group-flush">
-                                    {props.yourTasks.sort(sortTasks).map((task:Task, index:number) => {
+                                    {yourTasks.sort(sortTasks).map((task:Task, index:number) => {
                                         return (
                                             <ListGroup.Item key={index} action onClick={() => {
                                                 setSelectedTask(task);
@@ -174,13 +186,13 @@ function Tasks(props: any) {
                                             </ListGroup.Item>
                                         );
                                     })}
-                                    {props.yourTasks.length === 0 && <ListGroup.Item>No tasks assigned to you yet.</ListGroup.Item>}
+                                    {yourTasks.length === 0 && <ListGroup.Item>No tasks assigned to you yet.</ListGroup.Item>}
                                 </ListGroup>
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="all-tasks">
                                 <ListGroup className="list-group-flush">
-                                    {props.tasks.sort(sortTasks).map((task:Task, index:number) => {
+                                    {tasks.sort(sortTasks).map((task:Task, index:number) => {
                                         return (
                                             <ListGroup.Item key={index} action onClick={() => {
                                                 setSelectedTask(task);

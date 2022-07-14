@@ -26,7 +26,6 @@ export const storage: any = getStorage(app);
 const functions = getFunctions(app);
 
 export function loggedIn(): boolean {
-    console.log(`loggedIn: ${auth.currentUser !== null}`);
     return auth.currentUser !== null;
 }
 
@@ -111,7 +110,7 @@ export async function createEvent(group: Group, event: any, personalEvent: any) 
             ...event,
             creationTimeStamp: Date.now(),
         });
-        await update(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${eventref.key}`), {
+        update(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${eventref.key}`), {
             eventId: eventref.key,
         });
     } else {
@@ -119,7 +118,7 @@ export async function createEvent(group: Group, event: any, personalEvent: any) 
             ...event,
             creationTimeStamp: Date.now(),
         });
-        await update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${eventref.key}`), {
+        update(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${eventref.key}`), {
             eventId: eventref.key,
         });
     }
@@ -149,12 +148,13 @@ export async function updateEvent(group: Group, newEvent: any, oldEvent: any) {
     }
 }
 
-export async function deleteEvent(group: Group, event: any) {
+export function deleteEvent(group: Group, event: any) {
+    if(!event.eventId) console.log("No eventId");
     let date = new Date(event.dateString);
     if (event.personalEvent) {
-        await remove(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
+        remove(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
     } else {
-        await remove(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
+        remove(ref(database, `groups/${group.groupId}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
     }
 }
 

@@ -97,4 +97,3 @@ exports.joinGroup = functions.https.onCall(async (data, context) => {
         return false;
     }
 });
-
