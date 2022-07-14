@@ -10,24 +10,34 @@ import { PrimaryButton } from "../../../../components/buttons/custombuttons";
 import { primaryColor } from "../../../../colorscheme";
 
 interface TasksProps {
-    tasks: any[];
-    yourTasks: any[];
-    setSelectedTask: (task: any) => void;
-    selectedTask: any;
-    currentUser: any;
+    tasks: Task[];
+    yourTasks: Task[];
+    currentUser: User;
     group: any;
     groupAdmin: any;
-    groupMembers: any[];
+    groupMembers: User[];
     isAdmin: boolean;
+}
+
+const DummyTask:Task = {
+    title: "",
+    description: "",
+    deadline: null,
+    assignedTo: null,
+    assignedBy: {name: "", userId: ""},
+    taskId: "",
+    creationTimeStamp: -1
 }
 
 const Tasks:FC<TasksProps> = ({group, tasks, currentUser, groupAdmin, groupMembers, isAdmin, yourTasks, }) => {
     const [showCreateTaskModal, setShowCreateTaskModal] = useState<boolean>(false);
-    const [showTaskDetailsModal, setShowTaskDetailsModal] = useState<any>(null);
-    const [showEditTaskModal, setShowEditTaskModal] = useState<any>(null);
-    const [selectedTask, setSelectedTask] = useState(tasks[0]);
+    const [showTaskDetailsModal, setShowTaskDetailsModal] = useState<boolean>(false);
+    const [showEditTaskModal, setShowEditTaskModal] = useState<boolean>(false);
+    const [selectedTask, setSelectedTask] = useState<Task>(DummyTask);
 
-    const deleteTask = (task: any) => {
+    const deleteTask = (task: Task) => {
+        console.log("Deleting task: ", task);
+        setSelectedTask(DummyTask);
         FBDeleteTask(group, task);
         setShowEditTaskModal(false);
         setShowTaskDetailsModal(false); // This is to close the modal when the task is deleted

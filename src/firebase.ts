@@ -93,11 +93,15 @@ export async function updateTask(group: Group, task: any) {
     });
 }
 
-export async function deleteTask(group: Group, task: any) {
-    await remove(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`));
+export async function deleteTask(group: Group, task: Task) {
+    if(!task.taskId){
+        console.error("taskId is null");
+        return;
+    }
+    remove(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`));
 }
 
-export async function completeTask(group: Group, task: any) {
+export async function completeTask(group: Group, task: Task) {
     await update(ref(database, `groups/${group.groupId}/tasks/${task.taskId}`), {
         completionTimeStamp: Date.now(),
     });
@@ -270,11 +274,12 @@ export async function resetPasswordEmail(email: string) {
 export async function inGroup(groupId: string) {
     let snapshot = await get(ref(database, `groups/${groupId}/members`));
     let data = snapshot.val();
+    let res = false
     if (data) {
         const members: User[] = Object.values(data);
         members.forEach((member: User) => {
             if (member.userId === auth.currentUser.uid) {
-                return true;
+                res = true;
             }
         });
     }
@@ -282,7 +287,8 @@ export async function inGroup(groupId: string) {
     snapshot = await get(ref(database, `groups/${groupId}/administrator`));
     data = snapshot.val();
     if(data.userId === auth.currentUser.uid) {
-        return true;
+        res = true;
     }
-    return false;
+    
+    return res;
 }

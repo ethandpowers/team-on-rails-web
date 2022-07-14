@@ -75,7 +75,7 @@ function MainDashboard() {
 		}
 	}, [accountLoaded, currentGroup, currentUser, groupsAsAdmin, groupsAsMember]);
 
-	//event listeners that depend on data
+
 	useEffect(() => {
 		if (!auth.currentUser || !currentGroup || !year || !month) return;
 
@@ -84,17 +84,19 @@ function MainDashboard() {
 			const data = snapshot.val();
 			if (!data && events.length > 0) {
 				setEvents([]);
-			} else if (data && Object.values(data).length !== events.length) {
-				Object.values(data).forEach((val)=>{
-					if(val.eventId){
-						setEvents([...events, val]);
+			} else if (data) {
+				let newEvents = [];
+				Object.values(data).forEach((val) => {
+					if (val.eventId) {
+						newEvents.push(val);
 					}
 				});
+				setEvents(newEvents);
 			}
 		});
-	}, [currentGroup, year, month, events]);
+	}, [currentGroup, year, month]);
 
-	useEffect(()=>{
+	useEffect(() => {
 		if (!auth.currentUser || !currentGroup || !year || !month) return;
 
 		//Realtime listener for personal events
@@ -102,15 +104,43 @@ function MainDashboard() {
 			const data = snapshot.val();
 			if (!data && personalEvents.length > 0) {
 				setPersonalEvents([]);
-			} else if (data && Object.values(data).length !== personalEvents.length) {
-				Object.values(data).forEach((val)=>{
-					if(val.eventId){
-						setPersonalEvents([...personalEvents, val]);
+			} else if (data) {
+				let newEvents = [];
+				Object.values(data).forEach((val) => {
+					if (val.eventId) {
+						newEvents.push(val);
 					}
 				})
+				setPersonalEvents(newEvents);
 			}
 		});
-	}, [currentGroup, year, month, personalEvents]);
+	}, [currentGroup, year, month]);
+
+	useEffect(() => {
+		// Realtime listener for tasks
+		if (!currentGroup) return;
+
+		return onValue(ref(database, `groups/${currentGroup.groupId}/tasks`), (snapshot) => {
+			const data = snapshot.val();
+			if (!data && (tasks.length > 0 || yourTasks.length > 0)) {
+				setTasks([]);
+				setYourTasks([]);
+			} else if (data) {
+				let newTasks = [];
+				let yourNewTasks = [];
+				Object.values(data).forEach((task) => {
+					if (task.userId === auth.currentUser.uid) {
+						yourNewTasks.push(task);
+						newTasks.push(task);
+					} else {
+						newTasks.push(task);
+					}
+				});
+				setTasks(newTasks);
+				setYourTasks(yourNewTasks);
+			}
+		});
+	}, [currentGroup]);
 
 	useEffect(() => {
 		//Realtime listener for group members
@@ -135,21 +165,6 @@ function MainDashboard() {
 		});
 	}, [currentGroup, groupAdministrator]);
 
-	useEffect(() => {
-		// Realtime listener for tasks
-		if (!currentGroup) return;
-
-		return onValue(ref(database, `groups/${currentGroup.groupId}/tasks`), (snapshot) => {
-			const data = snapshot.val();
-			if (!data && tasks.length !== 0) {
-				setTasks([]);
-				setYourTasks([]);
-			} else if (data && Object.values(data).length !== tasks.length) {
-				setTasks(Object.values(data));
-				setYourTasks(Object.values(data).filter(task => task.assignedTo && (task.assignedTo.userId === auth.currentUser.uid)));
-			}
-		});
-	}, [currentGroup, tasks]);
 	if (!accountLoaded || !currentGroup || !groupAdministrator) {
 		return <Loading />;
 	} else if (groupsAsAdmin.length === 0 && groupsAsMember.length === 0) {
