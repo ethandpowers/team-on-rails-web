@@ -5,7 +5,8 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import styled from "styled-components";
 import { darkColor } from "../../colorscheme";
 import Logo from '../../assets/partial_logo.png';
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
 
 const NavBar = styled(Navbar)`
     background-color: ${darkColor};
@@ -20,8 +21,11 @@ const StyledNav = styled(Nav)`
     };
 `
 
-const CopyId = styled(Nav.Link)`
+const WhiteLink = styled(Nav.Link)`
     color: white !important;
+    text-decoration: none;
+    align-self: center;
+    margin-right: 20px;
 `
 
 // const ChatIcon = styled.i`
@@ -73,9 +77,10 @@ const DashboardHeader: FC<DashboardHeaderProps> = (props) => {
                             </Navbar.Brand>
                             {/* <ChatLink onClick={props.toggleChat}><ChatIcon className="bi bi-chat-left-text-fill"></ChatIcon></ChatLink> */}
                             <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
-                            <CopyId onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId); setCopiedId(true); }}>
+                            <WhiteLink onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId); setCopiedId(true); }}>
                                 Group ID: {props.currentGroup.groupId} {copiedId ? <i className="bi bi-clipboard-check" /> : <i className="bi bi-clipboard" />}
-                            </CopyId>
+                            </WhiteLink>
+                            <WhiteLink as={Link} to={`schedule/${props.currentGroup.groupId}`}>Schedule</WhiteLink>
                         </HorizontalDiv>
                         <AccountOptionsDropdown currentUser={props.currentUser} showSettings={props.showSettings} joinGroup={props.joinGroup} createGroup={props.createGroup}></AccountOptionsDropdown>
                     </StyledNav>

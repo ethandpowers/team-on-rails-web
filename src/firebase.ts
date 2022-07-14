@@ -42,7 +42,7 @@ export async function signUp(name: string, email: string, password: string) {
     });
     // const createAccount = httpsCallable(functions, "createAccount");
     // createAccount({ name: name, email: email, password: password });
-    
+
 }
 
 export async function logIn(email: string, password: string) {
@@ -149,7 +149,7 @@ export async function updateEvent(group: Group, newEvent: any, oldEvent: any) {
 }
 
 export function deleteEvent(group: Group, event: any) {
-    if(!event.eventId) console.log("No eventId");
+    if (!event.eventId) console.log("No eventId");
     let date = new Date(event.dateString);
     if (event.personalEvent) {
         remove(ref(database, `users/${auth.currentUser.uid}/calendar/${date.getFullYear()}/${date.getMonth()}/events/${event.eventId}`));
@@ -264,4 +264,25 @@ export async function resetPasswordEmail(email: string) {
     });
     return res;
 
+}
+
+//check if user is in group as member or admin
+export async function inGroup(groupId: string) {
+    let snapshot = await get(ref(database, `groups/${groupId}/members`));
+    let data = snapshot.val();
+    if (data) {
+        const members: User[] = Object.values(data);
+        members.forEach((member: User) => {
+            if (member.userId === auth.currentUser.uid) {
+                return true;
+            }
+        });
+    }
+
+    snapshot = await get(ref(database, `groups/${groupId}/administrator`));
+    data = snapshot.val();
+    if(data.userId === auth.currentUser.uid) {
+        return true;
+    }
+    return false;
 }
