@@ -1,0 +1,32 @@
+[debug] [2022-07-15T17:14:27.658Z] ----------------------------------------------------------------------
+[debug] [2022-07-15T17:14:27.659Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2022-07-15T17:14:27.659Z] CLI Version:   11.2.2
+[debug] [2022-07-15T17:14:27.659Z] Platform:      darwin
+[debug] [2022-07-15T17:14:27.659Z] Node Version:  v16.15.1
+[debug] [2022-07-15T17:14:27.661Z] Time:          Fri Jul 15 2022 13:14:27 GMT-0400 (Eastern Daylight Time)
+[debug] [2022-07-15T17:14:27.661Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-07-15T17:14:27.689Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-07-15T17:14:27.689Z] > authorizing via signed-in user (ethandpowers@gmail.com)
+[debug] [2022-07-15T17:14:27.689Z] [iam] checking project team-app-dev-6391e for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-07-15T17:14:27.690Z] > refreshing access token with scopes: []
+[debug] [2022-07-15T17:14:27.691Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2022-07-15T17:14:27.691Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-07-15T17:14:27.804Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2022-07-15T17:14:27.804Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-07-15T17:14:27.843Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/team-app-dev-6391e:testIamPermissions [none]
+[debug] [2022-07-15T17:14:27.843Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/team-app-dev-6391e:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-07-15T17:14:27.977Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/team-app-dev-6391e:testIamPermissions 200
+[debug] [2022-07-15T17:14:27.977Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/team-app-dev-6391e:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-07-15T17:14:27.978Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/team-app-dev-6391e/serviceAccounts/team-app-dev-6391e@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2022-07-15T17:14:27.978Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/team-app-dev-6391e/serviceAccounts/team-app-dev-6391e@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2022-07-15T17:14:28.125Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/team-app-dev-6391e/serviceAccounts/team-app-dev-6391e@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2022-07-15T17:14:28.125Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/team-app-dev-6391e/serviceAccounts/team-app-dev-6391e@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2022-07-15T17:14:28.127Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/team-app-dev-6391e [none]
+[debug] [2022-07-15T17:14:28.344Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/team-app-dev-6391e 200
+[debug] [2022-07-15T17:14:28.344Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/team-app-dev-6391e {"projectId":"team-app-dev-6391e","projectNumber":"97157440240","displayName":"team-on-rails-dev","name":"projects/team-app-dev-6391e","resources":{"hostingSite":"team-app-dev-6391e","realtimeDatabaseInstance":"team-app-dev-6391e-default-rtdb","storageBucket":"team-app-dev-6391e.appspot.com","locationId":"us-central"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'team-app-dev-6391e'...
+[info] 
+[info] i  deploying functions, hosting 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run build

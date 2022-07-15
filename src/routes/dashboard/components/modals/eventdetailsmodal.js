@@ -35,6 +35,8 @@ function EventDetailsModal(props) {
 
                 .participant-chip{
                     margin-right: 10px;
+                    margin-bottom: 5px;
+                    margin-top: 5px;
                 }
 
                 @media screen and (max-width: 1000px) {
