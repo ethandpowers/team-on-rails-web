@@ -77,10 +77,10 @@ const DashboardHeader: FC<DashboardHeaderProps> = (props) => {
                             </Navbar.Brand>
                             {/* <ChatLink onClick={props.toggleChat}><ChatIcon className="bi bi-chat-left-text-fill"></ChatIcon></ChatLink> */}
                             <SelectGroupDropdown currentGroup={props.currentGroup} groupsAsAdmin={props.groupsAsAdmin} groupsAsMember={props.groupsAsMember} setCurrentGroup={props.setCurrentGroup} />
+                            <WhiteLink as={Link} to={`schedule/${props.currentGroup.groupId}`}>Schedule</WhiteLink>
                             <WhiteLink onClick={() => { navigator.clipboard.writeText(props.currentGroup.groupId); setCopiedId(true); }}>
                                 Group ID: {props.currentGroup.groupId} {copiedId ? <i className="bi bi-clipboard-check" /> : <i className="bi bi-clipboard" />}
                             </WhiteLink>
-                            <WhiteLink as={Link} to={`schedule/${props.currentGroup.groupId}`}>Schedule</WhiteLink>
                         </HorizontalDiv>
                         <AccountOptionsDropdown currentUser={props.currentUser} showSettings={props.showSettings} joinGroup={props.joinGroup} createGroup={props.createGroup}></AccountOptionsDropdown>
                     </StyledNav>

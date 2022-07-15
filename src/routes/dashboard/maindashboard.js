@@ -82,7 +82,7 @@ function MainDashboard() {
 		//Realtime listener for group events
 		return onValue(ref(database, `groups/${currentGroup.groupId}/calendar/${year}/${month}/events`), (snapshot) => {
 			const data = snapshot.val();
-			if (!data && events.length > 0) {
+			if (!data) {
 				setEvents([]);
 			} else if (data) {
 				let newEvents = [];
@@ -102,7 +102,7 @@ function MainDashboard() {
 		//Realtime listener for personal events
 		return onValue(ref(database, `users/${auth.currentUser.uid}/calendar/${year}/${month}/events`), (snapshot) => {
 			const data = snapshot.val();
-			if (!data && personalEvents.length > 0) {
+			if (!data) {
 				setPersonalEvents([]);
 			} else if (data) {
 				let newEvents = [];
@@ -122,7 +122,7 @@ function MainDashboard() {
 
 		return onValue(ref(database, `groups/${currentGroup.groupId}/tasks`), (snapshot) => {
 			const data = snapshot.val();
-			if (!data && (tasks.length > 0 || yourTasks.length > 0)) {
+			if (!data) {
 				setTasks([]);
 				setYourTasks([]);
 			} else if (data) {
@@ -165,7 +165,7 @@ function MainDashboard() {
 		});
 	}, [currentGroup, groupAdministrator]);
 
-	if (!accountLoaded || !currentGroup || !groupAdministrator) {
+	if (!accountLoaded) {
 		return <Loading />;
 	} else if (groupsAsAdmin.length === 0 && groupsAsMember.length === 0) {
 		return (
@@ -176,7 +176,7 @@ function MainDashboard() {
 				<NoGroupsModal></NoGroupsModal>
 			</>
 		);
-	} else {
+	} else if(currentGroup && groupAdministrator){
 		return (
 			<>
 				<style type="text/css">

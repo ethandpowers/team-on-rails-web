@@ -1,12 +1,16 @@
 import React, { FC } from "react";
-import { Card, ListGroup } from "react-bootstrap";
+import { Card, ListGroup, Popover, OverlayTrigger } from "react-bootstrap";
+import MemberAvailability from "./memberavailability";
 
 interface MemberListProps {
     members: User[];
     admin: User;
+    groupId: string;
 }
 
 const MemberList: FC<MemberListProps> = (props) => {
+    const groupMembers = [props.admin, ...props.members];
+    const [showMember, setShowMember] = React.useState("");
     return (
         <>
             <style>
@@ -15,38 +19,31 @@ const MemberList: FC<MemberListProps> = (props) => {
                     display: flex;
                     height: 100%;
                     margin-right: 10px;
+                    overflow-y: auto;
                 }
-
-                #member-list-body{
-                    display: flex;
-                    flex-direction: column;
-                    width: 100%;
-                    height: 100%;
-                }
-
-                @media screen and (max-width: 1000px) {
-                    #calendar-body {
-                        flex-direction: column;
+                
+                @media (max-width: 1000px) {
+                    #main-member-list {
+                        margin-right: 0;
                     }
                 }
             `}
             </style>
             <Card id="main-member-list">
-                <Card.Header>Members</Card.Header>
-                <Card.Body id="member-list-body">
-                    <ListGroup variant="flush">
-                        <ListGroup.Item>
-                            {props.admin.name}
-                        </ListGroup.Item>
-                        {props.members.map((member) => {
-                            return (
-                                <ListGroup.Item key={member.userId}>
-                                    {member.name}
-                                </ListGroup.Item>
-                            );
-                        })}
-                    </ListGroup>
-                </Card.Body>
+                <Card.Header>Availability</Card.Header>
+                <ListGroup variant="flush">
+                    {groupMembers.map((member) => {
+                        return (
+                            <MemberAvailability
+                                key={member.userId}
+                                member={member}
+                                showMember={showMember}
+                                setShowMember={setShowMember}
+                                groupId={props.groupId}
+                            />
+                        );
+                    })}
+                </ListGroup>
             </Card>
         </>
     );

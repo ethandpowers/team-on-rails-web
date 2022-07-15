@@ -18,6 +18,10 @@ const TermsOfService = () => {
                 we are not responsible for the actions of the perpetrator, nor are we responsible for any damages
                 caused by the actions of the perpetrator.
             </p>
+            <h2>Software Bugs and Malfuctions</h2>
+            <p>
+                We do not guarantee the accuracy of the software, nor do we garuntee that it is free of bugs or issues.
+            </p>
         </Container>
     );
 }

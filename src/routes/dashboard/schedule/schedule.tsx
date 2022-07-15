@@ -5,6 +5,8 @@ import Loading from "../../../components/loading";
 import { database, auth, inGroup } from "../../../firebase";
 import MemberList from "./memberlist";
 import ScheduleHeader from "./scheduleheader";
+import WeeklySchedule from "./weeklyschedule";
+import YourAvailability from "./youravailability";
 
 const Schedule: FC = () => {
     const navigate = useNavigate();
@@ -57,23 +59,22 @@ const Schedule: FC = () => {
     }, [groupId]);
 
 
-    if (authorized && admin) {
+    if (authorized && admin && groupId) {
         return (
             <>
                 <style type="text/css">
                     {`
-					#schedule-container {
-						height: calc(100vh - 60px);
+					#schedule-horizontal-container {
+						height: calc(100vh - 75px);
                         flex: 1 1 auto;
                         display: flex;
                         flex-direction: row;
-                        width: 100%;
-                        padding: 10px;
                         justify-content: space-between;
+                        margin: 10px;
                     }
 
                     @media screen and (max-width: 1000px) {
-                        #schedule-container {
+                        #schedule-horizontal-container {
                             flex-direction: column; 
 							height: auto;
                         }
@@ -81,9 +82,11 @@ const Schedule: FC = () => {
         		`}
                 </style>
                 <ScheduleHeader />
-                <div id="schedule-container">
-                    {auth.currentUser.uid === admin.userId && <MemberList admin={admin} members={groupMembers}/>}
+                <div id="schedule-horizontal-container">
+                    {auth.currentUser.uid === admin.userId && <MemberList groupId={groupId} admin={admin} members={groupMembers}/>}
+                    <WeeklySchedule groupId={groupId}/>
                 </div>
+                <YourAvailability groupId={groupId}/>
             </>
         );
     }else{

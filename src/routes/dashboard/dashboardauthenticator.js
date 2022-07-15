@@ -10,9 +10,7 @@ function DashboardAuthenticator() {
     const [loaded, setLoaded] = React.useState(false);
 
     auth.onAuthStateChanged(user => {
-        if (!loaded) {
             setLoaded(true);
-        }
         if (user) {
             setLoggedIn(true);
         } else {

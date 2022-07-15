@@ -36,7 +36,6 @@ const Tasks:FC<TasksProps> = ({group, tasks, currentUser, groupAdmin, groupMembe
     const [selectedTask, setSelectedTask] = useState<Task>(DummyTask);
 
     const deleteTask = (task: Task) => {
-        console.log("Deleting task: ", task);
         setSelectedTask(DummyTask);
         FBDeleteTask(group, task);
         setShowEditTaskModal(false);

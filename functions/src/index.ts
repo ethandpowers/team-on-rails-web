@@ -67,7 +67,7 @@ exports.joinGroup = functions.https.onCall(async (data, context) => {
             //must retrieve the group name from the database
             const groupName: string = (await db.ref(`groups/${groupId}/name`).get()).val();
             const userId = context.auth.uid;
-            const displayName = context.auth.token.name || null;
+            const displayName = (await admin.auth().getUser(userId)).displayName;
             if (!displayName) {
                 functions.logger.error(`user ${userId} has no display name`);
                 return;
