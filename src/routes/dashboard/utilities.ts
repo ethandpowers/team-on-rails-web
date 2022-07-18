@@ -64,3 +64,5 @@ export const sortPeople = (a: User, b: User): number => {
         return 0;
     }
 }
+
+export const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

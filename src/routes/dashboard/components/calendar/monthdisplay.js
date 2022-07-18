@@ -2,10 +2,10 @@ import { React } from "react";
 import { primaryColor } from "../../../../colorscheme";
 import HorizontalDivider from "../../../../components/horizontaldivider";
 import DayOfMonthDisplay from "./dayofmonthdisplay";
+import { days } from "../../utilities"
 
 function MonthDisplay(props) {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const rows = (new Date(props.year, props.month, 0).getDay() + 1) % 7 < 5 || new Date(props.year, props.month + 1, 0).getDate() < 31 ? "5" : "6";
 
     const nextMonth = () => {

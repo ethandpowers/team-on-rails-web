@@ -18,8 +18,11 @@ const MemberList: FC<MemberListProps> = (props) => {
                 #main-member-list {
                     display: flex;
                     height: 100%;
+                    max-width: 30%;
                     margin-right: 10px;
                     overflow-y: auto;
+                    overflow-x: hidden;
+                    text-overflow: ellipsis;
                 }
                 
                 @media (max-width: 1000px) {

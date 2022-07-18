@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { darkColor } from "../../../colorscheme";
+import { darkColor, primaryColor } from "../../../colorscheme";
 
 const NavBar = styled(Navbar)`
     background-color: ${darkColor};
@@ -28,9 +28,23 @@ const HorizontalDiv = styled.div`
 
 const WhiteIcon = styled.i`
     color: white;
+    &:hover{
+        color: ${primaryColor};
+    }
 `
 
-const ScheduleHeader:FC = () => {
+const WhiteLink = styled(Nav.Link)`
+    color: white !important;
+    text-decoration: none;
+    align-self: center;
+    margin-right: 20px;
+`
+
+interface ScheduleHeaderProps {
+    showYourAvailability: () => void;
+}
+
+const ScheduleHeader: FC<ScheduleHeaderProps> = (props) => {
     const navigate = useNavigate();
     return (
         <NavBar expand="lg" variant="dark">
@@ -39,9 +53,9 @@ const ScheduleHeader:FC = () => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <StyledNav>
                         <HorizontalDiv>
-                        <WhiteIcon className="bi bi-arrow-left clickable" onClick={()=>navigate("/dashboard")}></WhiteIcon>
-                            
+                            <WhiteIcon className="bi bi-arrow-left clickable" onClick={() => navigate("/dashboard")}></WhiteIcon>
                         </HorizontalDiv>
+                        <WhiteLink onClick={props.showYourAvailability}>Your Availability</WhiteLink>
                     </StyledNav>
                 </Navbar.Collapse>
             </Container>

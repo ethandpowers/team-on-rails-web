@@ -6,7 +6,7 @@ import { database, auth, inGroup } from "../../../firebase";
 import MemberList from "./memberlist";
 import ScheduleHeader from "./scheduleheader";
 import WeeklySchedule from "./weeklyschedule";
-import YourAvailability from "./youravailability";
+import YourAvailabilityModal from "./youravailabilitymodal";
 
 const Schedule: FC = () => {
     const navigate = useNavigate();
@@ -14,6 +14,7 @@ const Schedule: FC = () => {
     const [authorized, setAuthorized] = useState(false);
     const [admin, setAdmin] = useState<User | null>(null);
     const [groupMembers, setGroupMembers] = useState<User[]>([]);
+    const [showYourAvailabilityModal, setShowYourAvailabilityModal] = useState<boolean>(false);
 
 
     useEffect(() => {
@@ -31,6 +32,7 @@ const Schedule: FC = () => {
 
 
     useEffect(() => {
+        //get schedule data from firebase
         return onValue(ref(database, `groups/${groupId}/schedule`), (snapshot) => {
             const data = snapshot.val();
         });
@@ -81,12 +83,16 @@ const Schedule: FC = () => {
                     }
         		`}
                 </style>
-                <ScheduleHeader />
+                <YourAvailabilityModal
+                groupId={groupId}
+                show={showYourAvailabilityModal}
+                setShow={setShowYourAvailabilityModal}
+                />
+                <ScheduleHeader showYourAvailability={()=>setShowYourAvailabilityModal(true)}/>
                 <div id="schedule-horizontal-container">
                     {auth.currentUser.uid === admin.userId && <MemberList groupId={groupId} admin={admin} members={groupMembers}/>}
                     <WeeklySchedule groupId={groupId}/>
                 </div>
-                <YourAvailability groupId={groupId}/>
             </>
         );
     }else{

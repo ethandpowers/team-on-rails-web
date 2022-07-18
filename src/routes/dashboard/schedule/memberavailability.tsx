@@ -1,6 +1,7 @@
 import { onValue, ref } from "firebase/database";
 import React, { FC, useEffect } from "react";
 import { ListGroup, OverlayTrigger, Popover } from "react-bootstrap";
+import { primaryColor } from "../../../colorscheme";
 import { database } from "../../../firebase";
 
 interface MemberAvailabilityProps {
@@ -22,31 +23,43 @@ const MemberAvailability: FC<MemberAvailabilityProps> = ({ member, showMember, s
     }, []);
 
     return (
-        <OverlayTrigger
-            key={member.userId}
-            placement="right"
-            trigger="click"
-            show={showMember === member.userId}
-            overlay={
-                <Popover id="popover-basic">
-                    <Popover.Header as="h3">{member.name} Availability</Popover.Header>
-                    <Popover.Body>
-                        And here's some <strong>amazing</strong> content. It's very engaging.
-                        right?
-                    </Popover.Body>
-                </Popover>
-            }>
-            <ListGroup.Item action onClick={() => {
-                if (showMember === member.userId) {
-                    setShowMember("");
-                } else {
-                    setShowMember(member.userId);
+        <>
+            <style>
+                {`
+                .selected-member-availability {
+                    color: ${primaryColor} !important;
                 }
-            }
-            }>
-                {member.name}
-            </ListGroup.Item>
-        </OverlayTrigger>
+            `}
+            </style>
+            <OverlayTrigger
+                key={member.userId}
+                placement="right"
+                trigger="click"
+                show={showMember === member.userId}
+                overlay={
+                    <Popover id="popover-basic">
+                        <Popover.Header as="h3">{member.name} Availability</Popover.Header>
+                        <Popover.Body>
+                            And here's some <strong>amazing</strong> content. It's very engaging.
+                            right?
+                        </Popover.Body>
+                    </Popover>
+                }>
+                <ListGroup.Item
+                    action
+                    className={showMember === member.userId ? "selected-member-availability" : ""}
+                    onClick={() => {
+                        if (showMember === member.userId) {
+                            setShowMember("");
+                        } else {
+                            setShowMember(member.userId);
+                        }
+                    }
+                    }>
+                    {member.name}
+                </ListGroup.Item>
+            </OverlayTrigger>
+        </>
     );
 }
 
