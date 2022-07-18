@@ -19,3 +19,8 @@ interface Task{
     completionTimeStamp?: number;
     taskId: string;
 }
+
+interface TimeBlock{
+    start:string;
+    end:string;
+}

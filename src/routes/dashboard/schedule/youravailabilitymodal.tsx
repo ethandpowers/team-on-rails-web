@@ -1,15 +1,17 @@
 import { onValue, ref } from "firebase/database";
 import React, { FC, useEffect } from "react";
-import { Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import styled from "styled-components";
+import HorizontalDivider from "../../../components/horizontaldivider";
 import VerticalDivider from "../../../components/verticaldivider";
 import { auth, database } from "../../../firebase";
 import { days } from "../utilities";
+import TimeBlockSelector from "./timeblockselector";
 
-const HorizontalBody = styled(Modal.Body)`
+const HorizontalDiv = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    width: 100%;
 `
 
 interface YourAvailabilityModalProps {
@@ -39,14 +41,14 @@ const YourAvailabilityModal: FC<YourAvailabilityModalProps> = ({ groupId, show, 
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        flex-grow: 1;
+                        width: 100%;
                     }
 
                     #specific-availability-form{
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        flex-grow: 1;
+                        width: 100%;
                     }
                 `}
             </style>
@@ -54,15 +56,27 @@ const YourAvailabilityModal: FC<YourAvailabilityModalProps> = ({ groupId, show, 
                 <Modal.Header closeButton>
                     <Modal.Title>Your Availability</Modal.Title>
                 </Modal.Header>
-                <HorizontalBody>
-                    <div id="general-availability-form">
-                        <h5>General Availability</h5>
-                    </div>
-                    <VerticalDivider />
-                    <div id="specific-availability-form">
-                        <h5>Specific Availability</h5>
-                    </div>
-                </HorizontalBody>
+                <Modal.Body>
+                    <HorizontalDiv>
+                        <div id="general-availability-form">
+                            <h5>General Availability</h5>
+                            {days.map((day, index) => {
+                                return (
+                                    <div key={index}>
+                                        {day}
+                                        <TimeBlockSelector />
+                                        <Button variant="primary">New Time Block</Button>
+                                        <HorizontalDivider />
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        <VerticalDivider />
+                        <div id="specific-availability-form">
+                            <h5>Specific Availability</h5>
+                        </div>
+                    </HorizontalDiv>
+                </Modal.Body>
             </Modal>
         </>
     );
