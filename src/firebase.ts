@@ -292,3 +292,8 @@ export async function inGroup(groupId: string) {
     
     return res;
 }
+
+export async function saveGeneralAvailability(groupId:string, availability: Availability) {
+    console.log(availability)
+    // await update(ref(database, `groups/${groupId}/availability/${auth.currentUser.uid}`), availability);
+}

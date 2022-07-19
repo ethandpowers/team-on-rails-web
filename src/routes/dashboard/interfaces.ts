@@ -9,7 +9,7 @@ interface User {
     name: string;
 }
 
-interface Task{
+interface Task {
     title: string;
     description: string | null;
     deadline: string | null;
@@ -20,7 +20,17 @@ interface Task{
     taskId: string;
 }
 
-interface TimeBlock{
-    start:string;
-    end:string;
+interface TimeBlock {
+    start: string;
+    end: string;
+}
+
+interface Availability {
+    0: TimeBlock[];
+    1: TimeBlock[];
+    2: TimeBlock[];
+    3: TimeBlock[];
+    4: TimeBlock[];
+    5: TimeBlock[];
+    6: TimeBlock[];
 }

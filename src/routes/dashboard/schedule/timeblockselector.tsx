@@ -11,14 +11,22 @@ const HorizontalDiv = styled.div`
 `
 
 const TimePicker = styled(Form.Control)`
-    margin: 4px;
+    margin: 8px;
 `
 
-const TimeBlockSelector: FC = () => {
-    const [timeBlock, setTimeBlock] = React.useState<TimeBlock>({ start: '', end: '' });
+interface TimeBlockSelectorProps {
+    timeBlock: TimeBlock;
+    setTimeBlock: (timeBlock: TimeBlock) => void;
+}
+
+const TimeBlockSelector: FC<TimeBlockSelectorProps> = ({timeBlock, setTimeBlock}) => {
     return (
         <HorizontalDiv>
-            From <TimePicker type="time" /> to <TimePicker type="time" />
+            From <TimePicker type="time" value={timeBlock.start} onChange={(event:any)=>{
+                setTimeBlock({ ...timeBlock, start: event.target.value });
+            }}/> to <TimePicker value={timeBlock.end} type="time" onChange={(event:any)=>{
+                setTimeBlock({ ...timeBlock, end: event.target.value });
+            }}/>
         </HorizontalDiv>
     );
 }

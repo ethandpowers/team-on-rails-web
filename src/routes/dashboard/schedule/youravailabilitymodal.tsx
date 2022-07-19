@@ -1,10 +1,9 @@
 import { onValue, ref } from "firebase/database";
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styled from "styled-components";
 import HorizontalDivider from "../../../components/horizontaldivider";
-import VerticalDivider from "../../../components/verticaldivider";
-import { auth, database } from "../../../firebase";
+import { auth, database, saveGeneralAvailability } from "../../../firebase";
 import { days } from "../utilities";
 import TimeBlockSelector from "./timeblockselector";
 
@@ -12,6 +11,29 @@ const HorizontalDiv = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
+    justify-content: center;
+`
+
+const SpacedDiv = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+`
+
+const CustomSelect = styled(Form.Select)`
+    margin: 8px;
+`
+
+const RightAlignDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+`
+
+const ButtonWithMargin = styled(Button)`
+    margin: 8px;
 `
 
 interface YourAvailabilityModalProps {
@@ -20,8 +42,24 @@ interface YourAvailabilityModalProps {
     setShow: (show: boolean) => void;
 }
 
+const BlankAvailability: Availability = {
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+}
+
+const BlankTimeBlock: TimeBlock = {
+    start: "",
+    end: "",
+}
+
+type key = keyof Availability;
 const YourAvailabilityModal: FC<YourAvailabilityModalProps> = ({ groupId, show, setShow }) => {
-    const [availability, setAvailability] = React.useState<any>(null);
+    const [availability, setAvailability] = useState<Availability>(BlankAvailability);
 
     useEffect(() => {
         //get user availability
@@ -60,18 +98,52 @@ const YourAvailabilityModal: FC<YourAvailabilityModalProps> = ({ groupId, show, 
                     <HorizontalDiv>
                         <div id="general-availability-form">
                             <h5>General Availability</h5>
-                            {days.map((day, index) => {
-                                return (
-                                    <div key={index}>
-                                        {day}
-                                        <TimeBlockSelector />
-                                        <Button variant="primary">New Time Block</Button>
-                                        <HorizontalDivider />
-                                    </div>
-                                )
-                            })}
+                            <div>
+                                {days.map((day, index) => {
+                                    return (
+                                        <div key={index}>
+                                            <SpacedDiv>
+                                                <label>{day}</label>
+                                                <CustomSelect onChange={(event: any) => {
+                                                    if (event.target.value === "Unavailable") {
+                                                        setAvailability({ ...availability, [index]: [] });
+                                                    } else {
+                                                        setAvailability({ ...availability, [index]: [BlankTimeBlock] });
+                                                    }
+                                                }}>
+                                                    <option>Unavailable</option>
+                                                    <option>Available</option>
+                                                </CustomSelect>
+                                            </SpacedDiv>
+                                            {availability[index as key].length > 0 ?
+                                                <RightAlignDiv>
+                                                    {availability[index as key].map((timeBlock, i) => {
+                                                        return (
+                                                            <div key={i}>
+                                                                <TimeBlockSelector timeBlock={timeBlock} setTimeBlock={(timeBlock) => {
+                                                                    setAvailability(()=>{
+                                                                        const newAvailability = {...availability};
+                                                                        newAvailability[index as key][i] = timeBlock;
+                                                                        return newAvailability;
+                                                                    });
+                                                                }} />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                    <ButtonWithMargin size="sm" variant="primary" onClick={() => {
+                                                        setAvailability({ ...availability, [index as key]: [...availability[index as key], BlankTimeBlock] });
+                                                    }}>New Time Block</ButtonWithMargin>
+                                                </RightAlignDiv> : null
+                                            }
+                                            <HorizontalDivider />
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                            <Button variant="primary" onClick={async () => {
+                                await saveGeneralAvailability(groupId, availability);
+                            }}>Save</Button>
                         </div>
-                        <VerticalDivider />
                         <div id="specific-availability-form">
                             <h5>Specific Availability</h5>
                         </div>
