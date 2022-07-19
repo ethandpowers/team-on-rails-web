@@ -1,8 +1,9 @@
 import { onValue, ref } from "firebase/database";
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { ListGroup, OverlayTrigger, Popover } from "react-bootstrap";
 import { primaryColor } from "../../../colorscheme";
 import { database } from "../../../firebase";
+import { BlankWeeklyAvailability, isBlankAvailability, WeeklyAvailabilityFromDb } from "../utilities";
 
 interface MemberAvailabilityProps {
     groupId: string;
@@ -12,12 +13,15 @@ interface MemberAvailabilityProps {
 }
 
 const MemberAvailability: FC<MemberAvailabilityProps> = ({ member, showMember, setShowMember, groupId }) => {
+    const [generalAvailability, setGeneralAvailability] = useState<WeeklyAvailability>(BlankWeeklyAvailability);
 
     useEffect(() => {
-        return onValue(ref(database, `groups/${groupId}/availability/${member.userId}`), (snapshot) => {
+        return onValue(ref(database, `groups/${groupId}/availability/${member.userId}/general`), (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                console.log(data);
+                setGeneralAvailability(WeeklyAvailabilityFromDb(data));
+            }else{
+                setGeneralAvailability(BlankWeeklyAvailability);
             }
         });
     }, []);
@@ -40,8 +44,12 @@ const MemberAvailability: FC<MemberAvailabilityProps> = ({ member, showMember, s
                     <Popover id="popover-basic">
                         <Popover.Header as="h3">{member.name} Availability</Popover.Header>
                         <Popover.Body>
-                            And here's some <strong>amazing</strong> content. It's very engaging.
-                            right?
+                            {isBlankAvailability(generalAvailability) ? `${member.name} does not have any availability.` :
+                                <>
+                                    <h5>General Availability</h5>
+                                    {}
+                                </>
+                            }
                         </Popover.Body>
                     </Popover>
                 }>
@@ -54,8 +62,7 @@ const MemberAvailability: FC<MemberAvailabilityProps> = ({ member, showMember, s
                         } else {
                             setShowMember(member.userId);
                         }
-                    }
-                    }>
+                    }}>
                     {member.name}
                 </ListGroup.Item>
             </OverlayTrigger>

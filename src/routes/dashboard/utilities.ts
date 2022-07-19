@@ -66,3 +66,23 @@ export const sortPeople = (a: User, b: User): number => {
 }
 
 export const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+export const BlankWeeklyAvailability: WeeklyAvailability = [[], [], [], [], [], [], []];
+
+export const isBlankAvailability = (availability: WeeklyAvailability): boolean => {
+    let res  = true;
+    for (let arr in availability) {
+        if (availability[arr].length > 0) {
+            res = false;
+        }
+    }
+    return res;
+}
+
+export const WeeklyAvailabilityFromDb = (availability: any): WeeklyAvailability => {
+    let res = BlankWeeklyAvailability;
+    for (let day in availability) {
+        res[Number.parseInt(day)] = availability[day];
+    }
+    return res;
+}

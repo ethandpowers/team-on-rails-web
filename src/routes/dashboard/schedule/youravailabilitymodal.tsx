@@ -4,8 +4,9 @@ import { Button, Form, Modal } from "react-bootstrap";
 import styled from "styled-components";
 import HorizontalDivider from "../../../components/horizontaldivider";
 import { auth, database, saveGeneralAvailability } from "../../../firebase";
-import { days } from "../utilities";
+import { days, WeeklyAvailabilityFromDb } from "../utilities";
 import TimeBlockSelector from "./timeblockselector";
+import { BlankWeeklyAvailability } from "../utilities";
 
 const HorizontalDiv = styled.div`
     display: flex;
@@ -42,31 +43,22 @@ interface YourAvailabilityModalProps {
     setShow: (show: boolean) => void;
 }
 
-const BlankAvailability: Availability = {
-    0: [],
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-    6: [],
-}
-
 const BlankTimeBlock: TimeBlock = {
     start: "",
     end: "",
 }
 
-type key = keyof Availability;
 const YourAvailabilityModal: FC<YourAvailabilityModalProps> = ({ groupId, show, setShow }) => {
-    const [availability, setAvailability] = useState<Availability>(BlankAvailability);
+    const [generalAvailability, setGeneralAvailability] = useState<WeeklyAvailability>(BlankWeeklyAvailability);
 
     useEffect(() => {
         //get user availability
-        return onValue(ref(database, `groups/${groupId}/availability/${auth.currentUser.uid}`), (snapshot) => {
+        return onValue(ref(database, `groups/${groupId}/availability/${auth.currentUser.uid}/general`), (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                setAvailability(data);
+                setGeneralAvailability(WeeklyAvailabilityFromDb(data));
+            } else {
+                setGeneralAvailability(BlankWeeklyAvailability);
             }
         });
     }, []);
@@ -104,26 +96,28 @@ const YourAvailabilityModal: FC<YourAvailabilityModalProps> = ({ groupId, show, 
                                         <div key={index}>
                                             <SpacedDiv>
                                                 <label>{day}</label>
-                                                <CustomSelect onChange={(event: any) => {
-                                                    if (event.target.value === "Unavailable") {
-                                                        setAvailability({ ...availability, [index]: [] });
-                                                    } else {
-                                                        setAvailability({ ...availability, [index]: [BlankTimeBlock] });
-                                                    }
-                                                }}>
+                                                <CustomSelect
+                                                    value={generalAvailability[index].length > 0 ? "Available" : "Unavailable"}
+                                                    onChange={(event: any) => {
+                                                        if (event.target.value === "Unavailable") {
+                                                            setGeneralAvailability({ ...generalAvailability, [index]: [] });
+                                                        } else {
+                                                            setGeneralAvailability({ ...generalAvailability, [index]: [BlankTimeBlock] });
+                                                        }
+                                                    }}>
                                                     <option>Unavailable</option>
                                                     <option>Available</option>
                                                 </CustomSelect>
                                             </SpacedDiv>
-                                            {availability[index as key].length > 0 ?
+                                            {generalAvailability[index].length > 0 ?
                                                 <RightAlignDiv>
-                                                    {availability[index as key].map((timeBlock, i) => {
+                                                    {generalAvailability[index].map((timeBlock, i) => {
                                                         return (
                                                             <div key={i}>
                                                                 <TimeBlockSelector timeBlock={timeBlock} setTimeBlock={(timeBlock) => {
-                                                                    setAvailability(()=>{
-                                                                        const newAvailability = {...availability};
-                                                                        newAvailability[index as key][i] = timeBlock;
+                                                                    setGeneralAvailability(() => {
+                                                                        const newAvailability = { ...generalAvailability };
+                                                                        newAvailability[index][i] = timeBlock;
                                                                         return newAvailability;
                                                                     });
                                                                 }} />
@@ -131,7 +125,7 @@ const YourAvailabilityModal: FC<YourAvailabilityModalProps> = ({ groupId, show, 
                                                         );
                                                     })}
                                                     <ButtonWithMargin size="sm" variant="primary" onClick={() => {
-                                                        setAvailability({ ...availability, [index as key]: [...availability[index as key], BlankTimeBlock] });
+                                                        setGeneralAvailability({ ...generalAvailability, [index]: [...generalAvailability[index], BlankTimeBlock] });
                                                     }}>New Time Block</ButtonWithMargin>
                                                 </RightAlignDiv> : null
                                             }
@@ -141,7 +135,7 @@ const YourAvailabilityModal: FC<YourAvailabilityModalProps> = ({ groupId, show, 
                                 })}
                             </div>
                             <Button variant="primary" onClick={async () => {
-                                await saveGeneralAvailability(groupId, availability);
+                                await saveGeneralAvailability(groupId, generalAvailability);
                             }}>Save</Button>
                         </div>
                         <div id="specific-availability-form">
