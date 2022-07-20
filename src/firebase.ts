@@ -314,3 +314,7 @@ export async function sendTimeOffRequest(groupId: string, timeOffRequest: TimeOf
         id: requestRef.key,
     });
 }
+
+export async function rejectRequest(groupId: string, requestId: string) {
+    await remove(ref(database, `groups/${groupId}/requests/${requestId}`));
+}

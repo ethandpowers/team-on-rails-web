@@ -12,7 +12,7 @@ interface TaskDetailsModalProps {
     currentUser: User;
 }
 
-const TaskDetailsModal:FC<TaskDetailsModalProps> = (props) => {
+const TaskDetailsModal: FC<TaskDetailsModalProps> = (props) => {
     const completeCurrentTask = () => {
         completeTask(props.group, props.task);
         props.hideModal();

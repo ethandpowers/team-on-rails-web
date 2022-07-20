@@ -114,6 +114,7 @@ const Schedule: FC = () => {
                     requests={requests}
                     show={showRequestsModal}
                     hide={()=>setShowRequestsModal(false)}
+                    groupId={groupId}
                 />}
                 <ScheduleHeader
                     showYourAvailability={() => setShowYourAvailabilityModal(true)}
