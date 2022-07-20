@@ -71,9 +71,7 @@ const ScheduleHeader: FC<ScheduleHeaderProps> = (props) => {
                                     onClick={props.showRequests}
                                 >
                                     Requests
-                                    {props.requests > 0 &&
-                                        <Badge style={{ marginLeft: "8px" }} bg="secondary" pill>{props.requests}</Badge>
-                                    }
+                                    <Badge style={{ marginLeft: "8px" }} bg="secondary" pill>{props.requests}</Badge>
                                 </WhiteLink>
                             }
                             {props.admin.userId === auth.currentUser.uid && <WhiteLink onClick={props.showEditSchedule}>Set Schedule</WhiteLink>}

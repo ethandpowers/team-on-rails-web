@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Button, ListGroup, Modal } from "react-bootstrap";
+import { Accordion, Button, ListGroup, Modal } from "react-bootstrap";
 import { rejectRequest } from "../../../firebase";
 import { convertDefaultDateFormat } from "../utilities";
 
@@ -24,17 +24,24 @@ const RequestsModal: FC<RequestsModalProps> = (props) => {
             </Modal.Header>
             <Modal.Body>
                 {props.requests.length > 0 ?
-                    <ListGroup variant="flush">
+                    <Accordion defaultActiveKey="1" flush>
                         {props.requests.map((request, index) => {
                             return (
-                                <ListGroup.Item key={index} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                    {request.requestType === "time-off" && `${request.for.name} requested time off from ${convertDefaultDateFormat(request.start)} to ${convertDefaultDateFormat(request.end)}`}
-                                    <Button variant="outline-danger" size="sm" onClick={() => rejectRequest(props.groupId, request.id)}>Reject</Button>
-                                    <Button size="sm" onClick={() => { }}>Approve</Button>
-                                </ListGroup.Item>
+                                <Accordion.Item eventKey="0" key={index}>
+                                    <Accordion.Header style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                                        {request.requestType === "time-off" && `${request.for.name} requested time off from ${convertDefaultDateFormat(request.start)} to ${convertDefaultDateFormat(request.end)}`}
+                                    </Accordion.Header>
+                                    <Accordion.Body>
+                                        <p>{request.reason}</p>
+                                        <div style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
+                                        <Button variant="outline-danger" size="sm" onClick={() => rejectRequest(props.groupId, request.id)} style={{ marginRight: "8px" }}>Reject</Button>
+                                        <Button size="sm" onClick={() => { }}>Approve</Button>
+                                        </div>
+                                    </Accordion.Body>
+                                </Accordion.Item>
                             );
                         })}
-                    </ListGroup> :
+                    </Accordion> :
                     <p>No requests</p>}
             </Modal.Body>
         </Modal>
