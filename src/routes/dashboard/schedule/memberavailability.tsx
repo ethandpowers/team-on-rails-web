@@ -1,9 +1,10 @@
 import { onValue, ref } from "firebase/database";
+import moment from "moment";
 import React, { FC, useEffect, useState } from "react";
 import { ListGroup, OverlayTrigger, Popover } from "react-bootstrap";
 import { primaryColor } from "../../../colorscheme";
 import { database } from "../../../firebase";
-import { BlankWeeklyAvailability, isBlankAvailability, WeeklyAvailabilityFromDb } from "../utilities";
+import { days, isBlankAvailability, WeeklyAvailabilityFromDb } from "../utilities";
 
 interface MemberAvailabilityProps {
     groupId: string;
@@ -13,15 +14,15 @@ interface MemberAvailabilityProps {
 }
 
 const MemberAvailability: FC<MemberAvailabilityProps> = ({ member, showMember, setShowMember, groupId }) => {
-    const [generalAvailability, setGeneralAvailability] = useState<WeeklyAvailability>(BlankWeeklyAvailability);
+    const [memberGeneralAvailability, setMemberGeneralAvailability] = useState<WeeklyAvailability>({ "Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": [], "Saturday": [], "Sunday": [] });
 
     useEffect(() => {
         return onValue(ref(database, `groups/${groupId}/availability/${member.userId}/general`), (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                setGeneralAvailability(WeeklyAvailabilityFromDb(data));
-            }else{
-                setGeneralAvailability(BlankWeeklyAvailability);
+                setMemberGeneralAvailability(WeeklyAvailabilityFromDb(data));
+            } else {
+                setMemberGeneralAvailability({ "Monday": [], "Tuesday": [], "Wednesday": [], "Thursday": [], "Friday": [], "Saturday": [], "Sunday": [] });
             }
         });
     }, []);
@@ -42,12 +43,26 @@ const MemberAvailability: FC<MemberAvailabilityProps> = ({ member, showMember, s
                 show={showMember === member.userId}
                 overlay={
                     <Popover id="popover-basic">
-                        <Popover.Header as="h3">{member.name} Availability</Popover.Header>
                         <Popover.Body>
-                            {isBlankAvailability(generalAvailability) ? `${member.name} does not have any availability.` :
+                            {isBlankAvailability(memberGeneralAvailability) ? `${member.name} does not have any availability.` :
                                 <>
-                                    <h5>General Availability</h5>
-                                    {}
+                                    <h6>General Availability</h6>
+                                    <ListGroup>
+                                        {days.map((day, index) => {
+                                            return (
+                                                <ListGroup.Item key={index}>
+                                                    {day}:
+                                                    {memberGeneralAvailability[day as WAKey].map((availability, index) => {
+                                                        return (
+                                                            <div key={index}>
+                                                                {moment(availability.start, "HH:mm").format('LT')} - {moment(availability.end, "HH:mm").format('LT')}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </ListGroup.Item>
+                                            );
+                                        })}
+                                    </ListGroup>
                                 </>
                             }
                         </Popover.Body>

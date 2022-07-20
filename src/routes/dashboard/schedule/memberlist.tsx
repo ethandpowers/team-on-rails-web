@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Card, ListGroup, Popover, OverlayTrigger } from "react-bootstrap";
+import { Card, ListGroup } from "react-bootstrap";
 import MemberAvailability from "./memberavailability";
 
 interface MemberListProps {

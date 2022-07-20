@@ -11,15 +11,6 @@ interface SettingsModalProps {
 }
 
 const Settings: FC<SettingsModalProps> = (props) => {
-    const [availability, setAvailability] = useState(null);
-
-    //Realtime listener for user availablity
-    onValue(ref(database, `groups/${props.group.groupId}/members/${auth.currentUser.uid}/availability`), (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            setAvailability(data);
-        }
-    });
 
     return (
         <Modal

@@ -25,4 +25,14 @@ interface TimeBlock {
     end: string;
 }
 
-type WeeklyAvailability = TimeBlock[][];
+interface WeeklyAvailability{
+    "Sunday": TimeBlock[];
+    "Monday": TimeBlock[];
+    "Tuesday": TimeBlock[];
+    "Wednesday": TimeBlock[];
+    "Thursday": TimeBlock[];
+    "Friday": TimeBlock[];
+    "Saturday": TimeBlock[];
+}
+
+type WAKey = keyof WeeklyAvailability;

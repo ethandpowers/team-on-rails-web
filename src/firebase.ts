@@ -294,5 +294,17 @@ export async function inGroup(groupId: string) {
 }
 
 export async function saveGeneralAvailability(groupId:string, availability: WeeklyAvailability) {
+    Object.values(availability).forEach((day: TimeBlock[]) => {
+        let emptyTimeBlocks:number[] = [];
+        day.forEach((timeBlock: TimeBlock) => {
+            if (timeBlock.start === "" || timeBlock.end === "") {
+                emptyTimeBlocks.push(day.indexOf(timeBlock));
+            }
+        });
+        emptyTimeBlocks.forEach((index: number) => {
+            day.splice(index, 1);
+        });
+    });
+    console.log(availability)
     await update(ref(database, `groups/${groupId}/availability/${auth.currentUser.uid}/general`), availability);
 }

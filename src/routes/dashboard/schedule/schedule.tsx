@@ -84,18 +84,18 @@ const Schedule: FC = () => {
         		`}
                 </style>
                 <YourAvailabilityModal
-                groupId={groupId}
-                show={showYourAvailabilityModal}
-                setShow={setShowYourAvailabilityModal}
+                    groupId={groupId}
+                    show={showYourAvailabilityModal}
+                    setShow={setShowYourAvailabilityModal}
                 />
-                <ScheduleHeader showYourAvailability={()=>setShowYourAvailabilityModal(true)}/>
+                <ScheduleHeader showYourAvailability={() => setShowYourAvailabilityModal(true)} />
                 <div id="schedule-horizontal-container">
-                    {auth.currentUser.uid === admin.userId && <MemberList groupId={groupId} admin={admin} members={groupMembers}/>}
-                    <WeeklySchedule groupId={groupId}/>
+                    {auth.currentUser.uid === admin.userId && <MemberList groupId={groupId} admin={admin} members={groupMembers} />}
+                    <WeeklySchedule groupId={groupId} />
                 </div>
             </>
         );
-    }else{
+    } else {
         return <Loading />;
     }
 }
