@@ -94,7 +94,7 @@ export async function updateTask(group: Group, task: any) {
 }
 
 export async function deleteTask(group: Group, task: Task) {
-    if(!task.taskId){
+    if (!task.taskId) {
         console.error("taskId is null");
         return;
     }
@@ -286,16 +286,16 @@ export async function inGroup(groupId: string) {
 
     snapshot = await get(ref(database, `groups/${groupId}/administrator`));
     data = snapshot.val();
-    if(data.userId === auth.currentUser.uid) {
+    if (data.userId === auth.currentUser.uid) {
         res = true;
     }
-    
+
     return res;
 }
 
-export async function saveGeneralAvailability(groupId:string, availability: WeeklyAvailability) {
+export async function saveGeneralAvailability(groupId: string, availability: WeeklyAvailability) {
     Object.values(availability).forEach((day: TimeBlock[]) => {
-        let emptyTimeBlocks:number[] = [];
+        let emptyTimeBlocks: number[] = [];
         day.forEach((timeBlock: TimeBlock) => {
             if (timeBlock.start === "" || timeBlock.end === "") {
                 emptyTimeBlocks.push(day.indexOf(timeBlock));
@@ -305,6 +305,12 @@ export async function saveGeneralAvailability(groupId:string, availability: Week
             day.splice(index, 1);
         });
     });
-    console.log(availability)
     await update(ref(database, `groups/${groupId}/availability/${auth.currentUser.uid}/general`), availability);
+}
+
+export async function sendTimeOffRequest(groupId: string, timeOffRequest: TimeOffRequest) {
+    let requestRef = await push(ref(database, `groups/${groupId}/requests`), timeOffRequest)
+    await update(ref(database, `groups/${groupId}/requests/${requestRef.key}`), {
+        id: requestRef.key,
+    });
 }

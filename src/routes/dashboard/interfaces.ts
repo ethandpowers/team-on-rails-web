@@ -36,3 +36,10 @@ interface WeeklyAvailability{
 }
 
 type WAKey = keyof WeeklyAvailability;
+
+interface TimeOffRequest{
+    start: string;
+    end: string;
+    reason: string;
+    id: string;
+}
