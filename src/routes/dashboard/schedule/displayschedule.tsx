@@ -1,9 +1,6 @@
-import { tab } from "@testing-library/user-event/dist/tab";
-import { onValue, ref } from "firebase/database";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Card, Table } from "react-bootstrap";
 import styled from "styled-components";
-import { database } from "../../../firebase";
 import { getWeekString, intToTimeOfDay, weekFromDate } from "../utilities";
 
 const Header = styled(Card.Header)`
@@ -14,16 +11,13 @@ const Header = styled(Card.Header)`
 
 const Spacer = styled.div`
     height: 1px;;
-    width: 8px;
 `
 
-interface WeeklyScheduleProps {
-    groupId: string;
-    admin: User;
+interface DisplayScheduleProps {
+    schedule: any;
 }
 
-const WeeklySchedule: FC<WeeklyScheduleProps> = (props) => {
-    const [weeklySchedule, setWeeklySchedule] = useState<any>(null);
+const DisplaySchedule: FC<DisplayScheduleProps> = (props) => {
     const [currentWeek, setCurrentWeek] = useState<Week>(weekFromDate(new Date()));
 
     const nextWeek = () => {
@@ -41,16 +35,10 @@ const WeeklySchedule: FC<WeeklyScheduleProps> = (props) => {
             return weekFromDate(date);
         });
     }
-
     useEffect(() => {
         document.getElementById("row-15")!.scrollIntoView();
-
-        return onValue(ref(database, `groups/${props.groupId}/schedule`), (snapshot) => {
-            const data = snapshot.val();
-            if (data) console.log(data);
-        });
-    }, [props.groupId]);
-
+    }, []);
+    
     return (
         <>
             <style>
@@ -71,11 +59,11 @@ const WeeklySchedule: FC<WeeklyScheduleProps> = (props) => {
             </style>
             <Card id="main-weekly-schedule">
                 <Header>
-                    <i className="clickable bi bi-arrow-right" onClick={nextWeek}/>
+                    <i className="clickable bi bi-arrow-right" onClick={nextWeek} />
                     <Spacer />
                     {getWeekString(currentWeek)}
                     <Spacer />
-                    <i className="clickable bi bi-arrow-left" onClick={previousWeek}/>
+                    <i className="clickable bi bi-arrow-left" onClick={previousWeek} />
                 </Header>
                 <Table striped size="sm" responsive>
                     <thead className="sticky table-header-color">
@@ -92,7 +80,7 @@ const WeeklySchedule: FC<WeeklyScheduleProps> = (props) => {
                     </thead>
                     <tbody>
                         {[...Array(48).keys()].map((i) => {
-                            return <tr key={i}id={`row-${i}`}>
+                            return <tr key={i} id={`row-${i}`}>
                                 <td>{intToTimeOfDay(i)}</td>
                                 <td></td>
                                 <td></td>
@@ -110,4 +98,4 @@ const WeeklySchedule: FC<WeeklyScheduleProps> = (props) => {
     );
 }
 
-export default WeeklySchedule;
+export default DisplaySchedule;

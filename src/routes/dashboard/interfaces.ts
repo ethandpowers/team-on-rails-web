@@ -25,7 +25,7 @@ interface TimeBlock {
     end: string;
 }
 
-interface WeeklyAvailability{
+interface WeeklyAvailability {
     "Sunday": TimeBlock[];
     "Monday": TimeBlock[];
     "Tuesday": TimeBlock[];
@@ -37,9 +37,27 @@ interface WeeklyAvailability{
 
 type WAKey = keyof WeeklyAvailability;
 
-interface TimeOffRequest{
+interface TimeOffRequest {
     start: string;
     end: string;
     reason: string;
     id: string;
+    for: User;
+    requestType: string;
+    timeStamp: number;
+}
+
+interface Week {
+    start: Date;
+    end: Date;
+}
+
+interface Schedule {
+
+}
+
+interface ScheduleRequest {
+    id: string;
+    requestType: string;
+    [prop: string]: any;
 }

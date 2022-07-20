@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Button, Form } from "react-bootstrap";
 import styled from "styled-components";
-import { sendTimeOffRequest } from "../../../../firebase";
+import { auth, sendTimeOffRequest } from "../../../../../firebase";
 
 const Header = styled.div`
     display: flex;
@@ -43,7 +43,7 @@ const RequestTimeOff: FC<RequestTimeOffProps> = (props) => {
         if (startDate && endDate && reason) {
             //check if start date is greater or equal to today's date
             if (new Date(startDate) >= new Date()) {
-                if (startDate < endDate) {
+                if (startDate <= endDate) {
                     //submit request
                     sendTimeOffRequest(
                         props.groupId,
@@ -51,7 +51,13 @@ const RequestTimeOff: FC<RequestTimeOffProps> = (props) => {
                             start: startDate,
                             end: endDate,
                             reason,
-                            id: ""
+                            id: "",
+                            requestType: "time-off",
+                            for: {
+                                userId: auth.currentUser!.uid,
+                                name: auth.currentUser!.displayName,
+                            },
+                            timeStamp: Date.now()
                         }).then(()=>{
                             alert("Request submitted successfully!");
                             props.back();

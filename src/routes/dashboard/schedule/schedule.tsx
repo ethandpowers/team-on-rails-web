@@ -3,18 +3,23 @@ import React, { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../../../components/loading";
 import { database, auth, inGroup } from "../../../firebase";
+import EditScheduleModal from "./editschedule/editschedulemodal";
 import MemberList from "./memberlist";
+import RequestsModal from "./requestsmodal";
 import ScheduleHeader from "./scheduleheader";
 import WeeklySchedule from "./weeklyschedule";
-import YourAvailabilityModal from "./youravailabilitymodal";
+import YourAvailabilityModal from "./youravailability/youravailabilitymodal";
 
 const Schedule: FC = () => {
     const navigate = useNavigate();
     const { groupId } = useParams();
     const [authorized, setAuthorized] = useState(false);
     const [admin, setAdmin] = useState<User | null>(null);
+    const [requests, setRequests] = useState<ScheduleRequest[]>([]);
     const [groupMembers, setGroupMembers] = useState<User[]>([]);
     const [showYourAvailabilityModal, setShowYourAvailabilityModal] = useState<boolean>(false);
+    const [showEditScheduleModal, setShowEditScheduleModal] = useState<boolean>(false);
+    const [showRequestsModal, setShowRequestsModal] = useState<boolean>(false);
 
 
     useEffect(() => {
@@ -60,6 +65,18 @@ const Schedule: FC = () => {
         });
     }, [groupId]);
 
+    //load requests
+    useEffect(() => {
+        return onValue(ref(database, `groups/${groupId}/requests`), (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                setRequests(Object.values(data));
+            }else{
+                setRequests([]);
+            }
+        });
+    }, [groupId]);
+
 
     if (authorized && admin && groupId) {
         return (
@@ -88,10 +105,26 @@ const Schedule: FC = () => {
                     show={showYourAvailabilityModal}
                     setShow={setShowYourAvailabilityModal}
                 />
-                <ScheduleHeader showYourAvailability={() => setShowYourAvailabilityModal(true)} />
+                {admin.userId === auth.currentUser.uid && <EditScheduleModal
+                    groupId={groupId}
+                    show={showEditScheduleModal}
+                    setShow={setShowEditScheduleModal}
+                />}
+                {admin.userId === auth.currentUser.uid && <RequestsModal 
+                    requests={requests}
+                    show={showRequestsModal}
+                    hide={()=>setShowRequestsModal(false)}
+                />}
+                <ScheduleHeader
+                    showYourAvailability={() => setShowYourAvailabilityModal(true)}
+                    showEditSchedule={() => setShowEditScheduleModal(true)}
+                    showRequests={() => setShowRequestsModal(true)}
+                    admin={admin}
+                    requests={requests.length}
+                />
                 <div id="schedule-horizontal-container">
                     {auth.currentUser.uid === admin.userId && <MemberList groupId={groupId} admin={admin} members={groupMembers} />}
-                    <WeeklySchedule groupId={groupId} />
+                    <WeeklySchedule groupId={groupId} admin={admin} />
                 </div>
             </>
         );

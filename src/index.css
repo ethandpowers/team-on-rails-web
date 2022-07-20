@@ -72,3 +72,8 @@ code {
 .small-text{
   font-size: 0.8rem;
 }
+
+.sticky{
+  position: sticky;
+  top: 0; 
+}
