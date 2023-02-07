@@ -11,7 +11,7 @@ const StyledNav = styled(Nav)`
     @media (min-width: 1000px) {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        // justify-content: space-between;
         width: 100%;
         align-items: center;
     };
@@ -30,6 +30,9 @@ const StyledLink = styled(Nav.Link)`
     &:hover {
         color: ${primaryColor};
     }
+`
+const Expand = styled.div`
+    flex-grow: 1;
 `
 
 interface HeaderProps {
@@ -76,8 +79,15 @@ const Header: FC<HeaderProps> = (props) => {
                                         height="30"
                                         className="d-inline-block align-top"
                                     />
+
                                 </Navbar.Brand>
                             </HorizontalDiv>
+
+                            <HorizontalDiv>
+                                <StyledLink as={Link} to="/terms">Terms of Service</StyledLink>
+                            </HorizontalDiv>
+                            <Expand/>
+
                             {loggedIn ?
 
                                 <NavDropdown id="header-account-dropdown" title={name} align="end">

@@ -5,22 +5,14 @@ const TermsOfService = () => {
     return (
         <Container className="center-text">
             <h1>Terms of Service</h1>
-            <h2>Refunds</h2>
             <p>
-                All payments are non-refundable.  Refunds may be given at the discretion of the 
-                owner on upon request.  To request a refund, contact the owner at ethandpowers@gmail.com.  
-                Please include the name of your business, the date of the transaction, 
-                and the reason for your request.
+                I do not guarantee the accuracy of the software, nor do I garuntee that it is free of bugs or issues.  This software is provided as-is, and I am not responsible for any damages caused by the use of this software.  ote that this site is no longer actively maintained and may contain outdated information, so please do not use this site for anything critical to personal or business operation.
             </p>
             <h2>Privacy Policy</h2>
             <p>
-                We do not sell or share your personal information with anyone.  In the event of a cybercrime, 
-                we are not responsible for the actions of the perpetrator, nor are we responsible for any damages
+                I do not sell or share your personal information with anyone.  In the event of a cybercrime, 
+                I am not responsible for the actions of the perpetrator, nor am I responsible for any damages
                 caused by the actions of the perpetrator.
-            </p>
-            <h2>Software Bugs and Malfuctions</h2>
-            <p>
-                We do not guarantee the accuracy of the software, nor do we garuntee that it is free of bugs or issues.
             </p>
         </Container>
     );

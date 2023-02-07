@@ -2,9 +2,9 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "firebase/auth";
-import { get, getDatabase, push, ref, set, update, remove } from "firebase/database";
+import { get, getDatabase, push, ref, set, update, remove, child } from "firebase/database";
 import { getStorage, uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
-import { getFunctions, httpsCallable } from 'firebase/functions';
+// import { getFunctions, httpsCallable } from 'firebase/functions';
 import { sortPeople } from "./routes/dashboard/utilities";
 
 const firebaseConfig = {
@@ -20,10 +20,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
-export const auth: any = getAuth(app);
-export const database: any = getDatabase(app);
-export const storage: any = getStorage(app);
-const functions = getFunctions(app);
+export const auth:any = getAuth(app);
+export const database = getDatabase(app);
+export const storage = getStorage(app);
+// const functions = getFunctions(app);
 
 export function loggedIn(): boolean {
     return auth.currentUser !== null;
@@ -54,13 +54,54 @@ export async function logOut() {
 }
 
 export async function joinGroup(id: string) {
-    const join = httpsCallable(functions, "joinGroup");
-    let success: any = false;
-    await join({ groupId: id }).then((res) => {
-        //return true if successful, false otherwise
-        success = res.data;
+    let snap = await get(child(ref(database), `users/${auth.currentUser.uid}/groupsAsMember`));
+    if (snap.val()) {
+        Object.values(snap.val()).forEach((group:any) => {
+            if (group.groupId === id) {
+                throw new Error("User is already in group");
+            }
+        });
+    }
+
+    // let gaa = (await database.ref(`users/${auth.currentUser.uid}/groupsAsAdmin`).get()).val();
+    let gaa = await get(child(ref(database), `users/${auth.currentUser.uid}/groupsAsAdmin`));
+    if (gaa.val()) {
+        Object.values(gaa.val()).forEach((group: any) => {
+            if (group.groupId === id) {
+                throw new Error("User is already in group");
+            }
+        });
+    }
+    //must retrieve the group name from the database
+    // const groupName: string = (await database.ref(`groups/${id}/name`).get()).val();
+    const groupName: string = (await get(child(ref(database), `groups/${id}/name`))).val();
+    const displayName = auth.currentUser.displayName;
+    if (!displayName) {
+        throw new Error(`user ${auth.currentUser.uid} has no display name`);
+    }
+
+    //add the user to the group
+    // await database.ref(`groups/${id}/members/${auth.currentUser.uid}`).update({
+    //     userId: auth.currentUser.uid,
+    //     name: displayName,
+    // });
+    await update(ref(database, `groups/${id}/members/${auth.currentUser.uid}`), {
+        userId: auth.currentUser.uid,
+        name: displayName,
     });
-    return success;
+
+    //add the group to the user
+    // await database.ref(`users/${auth.currentUser.uid}/groupsAsMember`).push({
+    //     groupId: id,
+    //     name: groupName,
+    //     joinedTimeStamp: Date.now(),
+    // });
+    await push(ref(database, `users/${auth.currentUser.uid}/groupsAsMember/`), {
+        groupId: id,
+        name: groupName,
+        joinedTimeStamp: Date.now(),
+    });
+    return true;
 }
 
 export async function createGroup(groupName: string) {

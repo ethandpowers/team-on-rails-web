@@ -21,7 +21,7 @@ const AccountOptionsDropdown: FC<AccountOptionsDropdownProps> = (props) => {
             <NavDropdown id="account-options-dropdown" title={props.currentUser.name} align="end">
                 <NavDropdown.Item onClick={props.createGroup}>Create Group</NavDropdown.Item>
                 <NavDropdown.Item onClick={props.joinGroup}>Join Group</NavDropdown.Item>
-                <NavDropdown.Item onClick={props.showSettings}>Settings</NavDropdown.Item>
+                {/* <NavDropdown.Item onClick={props.showSettings}>Settings</NavDropdown.Item> */}
                 <NavDropdown.Item onClick={logOut}>Log Out</NavDropdown.Item>
             </NavDropdown>
         </>
